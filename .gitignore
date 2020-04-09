@@ -1,0 +1,9 @@
+*~
+*.o
+mumu
+.depend
+compile_commands.json
+gmon.out
+*.gcno
+*.gcda
+*.gcov
