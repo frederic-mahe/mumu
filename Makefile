@@ -41,9 +41,9 @@ depend: .depend
 	$(CXX) $(CXXFLAGS) -MM $^>>./.depend;
 
 clean:
-	rm -f $(objects)
+	rm -f $(objects) $(appname) compile_commands.json
 
 dist-clean: clean
-	rm -f *~ .depend
+	rm -f *~ .depend ./src/*~
 
 include .depend
