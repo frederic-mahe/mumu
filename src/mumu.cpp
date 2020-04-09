@@ -22,10 +22,17 @@
 // France
 
 #include <iostream>
+#include <string>
+#include <vector>
 
+auto main(int argc, char** argv) -> int {
 
-auto main() -> int {
-  std::cout << "Hello World!" << '\n';
+  std::cout << "Have " << argc - 1  << " arguments:" << "\n";
+
+  std::vector<std::string> params(argv, argv + argc);
+  for (auto& x : params) {
+    std::cout << x << "\n";
+  }
 
   return 0;
 }
