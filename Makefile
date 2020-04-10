@@ -24,7 +24,7 @@
 appname := mumu
 
 CXX := g++
-CXXFLAGS := -std=c++2a
+CXXFLAGS := -std=c++17
 
 srcfiles := $(shell find ./src/ -name "*.cpp")
 objects  := $(patsubst %.cpp, %.o, $(srcfiles))
