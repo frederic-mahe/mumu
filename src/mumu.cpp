@@ -24,15 +24,76 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <getopt.h>
+#include <cstring>
+#include <array>
+
+
+void help (char ** argv)
+{
+  std::cout << "experiments with long options.\n";
+}
+
+void parse_args (int argc, char ** argv, int & verbose, int & param)
+{
+  auto c {0};
+  while (true)
+    {
+      static struct option long_options[] =
+        {
+         {"help", no_argument, nullptr, 'h'},
+         {"verbose", required_argument, nullptr, 'v'},
+         {"param", required_argument, nullptr, 0},
+         {nullptr, 0, nullptr, 0}
+        };
+
+      auto option_index {0};
+      c = getopt_long(argc, argv, "hv:",
+                      long_options, &option_index);
+
+      std::cout << "c=" << c << "\n";
+
+      if (c == -1) {
+        break;
+      }
+      switch (c)
+        {
+        case 0:
+          if (long_options[option_index].flag != nullptr) {
+            break;
+          }
+          if (strcmp(long_options[option_index].name,"param") == 0) {
+            param = atoi(optarg);
+          }
+          break;
+          std::cout << "option " << long_options[option_index].name;
+          if (optarg != nullptr) {
+            std::cout << " with arg " << optarg;
+          }
+          std::cout << "\n";
+          break;
+        case 'h':
+          help (argv);
+          exit (0);
+        case 'v':
+          verbose = atoi(optarg);
+          break;
+        case '?':
+          abort ();
+        default:
+          abort ();
+        }
+    }
+}
+
 
 auto main(int argc, char** argv) -> int {
 
-  std::cout << "Have " << argc - 1  << " arguments:" << "\n";
+  auto verbose {0};
+  auto param {0};
+  parse_args(argc, argv, verbose, param);
 
-  std::vector<std::string> params(argv, argv + argc);
-  for (auto& x : params) {
-    std::cout << x << "\n";
-  }
+  std::cout << "verbose=" << verbose << " param=" << param << "\n";
 
   return 0;
 }
