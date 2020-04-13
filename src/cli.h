@@ -21,12 +21,5 @@
 // 34398 MONTPELLIER CEDEX 5
 // France
 
-#include "cli.h"
 
-
-auto main(int argc, char** argv) -> int {
-
-  parse_args(argc, argv);
-
-  return 0;
-}
+auto parse_args (int argc, char ** argv) -> void;
