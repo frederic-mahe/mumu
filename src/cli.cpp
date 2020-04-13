@@ -74,7 +74,7 @@ struct Parameters {
   std::string minimum_ratio_type {"min"};
   double minimum_ratio {minimum_ratio_default};
   double minimum_relative_cooccurence {minimum_relative_cooccurence_default};
-};
+} parameters;
 
 
 void help () {
@@ -110,11 +110,9 @@ void version() {
 }
 
 
-void parse_args (int argc, char ** argv)
-{
+void parse_args (int argc, char ** argv) {
 
   auto c {0};
-  Parameters parameters;
 
   while (true) {
     auto option_index {0};
@@ -195,5 +193,48 @@ void parse_args (int argc, char ** argv)
       std::cout << argv[optind++] << " ";
     }
     std::cout << "\n";
+  }
+}
+
+
+void validate_args () {
+  // minimum match (50 <= x <= 100)
+  constexpr auto lowest_similarity {50};
+  constexpr auto highest_similarity {100};
+  if (parameters.minimum_match < lowest_similarity
+      || parameters.minimum_match > highest_similarity) {
+    std::cerr << "Error: --minimum_match value must be between "
+              << lowest_similarity
+              << " and "
+              << highest_similarity << "\n";
+    exit(EXIT_FAILURE);
+  }
+
+  // minimum ratio (x >= 0)
+  if (parameters.minimum_ratio < 0) {
+    std::cerr << "Error: --minimum_ratio value must be greater than zero\n";
+    exit(EXIT_FAILURE);
+  }
+
+  // minimum relative cooccurence (0 <= x <= 1.0)
+  if (parameters.minimum_relative_cooccurence < 0
+      || parameters.minimum_relative_cooccurence > 1.0) {
+    std::cerr << "Error: --minimum_relative_cooccurence value must be between zero and one\n";
+    exit(EXIT_FAILURE);
+  }
+
+  // threads (1 <= x <= 255)
+  constexpr auto max_threads {255};
+  if (parameters.threads < 1 || parameters.threads > max_threads) {
+    std::cerr << "Error: --threads value must be between "
+              << 0 << " and " << max_threads << "\n";
+    exit(EXIT_FAILURE);
+  }
+
+  // minimum ratio type ("min" or "avg")
+  if (parameters.minimum_ratio_type != "min"
+      && parameters.minimum_ratio_type != "avg") {
+    std::cerr << "Error: --minimum ratio type can only be \"min\" or \"avg\"\n";
+    exit(EXIT_FAILURE);
   }
 }

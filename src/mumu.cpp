@@ -27,6 +27,6 @@
 auto main(int argc, char** argv) -> int {
 
   parse_args(argc, argv);
-
+  validate_args();
   return 0;
 }

@@ -23,3 +23,5 @@
 
 
 auto parse_args (int argc, char ** argv) -> void;
+
+auto validate_args () -> void;
