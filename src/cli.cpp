@@ -23,16 +23,14 @@
 
 #include <iostream>
 #include <array>
-#include <string>
 #include <cstdlib>  // atoi, atof
 #include <getopt.h>
+#include <fstream>
+#include "mumu.h"
+#include "cli.h"
 
-constexpr auto threads_default {1U};
-constexpr auto minimum_match_default {84U};
-constexpr auto minimum_relative_cooccurence_default {0.95F};
-constexpr auto minimum_ratio_default {1.0F};
-
-// 12 options
+// additional options?
+//  --minimum_spread n (spread threshold to consider as potential father)
 const struct option long_options[] =
   {// standard options
    {"help",    no_argument,       nullptr, 'h'},
@@ -55,26 +53,6 @@ const struct option long_options[] =
 
    {nullptr, 0, nullptr, 0}
   };
-
-
-struct Parameters {
-  // mandatory arguments
-  bool is_otu_table {false};
-  bool is_match_list {false};
-  bool is_new_otu_table {false};
-  bool is_log {false};
-  std::string otu_table;
-  std::string match_list;
-  std::string new_otu_table;
-  std::string log;
-
-  // default values
-  unsigned int threads {threads_default};
-  unsigned int minimum_match {minimum_match_default};
-  std::string minimum_ratio_type {"min"};
-  double minimum_ratio {minimum_ratio_default};
-  double minimum_relative_cooccurence {minimum_relative_cooccurence_default};
-} parameters;
 
 
 void help () {
@@ -110,7 +88,7 @@ void version() {
 }
 
 
-void parse_args (int argc, char ** argv) {
+void parse_args (int argc, char ** argv, Parameters& parameters) {
 
   auto c {0};
 
@@ -197,7 +175,7 @@ void parse_args (int argc, char ** argv) {
 }
 
 
-void validate_args () {
+void validate_args (const Parameters& parameters) {
   // check for mandatory arguments (file names)
   if (! parameters.is_otu_table) {
     std::cerr << "Error: missing mandatory argument --otu_table filename\n";
@@ -215,6 +193,35 @@ void validate_args () {
     std::cerr << "Error: missing mandatory argument --log filename\n";
     exit(EXIT_FAILURE);
   }
+
+  // check files can be opened
+  std::ifstream otu_table {parameters.otu_table};
+  if (! otu_table) {
+    std::cerr << "Error: can't open input file " << parameters.otu_table << "\n";
+    exit(EXIT_FAILURE);
+  }
+  otu_table.close();
+
+  std::ifstream match_list {parameters.match_list};
+  if (! match_list) {
+    std::cerr << "Error: can't open input file " << parameters.match_list << "\n";
+    exit(EXIT_FAILURE);
+  }
+  match_list.close();
+
+  std::ofstream new_otu_table {parameters.new_otu_table};
+  if (! new_otu_table) {
+    std::cerr << "Error: can't open output file " << parameters.new_otu_table << "\n";
+    exit(EXIT_FAILURE);
+  }
+  new_otu_table.close();
+
+  std::ofstream log {parameters.log};
+  if (! log) {
+    std::cerr << "Error: can't open output file " << parameters.log << "\n";
+    exit(EXIT_FAILURE);
+  }
+  log.close();
 
   // minimum match (50 <= x <= 100)
   constexpr auto lowest_similarity {50};

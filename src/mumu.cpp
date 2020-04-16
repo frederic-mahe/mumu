@@ -21,12 +21,24 @@
 // 34398 MONTPELLIER CEDEX 5
 // France
 
+#include "mumu.h"
 #include "cli.h"
 
 
 auto main(int argc, char** argv) -> int {
 
-  parse_args(argc, argv);
-  validate_args();
+  // command line interface
+  Parameters parameters;
+  parse_args(argc, argv, parameters);
+  validate_args(parameters);
+
+  // load data
+
+  // find potential parents
+
+  // merge
+
+  // output new table and clean up
+
   return 0;
 }
