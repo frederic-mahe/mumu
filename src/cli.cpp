@@ -198,6 +198,24 @@ void parse_args (int argc, char ** argv) {
 
 
 void validate_args () {
+  // check for mandatory arguments (file names)
+  if (! parameters.is_otu_table) {
+    std::cerr << "Error: missing mandatory argument --otu_table filename\n";
+    exit(EXIT_FAILURE);
+  }
+  if (! parameters.is_match_list) {
+    std::cerr << "Error: missing mandatory argument --match_list filename\n";
+    exit(EXIT_FAILURE);
+  }
+  if (! parameters.is_new_otu_table) {
+    std::cerr << "Error: missing mandatory argument --new_otu_table filename\n";
+    exit(EXIT_FAILURE);
+  }
+  if (! parameters.is_log) {
+    std::cerr << "Error: missing mandatory argument --log filename\n";
+    exit(EXIT_FAILURE);
+  }
+
   // minimum match (50 <= x <= 100)
   constexpr auto lowest_similarity {50};
   constexpr auto highest_similarity {100};
