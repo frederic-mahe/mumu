@@ -33,6 +33,8 @@ auto main(int argc, char** argv) -> int {
   validate_args(parameters);
 
   // load data
+  // initialize a map
+  // read_otu_table(parameters.otu_table, map name)
 
   // find potential parents
 
