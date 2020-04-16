@@ -209,6 +209,7 @@ void validate_args (const Parameters& parameters) {
   }
   match_list.close();
 
+  // check if writing is possible (better now than after a lengthy computation)
   std::ofstream new_otu_table {parameters.new_otu_table};
   if (! new_otu_table) {
     std::cerr << "Error: can't open output file " << parameters.new_otu_table << "\n";
