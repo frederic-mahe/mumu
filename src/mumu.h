@@ -56,8 +56,10 @@ struct Parameters {
 
 
 struct Match {
-  std::string hit_id;
   double similarity {0.0};
+  unsigned int hit_sum_reads {0};
+  unsigned int hit_spread {0};
+  std::string hit_id;
 };
 
 struct OTU {

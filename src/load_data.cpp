@@ -133,12 +133,16 @@ auto read_match_list(std::string match_list_name,
         std::cerr << "Error: can't open input file " << match_list_name << "\n";
         exit(EXIT_FAILURE);
       }
-      // update map if query is smaller than hit
-      if (OTUs[query].sum_reads <= OTUs[hit].sum_reads &&
-          OTUs[query].spread <= OTUs[hit].spread) {
+      // update map if query is "smaller" than hit
+      auto hit_sum_reads {OTUs[hit].sum_reads};
+      auto hit_spread {OTUs[hit].spread};
+      if (OTUs[query].sum_reads <= hit_sum_reads &&
+          OTUs[query].spread <= hit_spread) {
         Match match;
-        match.hit_id = hit;
         match.similarity = similarity;
+        match.hit_sum_reads = hit_sum_reads;
+        match.hit_spread = hit_spread;
+        match.hit_id = hit;
         OTUs[query].matches.push_back(match);
       }
     }

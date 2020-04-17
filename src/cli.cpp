@@ -55,7 +55,7 @@ const struct option long_options[] =
   };
 
 
-void help () {
+auto help () -> void {
   std::cout << "Usage: mumu\n"
             << " -h, --help                           display this help and exit\n"
             << " -v, --version                        display version information and exit\n"
@@ -79,7 +79,7 @@ void help () {
 }
 
 
-void version() {
+auto version() -> void {
   std::cout << "mumu 0.0.1\n"
             << "Copyright (C) 2020 Frederic Mahe\n"
             << "https://github.com/frederic-mahe/mumu\n"
@@ -88,7 +88,7 @@ void version() {
 }
 
 
-void parse_args (int argc, char ** argv, Parameters& parameters) {
+auto parse_args (int argc, char ** argv, Parameters& parameters) -> void {
 
   auto c {0};
 
@@ -175,7 +175,7 @@ void parse_args (int argc, char ** argv, Parameters& parameters) {
 }
 
 
-void validate_args (const Parameters& parameters) {
+auto validate_args (const Parameters& parameters) -> void {
   // check for mandatory arguments (file names)
   if (! parameters.is_otu_table) {
     std::cerr << "Error: missing mandatory argument --otu_table filename\n";

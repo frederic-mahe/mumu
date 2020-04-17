@@ -27,6 +27,7 @@
 #include "mumu.h"
 #include "cli.h"
 #include "load_data.h"
+#include "search_parent.h"
 
 auto main(int argc, char** argv) -> int {
 
@@ -38,21 +39,15 @@ auto main(int argc, char** argv) -> int {
   parse_args(argc, argv, parameters);
   validate_args(parameters);
 
-  // load data
+  // index data
   std::unordered_map<std::string, struct OTU> OTUs;
   read_otu_table(parameters.otu_table, OTUs);
 
   // read_otu_table(parameters.otu_table, map name)
   read_match_list(parameters.match_list, OTUs);
 
-  for (auto& otu : OTUs) {
-    const std::string& OTU_id {otu.first};
-    std::cout << OTU_id << "\t";
-    std::cout << OTUs[OTU_id].spread << "\n";
-  }
-  std::cout << "end of mumu\n";
-
   // find potential parents
+  search_parent(OTUs);
 
   // merge
 
