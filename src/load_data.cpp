@@ -29,7 +29,7 @@
 #include "load_data.h"
 
 
-auto count_columns(std::string line) {
+auto count_columns(std::string line) -> unsigned int {
   auto columns {0U};
   constexpr auto sepchar {'\t'};
 
@@ -43,9 +43,9 @@ auto count_columns(std::string line) {
 }
 
 
-auto parse_otu(std::unordered_map<std::string, struct OTU>& OTUs,
-               std::string line,
-               unsigned int header_columns) {
+auto parse_each_otu(std::unordered_map<std::string, struct OTU>& OTUs,
+                    std::string line,
+                    unsigned int header_columns) -> void {
   constexpr auto sepchar {'\t'};
   auto sum_reads {0U};  // 4,294,967,295 reads at most
   auto spread {0U};
@@ -63,7 +63,7 @@ auto parse_otu(std::unordered_map<std::string, struct OTU>& OTUs,
     auto i {std::stoul(buf)};
     if (i > 0) { spread += 1; }
     sum_reads += i;
-    otu.samples.push_back(i);
+    otu.samples.push_back(i);  // push to map entry
     n_values++;
   }
 
@@ -73,18 +73,15 @@ auto parse_otu(std::unordered_map<std::string, struct OTU>& OTUs,
     exit(EXIT_FAILURE);
   }
 
-  // add results to the map (samples, sum_reads, spread)
+  // add more results to the map
   otu.spread = spread;
   otu.sum_reads = sum_reads;
   OTUs[OTU_id] = otu;
 }
 
 
-
-void read_otu_table(std::string otu_table_name,
-                    std::unordered_map<std::string, struct OTU>& OTUs) {
-
-  constexpr auto sepchar {'\t'};
+auto read_otu_table(std::string otu_table_name,
+                    std::unordered_map<std::string, struct OTU>& OTUs) -> void {
 
   // check if file can be opened
   std::ifstream otu_table {otu_table_name};
@@ -99,43 +96,51 @@ void read_otu_table(std::string otu_table_name,
   auto header_columns = count_columns(line);
 
   // parse other lines, and map the values
-  std::string OTU_id;
   while (std::getline(otu_table, line))
     {
-      auto sum_reads {0U};  // 4,294,967,295 reads at most
-      auto spread {0U};
-      std::vector<unsigned int> samples;
-      std::stringstream ss(line);
-
-      // get OTU id (first item of the line)
-      std::string buf;
-      getline(ss, OTU_id, sepchar);
-      // if OTU id already in map EXIT_FAILURE
-
-      // get abundance values (rest of the line)
-      auto n_values {0U};
-      while (getline(ss, buf, sepchar)) {
-        auto i {std::stoul(buf)};
-        if (i > 0) { spread += 1; }
-        sum_reads += i;
-        samples.push_back(i);  // update OTU struct directly??
-        n_values++;
-      }
-
-      // sanity check
-      if ((n_values + 1) != header_columns) {
-        std::cerr << "Error: variable number of columns in OTU table\n";
-        exit(EXIT_FAILURE);
-      }
-
-      // add results to the map (samples, sum_reads, spread)
-      OTU otu;
-      otu.spread = spread;
-      otu.sum_reads = sum_reads;
-      for (auto& s :samples) {
-        otu.samples.push_back(s);  // update OTU struct directly??
-      }
-      OTUs[OTU_id] = otu;
+      parse_each_otu(OTUs, line, header_columns);
     }
   otu_table.close();
+}
+
+
+auto read_match_list(std::string match_list_name,
+                     std::unordered_map<std::string, struct OTU>& OTUs) -> void {
+  constexpr auto sepchar {'\t'};
+
+  // check if file can be opened
+  std::ifstream match_list {match_list_name};
+  if (! match_list) {
+    std::cerr << "Error: can't open input file " << match_list_name << "\n";
+    exit(EXIT_FAILURE);
+  }
+
+  // expect three columns
+  std::string line;
+  while (std::getline(match_list, line))
+    {
+      std::string buf;
+      std::stringstream ss(line);
+      getline(ss, buf, sepchar);
+      auto query {buf};
+      getline(ss, buf, sepchar);
+      auto hit {buf};
+      getline(ss, buf, sepchar);
+      auto similarity {std::stof(buf)};
+
+      // sanity check
+      if (getline(ss, buf, sepchar)) {
+        std::cerr << "Error: can't open input file " << match_list_name << "\n";
+        exit(EXIT_FAILURE);
+      }
+      // update map if query is smaller than hit
+      if (OTUs[query].sum_reads <= OTUs[hit].sum_reads &&
+          OTUs[query].spread <= OTUs[hit].spread) {
+        Match match;
+        match.hit_id = hit;
+        match.similarity = similarity;
+        OTUs[query].matches.push_back(match);
+      }
+    }
+  match_list.close();
 }
