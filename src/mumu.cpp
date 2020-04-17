@@ -21,11 +21,15 @@
 // 34398 MONTPELLIER CEDEX 5
 // France
 
+#include <ios>
 #include "mumu.h"
 #include "cli.h"
-
+#include "load_data.h"
 
 auto main(int argc, char** argv) -> int {
+
+  // printf is not used
+  std::ios_base::sync_with_stdio(false);
 
   // command line interface
   Parameters parameters;
@@ -34,6 +38,7 @@ auto main(int argc, char** argv) -> int {
 
   // load data
   // initialize a map
+  read_otu_table(parameters.otu_table);
   // read_otu_table(parameters.otu_table, map name)
 
   // find potential parents
