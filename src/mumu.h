@@ -22,6 +22,12 @@
 // France
 
 #include <string>
+#include <vector>
+#include <climits>
+#include <unordered_map>
+
+static_assert(UINT_MAX > UINT16_MAX, "unsigned integers are too small");
+static_assert(UINT_MAX >= UINT32_MAX, "unsigned integers are too small");
 
 constexpr auto threads_default {1U};
 constexpr auto minimum_match_default {84U};
@@ -46,4 +52,20 @@ struct Parameters {
   std::string minimum_ratio_type {"min"};
   double minimum_ratio {minimum_ratio_default};
   double minimum_relative_cooccurence {minimum_relative_cooccurence_default};
+};
+
+
+struct Match {
+  std::string hit_id;
+  double similarity {0.0};
+};
+
+struct OTU {
+  unsigned int spread {0};
+  unsigned int sum_reads {0};
+  bool mergeable {false};
+  bool merged {false};
+  std::string father_id;
+  std::vector<struct Match> matches;
+  std::vector<unsigned int> samples;
 };
