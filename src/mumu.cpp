@@ -22,6 +22,8 @@
 // France
 
 #include <ios>
+#include <string>
+#include <iostream>
 #include "mumu.h"
 #include "cli.h"
 #include "load_data.h"
@@ -37,8 +39,15 @@ auto main(int argc, char** argv) -> int {
   validate_args(parameters);
 
   // load data
-  // initialize a map
-  read_otu_table(parameters.otu_table);
+  std::unordered_map<std::string, struct OTU> OTUs;
+  read_otu_table(parameters.otu_table, OTUs);
+  for (auto& otu : OTUs) {
+    const std::string& OTU_id {otu.first};
+    std::cout << OTU_id << "\t";
+    std::cout << OTUs[OTU_id].spread << "\n";
+  }
+  std::cout << "end of mumu\n";
+
   // read_otu_table(parameters.otu_table, map name)
 
   // find potential parents

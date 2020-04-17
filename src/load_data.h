@@ -22,5 +22,7 @@
 // France
 
 #include <string>
+#include <unordered_map>
 
-auto read_otu_table(std::string otu_table_name) -> void;
+auto read_otu_table(std::string otu_table_name,
+                    std::unordered_map<std::string, struct OTU>& OTUs) -> void;
