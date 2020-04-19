@@ -24,10 +24,13 @@
 #include <ios>
 #include <string>
 #include <iostream>
+#include <algorithm>
 #include "mumu.h"
 #include "cli.h"
 #include "load_data.h"
 #include "search_parent.h"
+#include "merge_OTUs.h"
+#include "write_table.h"
 
 auto main(int argc, char** argv) -> int {
 
@@ -41,17 +44,35 @@ auto main(int argc, char** argv) -> int {
 
   // index data
   std::unordered_map<std::string, struct OTU> OTUs;
-  read_otu_table(parameters.otu_table, OTUs);
+  read_otu_table(parameters.otu_table, parameters.new_otu_table, OTUs);
+  read_match_list(parameters.match_list, OTUs, parameters.minimum_match);
+  
+  // find potential parents (multithreaded)
+  search_parent(OTUs, parameters.log);
 
-  // read_otu_table(parameters.otu_table, map name)
-  read_match_list(parameters.match_list, OTUs);
+  // // test
+  // OTUs["B"].is_mergeable = true;
+  // OTUs["B"].father_id = "A";
+  
+  // merge, sort and output
+  merge_OTUs(OTUs);
+  write_table(OTUs, parameters.new_otu_table);
 
-  // find potential parents
-  search_parent(OTUs);
-
-  // merge
-
-  // output new table and clean up
-
+  // clean up?
+  
   return 0;
 }
+
+
+// TODO:
+
+// - get rid of is_mergeable,
+// - use 'sort(par_unseq' to get parallel and/or vectorized sort,
+// - use async() to test potential parents? not cluster-friendly, no
+//   control on CPU/thread usage
+
+// Assumptions
+
+// - a son cannot be as abundant as its father (to avoid circular
+//   linking among OTUs of the same abundance). OTUs of size one can
+//   only be linked to OTUs of size > 1.

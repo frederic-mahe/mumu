@@ -25,7 +25,9 @@
 #include <unordered_map>
 
 auto read_otu_table(std::string otu_table_name,
+                    std::string new_otu_table_name,
                     std::unordered_map<std::string, struct OTU>& OTUs) -> void;
 
 auto read_match_list(std::string match_list_name,
-                     std::unordered_map<std::string, struct OTU>& OTUs) -> void;
+                     std::unordered_map<std::string, struct OTU>& OTUs,
+                     unsigned int minimum_similarity) -> void;

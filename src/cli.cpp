@@ -89,7 +89,7 @@ auto version() -> void {
 
 
 auto parse_args (int argc, char ** argv, Parameters& parameters) -> void {
-
+  std::cout << "parse parameters... ";
   auto c {0};
 
   while (true) {
@@ -172,10 +172,12 @@ auto parse_args (int argc, char ** argv, Parameters& parameters) -> void {
     }
     std::cout << "\n";
   }
+  std::cout << "done\n";
 }
 
 
 auto validate_args (const Parameters& parameters) -> void {
+  std::cout << "check parameters... ";
   // check for mandatory arguments (file names)
   if (! parameters.is_otu_table) {
     std::cerr << "Error: missing mandatory argument --otu_table filename\n";
@@ -263,4 +265,5 @@ auto validate_args (const Parameters& parameters) -> void {
     std::cerr << "Error: --minimum ratio type can only be \"min\" or \"avg\"\n";
     exit(EXIT_FAILURE);
   }
+  std::cout << "done\n";
 }

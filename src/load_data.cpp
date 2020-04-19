@@ -28,10 +28,28 @@
 #include "mumu.h"
 #include "load_data.h"
 
+// // work in progress: use operator overload to parse match list file
+// struct Match_line {
+//   std::string query;
+//   std::string hit;
+//   float similarity {0.0};
+// };
+
+// std::istream& operator>>(std::istream& is, Match_line& line) {
+//   Match_line new_line;
+//   if(is >> std::ws
+//      && std::getline(is, new_line.query, sepchar)
+//      && std::getline(is, new_line.hit, sepchar)
+//      && std::getline(is, new_line.similarity, sepchar))  // similarity = std::stof(buf); !!
+//     {
+//       line = new_line; // could do more validation here
+//     }
+//   return is;
+// }
+  
 
 auto count_columns(std::string line) -> unsigned int {
   auto columns {0U};
-  constexpr auto sepchar {'\t'};
 
   std::string buf;                  // Have a buffer string
   std::stringstream ss(line);       // Insert the string into a stream
@@ -46,7 +64,6 @@ auto count_columns(std::string line) -> unsigned int {
 auto parse_each_otu(std::unordered_map<std::string, struct OTU>& OTUs,
                     std::string line,
                     unsigned int header_columns) -> void {
-  constexpr auto sepchar {'\t'};
   auto sum_reads {0U};  // 4,294,967,295 reads at most
   auto spread {0U};
   auto n_values {0U};
@@ -58,13 +75,16 @@ auto parse_each_otu(std::unordered_map<std::string, struct OTU>& OTUs,
   // get OTU id (first item of the line)
   getline(ss, OTU_id, sepchar);
 
+  // we know there are (columns - 1) samples
+  otu.samples.reserve(header_columns - 1);
+  
   // get abundance values (rest of the line)
   while (getline(ss, buf, sepchar)) {
     auto i {std::stoul(buf)};
     if (i > 0) { spread += 1; }
     sum_reads += i;
-    otu.samples.push_back(i);  // push to map entry
-    n_values++;
+    otu.samples.push_back(i);  // push to map
+    ++n_values;
   }
 
   // sanity check
@@ -81,39 +101,36 @@ auto parse_each_otu(std::unordered_map<std::string, struct OTU>& OTUs,
 
 
 auto read_otu_table(std::string otu_table_name,
+                    std::string new_otu_table_name,
                     std::unordered_map<std::string, struct OTU>& OTUs) -> void {
-
-  // check if file can be opened
+  std::cout << "parse OTU table... ";
+  // input and output files
   std::ifstream otu_table {otu_table_name};
-  if (! otu_table) {
-    std::cerr << "Error: can't open input file " << otu_table_name << "\n";
-    exit(EXIT_FAILURE);
-  }
-
-  // read first line, get number of columns
+  std::ofstream new_otu_table {new_otu_table_name};
+  
+  // first line: get number of columns, write to new OTU table
   std::string line;
   std::getline(otu_table, line);
   auto header_columns = count_columns(line);
-
+  new_otu_table << line << "\n";
+  new_otu_table.close();
+  
   // parse other lines, and map the values
   while (std::getline(otu_table, line))
     {
       parse_each_otu(OTUs, line, header_columns);
     }
   otu_table.close();
+  std::cout << "done, " << OTUs.size() << " entries\n";
 }
 
 
-auto read_match_list(std::string match_list_name,
-                     std::unordered_map<std::string, struct OTU>& OTUs) -> void {
-  constexpr auto sepchar {'\t'};
-
-  // check if file can be opened
+auto read_match_list(const std::string match_list_name,
+                     std::unordered_map<std::string, struct OTU>& OTUs,
+                     const unsigned int minimum_similarity) -> void {
+  std::cout << "parse match list... ";
+  // open input file
   std::ifstream match_list {match_list_name};
-  if (! match_list) {
-    std::cerr << "Error: can't open input file " << match_list_name << "\n";
-    exit(EXIT_FAILURE);
-  }
 
   // expect three columns
   std::string line;
@@ -130,21 +147,24 @@ auto read_match_list(std::string match_list_name,
 
       // sanity check
       if (getline(ss, buf, sepchar)) {
-        std::cerr << "Error: can't open input file " << match_list_name << "\n";
+        std::cerr << "Error: match list entry has more than three columns\n";
         exit(EXIT_FAILURE);
       }
-      // update map if query is "smaller" than hit
+      
+      // skip matches below our similarity threshold
+      if (similarity < minimum_similarity) { continue; }
+      
+      // update map only if query is less abundant than hit
       auto hit_sum_reads {OTUs[hit].sum_reads};
-      auto hit_spread {OTUs[hit].spread};
-      if (OTUs[query].sum_reads <= hit_sum_reads &&
-          OTUs[query].spread <= hit_spread) {
+      if (OTUs[query].sum_reads < hit_sum_reads) {
         Match match;
         match.similarity = similarity;
         match.hit_sum_reads = hit_sum_reads;
-        match.hit_spread = hit_spread;
+        match.hit_spread = OTUs[hit].spread;
         match.hit_id = hit;
-        OTUs[query].matches.push_back(match);
+        OTUs[query].matches.push_back(match);  // no need to reserve(10)?
       }
     }
   match_list.close();
+  std::cout << "done\n";
 }
