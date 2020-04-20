@@ -32,7 +32,7 @@
 #include "merge_OTUs.h"
 #include "write_table.h"
 
-auto main(int argc, char** argv) -> int {
+auto main (int argc, char** argv) -> int {
 
   // printf is not used
   std::ios_base::sync_with_stdio(false);
@@ -48,7 +48,7 @@ auto main(int argc, char** argv) -> int {
   read_match_list(parameters.match_list, OTUs, parameters.minimum_match);
   
   // find potential parents (multithreaded)
-  search_parent(OTUs, parameters.log);
+  search_parent(OTUs, parameters);
 
   // // test
   // OTUs["B"].is_mergeable = true;

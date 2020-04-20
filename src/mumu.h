@@ -34,7 +34,7 @@ constexpr auto threads_default {1U};
 constexpr auto minimum_match_default {84U};
 constexpr auto minimum_relative_cooccurence_default {0.95F};
 constexpr auto minimum_ratio_default {1.0F};
-
+constexpr auto largest_double {std::numeric_limits<double>::max()};
 
 struct Parameters {
   // mandatory arguments
@@ -49,7 +49,7 @@ struct Parameters {
 
   // default values
   unsigned int threads {threads_default};
-  unsigned int minimum_match {minimum_match_default};
+  double minimum_match {minimum_match_default};
   std::string minimum_ratio_type {"min"};
   double minimum_ratio {minimum_ratio_default};
   double minimum_relative_cooccurence {minimum_relative_cooccurence_default};

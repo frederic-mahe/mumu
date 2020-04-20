@@ -21,13 +21,7 @@
 // 34398 MONTPELLIER CEDEX 5
 // France
 
-#include <string>
 #include <unordered_map>
 
-auto read_otu_table (std::string otu_table_name,
-                     std::string new_otu_table_name,
-                     std::unordered_map<std::string, struct OTU> &OTUs) -> void;
-
-auto read_match_list (std::string match_list_name,
-                      std::unordered_map<std::string, struct OTU> &OTUs,
-                      double minimum_similarity) -> void;
+auto search_parent(std::unordered_map<std::string, struct OTU> &OTUs,
+                   struct Parameters const &parameters) -> void;

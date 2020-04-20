@@ -79,7 +79,7 @@ auto help () -> void {
 }
 
 
-auto version() -> void {
+auto version () -> void {
   std::cout << "mumu 0.0.1\n"
             << "Copyright (C) 2020 Frederic Mahe\n"
             << "https://github.com/frederic-mahe/mumu\n"
@@ -88,7 +88,7 @@ auto version() -> void {
 }
 
 
-auto parse_args (int argc, char ** argv, Parameters& parameters) -> void {
+auto parse_args (int argc, char ** argv, Parameters &parameters) -> void {
   std::cout << "parse parameters... ";
   auto c {0};
 
@@ -109,8 +109,8 @@ auto parse_args (int argc, char ** argv, Parameters& parameters) -> void {
       std::cout << "\n";
       break;
 
-    case 'a':  // minimum match (default is 84)
-      parameters.minimum_match = atoi(optarg);
+    case 'a':  // minimum match (default is 84.0)
+      parameters.minimum_match = atof(optarg);
       break;
 
     case 'b':  // minimum ratio type (default is "min")
@@ -176,7 +176,7 @@ auto parse_args (int argc, char ** argv, Parameters& parameters) -> void {
 }
 
 
-auto validate_args (const Parameters& parameters) -> void {
+auto validate_args (Parameters const &parameters) -> void {
   std::cout << "check parameters... ";
   // check for mandatory arguments (file names)
   if (! parameters.is_otu_table) {
@@ -227,8 +227,8 @@ auto validate_args (const Parameters& parameters) -> void {
   log.close();
 
   // minimum match (50 <= x <= 100)
-  constexpr auto lowest_similarity {50};
-  constexpr auto highest_similarity {100};
+  constexpr auto lowest_similarity {50.0};
+  constexpr auto highest_similarity {100.0};
   if (parameters.minimum_match < lowest_similarity
       || parameters.minimum_match > highest_similarity) {
     std::cerr << "Error: --minimum_match value must be between "

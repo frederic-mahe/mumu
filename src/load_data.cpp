@@ -48,7 +48,7 @@
 // }
   
 
-auto count_columns(std::string line) -> unsigned int {
+auto count_columns (std::string line) -> unsigned int {
   auto columns {0U};
 
   std::string buf;                  // Have a buffer string
@@ -61,9 +61,9 @@ auto count_columns(std::string line) -> unsigned int {
 }
 
 
-auto parse_each_otu(std::unordered_map<std::string, struct OTU>& OTUs,
-                    std::string line,
-                    unsigned int header_columns) -> void {
+auto parse_each_otu (std::unordered_map<std::string, struct OTU> &OTUs,
+                     std::string line,
+                     unsigned int header_columns) -> void {
   auto sum_reads {0U};  // 4,294,967,295 reads at most
   auto spread {0U};
   auto n_values {0U};
@@ -100,9 +100,9 @@ auto parse_each_otu(std::unordered_map<std::string, struct OTU>& OTUs,
 }
 
 
-auto read_otu_table(std::string otu_table_name,
-                    std::string new_otu_table_name,
-                    std::unordered_map<std::string, struct OTU>& OTUs) -> void {
+auto read_otu_table (std::string otu_table_name,
+                     std::string new_otu_table_name,
+                     std::unordered_map<std::string, struct OTU> &OTUs) -> void {
   std::cout << "parse OTU table... ";
   // input and output files
   std::ifstream otu_table {otu_table_name};
@@ -125,9 +125,9 @@ auto read_otu_table(std::string otu_table_name,
 }
 
 
-auto read_match_list(const std::string match_list_name,
-                     std::unordered_map<std::string, struct OTU>& OTUs,
-                     const unsigned int minimum_similarity) -> void {
+auto read_match_list (const std::string match_list_name,
+                      std::unordered_map<std::string, struct OTU> &OTUs,
+                      const double minimum_similarity) -> void {
   std::cout << "parse match list... ";
   // open input file
   std::ifstream match_list {match_list_name};

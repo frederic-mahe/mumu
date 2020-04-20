@@ -21,6 +21,6 @@
 // 34398 MONTPELLIER CEDEX 5
 // France
 
-auto parse_args (int argc, char ** argv, struct Parameters& parameters) -> void;
+auto parse_args (int argc, char ** argv, struct Parameters &parameters) -> void;
 
-auto validate_args (const struct Parameters& parameters) -> void;
+auto validate_args (struct Parameters const &parameters) -> void;
