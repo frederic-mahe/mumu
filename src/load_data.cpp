@@ -62,7 +62,7 @@ auto count_columns (std::string line) -> unsigned int {
 
 
 auto parse_each_otu (std::unordered_map<std::string, struct OTU> &OTUs,
-                     std::string line,
+                     std::string &line,
                      unsigned int header_columns) -> void {
   auto sum_reads {0U};  // 4,294,967,295 reads at most
   auto spread {0U};
@@ -121,7 +121,7 @@ auto read_otu_table (std::string otu_table_name,
       parse_each_otu(OTUs, line, header_columns);
     }
   otu_table.close();
-  std::cout << "done, " << OTUs.size() << " entries\n";
+  std::cout << "done, " << OTUs.size() << " entries" << std::endl;
 }
 
 
@@ -166,5 +166,5 @@ auto read_match_list (const std::string match_list_name,
       }
     }
   match_list.close();
-  std::cout << "done\n";
+  std::cout << "done" << std::endl;
 }

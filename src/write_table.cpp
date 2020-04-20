@@ -50,7 +50,7 @@ auto extract_OTU_stats (std::unordered_map<std::string, struct OTU> &OTUs)
     
     // spread must be re-computed :-(
     auto spread {0U};
-    for (auto const& sample: OTUs[OTU_id].samples) {
+    for (auto& sample: OTUs[OTU_id].samples) {
       if (sample > 0) { ++spread; }
     }
     otu_stats.spread = spread;
@@ -60,17 +60,13 @@ auto extract_OTU_stats (std::unordered_map<std::string, struct OTU> &OTUs)
 }
 
 
-auto compare_two_OTUs (OTU_stats const &a, OTU_stats const &b) -> bool {
+auto compare_two_OTUs (const OTU_stats& a, const OTU_stats& b) -> bool {
   // by decreasing abundance
   if (a.abundance > b.abundance) {
-    return a.abundance > b.abundance;
+    return true;
   }
   // then by decreasing spread
-  if (a.spread > b.spread) {
-    return a.spread > b.spread;
-  }
-  // then alphabetically for stability
-  return (a.OTU_id < b.OTU_id);
+  return (a.spread > b.spread);
 }
 
 
@@ -87,7 +83,7 @@ auto write_table (std::unordered_map<std::string, struct OTU> &OTUs,
   }
   if (sorted_OTUs.size() > 1) {
     // sort it by decreasing abundance, spread and id name
-    std::sort(sorted_OTUs.begin(), sorted_OTUs.end(), compare_two_OTUs);
+    std::stable_sort(sorted_OTUs.begin(), sorted_OTUs.end(), compare_two_OTUs);
   }
 
   // output 

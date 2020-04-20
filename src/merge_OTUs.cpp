@@ -59,6 +59,7 @@ auto merge_OTUs (std::unordered_map<std::string, struct OTU> &OTUs) -> void {
                    std::plus<>());  // C++14: no need to repeat the type
     // update status
     OTUs[OTU_id].is_merged = true;
+    OTUs[root].sum_reads += OTUs[OTU_id].sum_reads;
   }
   std::cout << "done\n";
 }

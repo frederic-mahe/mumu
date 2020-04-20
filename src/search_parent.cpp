@@ -74,18 +74,14 @@ auto operator<< (std::ostream& os, const Stats& s) -> std::ostream& {
 auto compare_two_matches (const Match& a, const Match& b) -> bool {
   // by decreasing similarity
   if (a.similarity > b.similarity) {
-    return a.similarity > b.similarity;
+    return true;
   }
   // then by decreasing abundance
   if (a.hit_sum_reads > b.hit_sum_reads) {
-    return a.hit_sum_reads > b.hit_sum_reads;
+    return true;
   }
   // then by decreasing spread
-  if (a.hit_spread > b.hit_spread) {
-    return a.hit_spread > b.hit_spread;
-  }
-  // then alphabetically for stability
-  return (a.hit_id < b.hit_id);
+  return  (a.hit_spread > b.hit_spread);
 }
 
 
@@ -129,20 +125,28 @@ auto test_parents (std::unordered_map<std::string, struct OTU> &OTUs,
     }
 
     s.avg_ratio = s.sum_ratio / s.son_spread;
-    s.avg_non_null_ratio = s.sum_ratio / s.father_overlap_spread;
+    if (s.father_overlap_spread > 0) {
+      s.avg_non_null_ratio = s.sum_ratio / s.father_overlap_spread;
+    }
+    if (s.smallest_non_null_ratio == largest_double) {
+      s.smallest_non_null_ratio = 0.0;  // avoid printing a giant value
+    }
     
     // not a parent if...
     auto relative_cooccurence {1.0 * s.father_overlap_spread / s.son_spread};
     if (relative_cooccurence < parameters.minimum_relative_cooccurence) {
-      return ;
+      log_file << s;
+      continue ;
     }
     if (parameters.minimum_ratio_type == "min" and
         s.smallest_non_null_ratio < parameters.minimum_ratio) {
-      return ;
+      log_file << s;
+      continue ;
     }
     if (parameters.minimum_ratio_type == "avg" and
         s.avg_non_null_ratio < parameters.minimum_ratio) {
-      return ;
+      log_file << s;
+      continue ;
     }
 
     // update and output
@@ -150,6 +154,7 @@ auto test_parents (std::unordered_map<std::string, struct OTU> &OTUs,
     otu.is_mergeable = true;
     otu.father_id = match.hit_id;
     log_file << s;
+    break;
   }
 }
 
@@ -164,20 +169,20 @@ auto search_parent (std::unordered_map<std::string, struct OTU> &OTUs,
     const std::string& OTU_id {otu.first};
     
     // ignore OTUs without any match
-    if (OTUs[OTU_id].matches.empty()) { return; }
+    if (OTUs[OTU_id].matches.empty()) { continue; }
     
     // sort matches (best candidates first)
     if (OTUs[OTU_id].matches.size() > 1) {
-      std::sort(OTUs[OTU_id].matches.begin(),
-                OTUs[OTU_id].matches.end(),
-                compare_two_matches);
+      std::stable_sort(OTUs[OTU_id].matches.begin(),
+                       OTUs[OTU_id].matches.end(),
+                       compare_two_matches);
     }
 
     // test_potential_parents
     test_parents(OTUs, OTUs[OTU_id], OTU_id, parameters, log_file);
   }
   log_file.close();
-  std::cout << "done\n";
+  std::cout << "done" << std::endl;
 }
 
 // the inside-loop of the function above is thread-safe (one OTU per
