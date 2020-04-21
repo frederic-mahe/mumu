@@ -56,7 +56,7 @@ const struct option long_options[] =
 
 
 auto help () -> void {
-  std::cout << "Usage: mumu\n"
+  std::cout << "Usage: mumu " << n_version << "\n"
             << " -h, --help                           display this help and exit\n"
             << " -v, --version                        display version information and exit\n"
             << " -t, --threads INTEGER                number of threads to use (1)\n"
@@ -70,7 +70,7 @@ auto help () -> void {
             << " --log FILE                           record operations\n"
             << "\n"
             << "Computation parameters:\n"
-            << " --minimum_match INTEGER              minimum similarity threshold (84)\n"
+            << " --minimum_match FLOAT                minimum similarity threshold (84.0)\n"
             << " --minimum_ratio FLOAT                minimum abundance ratio (1.0)\n"
             << " --minimum_ratio_type STRING          \"min\" or \"avg\" abundance ratio (\"min\")\n"
             << " --minimum_relative_cooccurence FLOAT relative father-son spread (0.95)\n"
@@ -80,8 +80,8 @@ auto help () -> void {
 
 
 auto version () -> void {
-  std::cout << "mumu 0.0.1\n"
-            << "Copyright (C) 2020 Frederic Mahe\n"
+  std::cout << "mumu " << n_version << "\n"
+            << "Copyright (C) " << copyright_years << " Frederic Mahe\n"
             << "https://github.com/frederic-mahe/mumu\n"
             << "\n";
   std::exit(EXIT_SUCCESS);
@@ -89,7 +89,6 @@ auto version () -> void {
 
 
 auto parse_args (int argc, char ** argv, Parameters &parameters) -> void {
-  std::cout << "parse parameters... ";
   auto c {0};
 
   while (true) {
@@ -174,12 +173,10 @@ auto parse_args (int argc, char ** argv, Parameters &parameters) -> void {
     }
     std::cout << "\n";
   }
-  std::cout << "done\n";
 }
 
 
 auto validate_args (Parameters const &parameters) -> void {
-  std::cout << "check parameters... ";
   // check for mandatory arguments (file names)
   if (! parameters.is_otu_table) {
     std::cerr << "Error: missing mandatory argument --otu_table filename\n";
@@ -267,5 +264,4 @@ auto validate_args (Parameters const &parameters) -> void {
     std::cerr << "Error: --minimum ratio type can only be \"min\" or \"avg\"\n";
     exit(EXIT_FAILURE);
   }
-  std::cout << "done\n";
 }
