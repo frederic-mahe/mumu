@@ -110,7 +110,7 @@ auto parse_args (int argc, char ** argv, Parameters &parameters) -> void {
       break;
 
     case 'a':  // minimum match (default is 84.0)
-      parameters.minimum_match = atof(optarg);
+      parameters.minimum_match = std::atof(optarg);
       break;
 
     case 'b':  // minimum ratio type (default is "min")
@@ -118,11 +118,11 @@ auto parse_args (int argc, char ** argv, Parameters &parameters) -> void {
       break;
 
     case 'c':  // minimum ratio (default is 1.0)
-      parameters.minimum_ratio = atof(optarg);
+      parameters.minimum_ratio = std::atof(optarg);
       break;
 
     case 'd':  // minimum relative cooccurence (default is 0.95)
-      parameters.minimum_relative_cooccurence = atof(optarg);
+      parameters.minimum_relative_cooccurence = std::atof(optarg);
       break;
 
     case 'h':  // help message
@@ -150,7 +150,7 @@ auto parse_args (int argc, char ** argv, Parameters &parameters) -> void {
       break;
 
     case 't':  // threads (default is 1)
-      parameters.threads = atoi(optarg);
+      parameters.threads = std::atoi(optarg);
       break;
 
     case 'v':  // version number
