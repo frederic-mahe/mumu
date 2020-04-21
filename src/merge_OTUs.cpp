@@ -43,6 +43,7 @@ auto find_root (std::unordered_map<std::string, struct OTU> &OTUs,
   return root;
 }
 
+
 auto merge_OTUs (std::unordered_map<std::string, struct OTU> &OTUs) -> void {
   std::cout << "merge OTUs... ";
   for (auto& otu : OTUs) {
@@ -61,5 +62,5 @@ auto merge_OTUs (std::unordered_map<std::string, struct OTU> &OTUs) -> void {
     OTUs[OTU_id].is_merged = true;
     OTUs[root].sum_reads += OTUs[OTU_id].sum_reads;
   }
-  std::cout << "done\n";
+  std::cout << "done" << std::endl;
 }
