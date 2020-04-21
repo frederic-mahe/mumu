@@ -30,6 +30,8 @@ static_assert(UINT_MAX > UINT16_MAX, "unsigned integers are too small");
 static_assert(UINT_MAX >= UINT32_MAX, "unsigned integers are too small");
 
 constexpr auto sepchar {'\t'};
+constexpr auto n_version {"0.0.1"};
+constexpr auto copyright_years {"2020"};  // latter: "2020-20XX"
 constexpr auto threads_default {1U};
 constexpr auto minimum_match_default {84.0};
 constexpr auto minimum_relative_cooccurence_default {0.95};
