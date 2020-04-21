@@ -95,7 +95,9 @@ auto parse_args (int argc, char ** argv, Parameters &parameters) -> void {
   while (true) {
     auto option_index {0};
 
-    c = getopt_long(argc, argv, "a:b:c:d:hl:m:n:o:t:v", long_options, &option_index);
+    c = getopt_long(argc, argv, "a:b:c:d:hl:m:n:o:t:v",
+                    static_cast<const struct option *>(long_options),
+                    &option_index);
     if (c == -1) {
       break;
     }
