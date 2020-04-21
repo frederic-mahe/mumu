@@ -122,7 +122,7 @@ auto parse_args (int argc, char ** argv, Parameters &parameters) -> void {
       break;
 
     case 'd':  // minimum relative cooccurence (default is 0.95)
-      parameters.minimum_ratio = atof(optarg);
+      parameters.minimum_relative_cooccurence = atof(optarg);
       break;
 
     case 'h':  // help message
