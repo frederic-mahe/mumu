@@ -139,12 +139,12 @@ auto test_parents (std::unordered_map<std::string, struct OTU> &OTUs,
       continue ;
     }
     if (parameters.minimum_ratio_type == "min" and
-        s.smallest_non_null_ratio < parameters.minimum_ratio) {
+        s.smallest_non_null_ratio <= parameters.minimum_ratio) {
       log_file << s;
       continue ;
     }
     if (parameters.minimum_ratio_type == "avg" and
-        s.avg_non_null_ratio < parameters.minimum_ratio) {
+        s.avg_non_null_ratio <= parameters.minimum_ratio) {
       log_file << s;
       continue ;
     }
