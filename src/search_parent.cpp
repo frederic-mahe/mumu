@@ -85,8 +85,36 @@ auto compare_two_matches (const Match& a, const Match& b) -> bool {
 }
 
 
+auto per_sample_ratios (std::unordered_map<std::string, struct OTU> &OTUs,
+                        Stats &s) -> void {
+  // 'zip' two OTUs (https://www.cplusplus.com/forum/general/228918/)
+  // for (auto [x,y] : std::zip( xs, ys ))  // available in c++2x?
+  auto& son = OTUs[s.son_id].samples;
+  auto& father = OTUs[s.father_id].samples;
+  auto xi = son.begin();
+  auto yi = father.begin();
+  while (xi != son.end()) {  // check only one end, vectors have the same length
+    auto son_abundance = *xi++;
+    const auto& father_abundance = *yi++;
+    if (son_abundance == 0) { continue; }  // skip this sample
+    s.son_overlap_abundance += son_abundance;
+    double ratio { 1.0 * father_abundance / son_abundance};
+    if (ratio < s.smallest_ratio) { s.smallest_ratio = ratio; }
+    if (ratio > s.largest_ratio) { s.largest_ratio = ratio; }
+    if (ratio < s.smallest_non_null_ratio and ratio > 0.0) {
+      s.smallest_non_null_ratio = ratio;
+    }
+    s.sum_ratio += ratio;
+    if (father_abundance > 0) {
+      ++s.father_overlap_spread;
+      s.father_overlap_abundance += father_abundance;
+    }
+  }
+}
+
+
 auto test_parents (std::unordered_map<std::string, struct OTU> &OTUs,
-                   struct OTU &otu,
+                   OTU &otu,
                    const std::string OTU_id,
                    Parameters const &parameters,
                    std::ofstream &log_file) -> void {
@@ -98,39 +126,19 @@ auto test_parents (std::unordered_map<std::string, struct OTU> &OTUs,
              .father_total_abundance = OTUs[match.hit_id].sum_reads,
              .son_spread = otu.spread,
              .father_spread = OTUs[match.hit_id].spread};
-    
-    // 'zip' two OTUs (https://www.cplusplus.com/forum/general/228918/)
-    // for (auto [x,y] : std::zip( xs, ys ))  // available in c++2x?    
-    auto& son = otu.samples;
-    auto& father = OTUs[match.hit_id].samples;
-    auto xi = son.begin();
-    auto yi = father.begin();
-    while (xi != son.end()) {  // check only one end, vectors have the same length
-      auto son_abundance = *xi++;
-      const auto& father_abundance = *yi++;
-      if (son_abundance == 0) { continue; }  // skip this sample
-      s.son_overlap_abundance += son_abundance;
-      double ratio { 1.0 * father_abundance / son_abundance};
-      if (ratio < s.smallest_ratio) { s.smallest_ratio = ratio; }
-      if (ratio > s.largest_ratio) { s.largest_ratio = ratio; }
-      if (ratio < s.smallest_non_null_ratio and ratio > 0.0) {
-        s.smallest_non_null_ratio = ratio;
-      }
-      s.sum_ratio += ratio;
-      if (father_abundance > 0) {
-        ++s.father_overlap_spread;
-        s.father_overlap_abundance += father_abundance;
-      }
-    }
 
+    // compute father/son ratios for all samples
+    per_sample_ratios(OTUs, s);
+
+    // prep results
     s.avg_ratio = s.sum_ratio / s.son_spread;
-    if (s.father_overlap_spread > 0) {
+    if (s.father_overlap_spread > 0) {  // avoid dividing by zero
       s.avg_non_null_ratio = s.sum_ratio / s.father_overlap_spread;
     }
     if (s.smallest_non_null_ratio == largest_double) {
       s.smallest_non_null_ratio = 0.0;  // avoid printing a giant value
     }
-    
+
     // not a parent if...
     auto relative_cooccurence {1.0 * s.father_overlap_spread / s.son_spread};
     if (relative_cooccurence < parameters.minimum_relative_cooccurence) {
@@ -160,13 +168,13 @@ auto search_parent (std::unordered_map<std::string, struct OTU> &OTUs,
   std::cout << "search for potential parent OTUs... ";
   // write to log file
   std::ofstream log_file {parameters.log};
-  
+
   for (auto& otu : OTUs) {
     const std::string& OTU_id {otu.first};
-    
+
     // ignore OTUs without any match
     if (OTUs[OTU_id].matches.empty()) { continue; }
-    
+
     // sort matches (best candidates first)
     if (OTUs[OTU_id].matches.size() > 1) {
       std::stable_sort(OTUs[OTU_id].matches.begin(),
