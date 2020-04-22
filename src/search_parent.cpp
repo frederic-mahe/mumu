@@ -130,7 +130,7 @@ auto test_parents (std::unordered_map<std::string, struct OTU> &OTUs,
     // compute father/son ratios for all samples
     per_sample_ratios(OTUs, s);
 
-    // prep results
+    // compute average ratios and prep for stats output
     s.avg_ratio = s.sum_ratio / s.son_spread;
     if (s.father_overlap_spread > 0) {  // avoid dividing by zero
       s.avg_non_null_ratio = s.sum_ratio / s.father_overlap_spread;
@@ -153,7 +153,7 @@ auto test_parents (std::unordered_map<std::string, struct OTU> &OTUs,
       continue ;
     }
 
-    // update and output
+    // update OTU and output stats
     s.status = "accepted";
     otu.is_mergeable = true;
     otu.father_id = match.hit_id;
@@ -166,7 +166,7 @@ auto test_parents (std::unordered_map<std::string, struct OTU> &OTUs,
 auto search_parent (std::unordered_map<std::string, struct OTU> &OTUs,
                     Parameters const &parameters) -> void {
   std::cout << "search for potential parent OTUs... ";
-  // write to log file
+  // stats will be written to log file
   std::ofstream log_file {parameters.log};
 
   for (auto& otu : OTUs) {
@@ -175,20 +175,18 @@ auto search_parent (std::unordered_map<std::string, struct OTU> &OTUs,
     // ignore OTUs without any match
     if (OTUs[OTU_id].matches.empty()) { continue; }
 
-    // sort matches (best candidates first)
+    // sort matches (best candidate OTUs first)
     if (OTUs[OTU_id].matches.size() > 1) {
       std::stable_sort(OTUs[OTU_id].matches.begin(),
                        OTUs[OTU_id].matches.end(),
                        compare_two_matches);
     }
 
-    // test_potential_parents
+    // test potential parents (thread safe: one OTU per thread, thread
+    // only modifies the OTU it is working on, other OTUs are
+    // read-only)
     test_parents(OTUs, OTUs[OTU_id], OTU_id, parameters, log_file);
   }
   log_file.close();
   std::cout << "done" << std::endl;
 }
-
-// the inside-loop of the function above is thread-safe (one OTU per
-// thread, thread only modifies the OTU it is working on, other OTUs
-// are read-only.
