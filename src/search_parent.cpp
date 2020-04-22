@@ -91,14 +91,13 @@ auto test_parents (std::unordered_map<std::string, struct OTU> &OTUs,
                    Parameters const &parameters,
                    std::ofstream &log_file) -> void {
   for (auto& match : otu.matches) {
-    Stats s;
-    s.son_id = OTU_id;
-    s.father_id = match.hit_id;
-    s.similarity = match.similarity;
-    s.son_total_abundance = otu.sum_reads;
-    s.father_total_abundance = OTUs[match.hit_id].sum_reads;
-    s.son_spread = otu.spread;
-    s.father_spread = OTUs[match.hit_id].spread;
+    Stats s {.son_id = OTU_id,
+             .father_id = match.hit_id,
+             .similarity = match.similarity,
+             .son_total_abundance = otu.sum_reads,
+             .father_total_abundance = OTUs[match.hit_id].sum_reads,
+             .son_spread = otu.spread,
+             .father_spread = OTUs[match.hit_id].spread};
     
     // 'zip' two OTUs (https://www.cplusplus.com/forum/general/228918/)
     // for (auto [x,y] : std::zip( xs, ys ))  // available in c++2x?    
@@ -138,13 +137,10 @@ auto test_parents (std::unordered_map<std::string, struct OTU> &OTUs,
       log_file << s;
       continue ;
     }
-    if (parameters.minimum_ratio_type == "min" and
-        s.smallest_non_null_ratio <= parameters.minimum_ratio) {
-      log_file << s;
-      continue ;
-    }
-    if (parameters.minimum_ratio_type == "avg" and
-        s.avg_non_null_ratio <= parameters.minimum_ratio) {
+    if ((parameters.minimum_ratio_type == "min" and
+         s.smallest_non_null_ratio <= parameters.minimum_ratio)
+        or (parameters.minimum_ratio_type == "avg" and
+            s.avg_non_null_ratio <= parameters.minimum_ratio)) {
       log_file << s;
       continue ;
     }
