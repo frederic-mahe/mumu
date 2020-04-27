@@ -21,7 +21,8 @@
 # 34398 MONTPELLIER CEDEX 5
 # France
 
-appname := mumu
+PROG := mumu
+MAN := man/$(PROG).1
 
 CXX := g++
 CXXFLAGS := -std=c++17 -g
@@ -29,10 +30,10 @@ CXXFLAGS := -std=c++17 -g
 srcfiles := $(shell find ./src/ -name "*.cpp")
 objects  := $(patsubst %.cpp, %.o, $(srcfiles))
 
-all: $(appname)
+all: $(PROG)
 
-$(appname): $(objects)
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $(appname) $(objects) $(LDLIBS)
+$(PROG): $(objects)
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $(PROG) $(objects) $(LDLIBS)
 
 depend: .depend
 
@@ -41,9 +42,13 @@ depend: .depend
 	$(CXX) $(CXXFLAGS) -MM $^>>./.depend;
 
 clean:
-	rm -f $(objects) $(appname) compile_commands.json
+	rm -f $(objects) $(PROG) compile_commands.json
 
 dist-clean: clean
 	rm -f *~ .depend ./src/*~
+
+install : $(PROG) $(MAN)
+	/usr/bin/install -c $(PROG) '/usr/local/bin'
+	/usr/bin/install -c $(MAN) '/usr/local/share/man/man1'
 
 include .depend
