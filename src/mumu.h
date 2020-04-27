@@ -55,7 +55,7 @@ struct Parameters {
   // default values
   unsigned int threads {threads_default};
   double minimum_match {minimum_match_default};
-  std::string minimum_ratio_type {"min"};
+  std::string minimum_ratio_type {use_minimum_value};
   double minimum_ratio {minimum_ratio_default};
   double minimum_relative_cooccurence {minimum_relative_cooccurence_default};
 };
