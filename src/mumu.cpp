@@ -62,6 +62,7 @@ auto main (int argc, char** argv) -> int {
 // - use 'sort(par_unseq' to get parallel and/or vectorized sort,
 // - use async() to test potential parents? not cluster-friendly, no
 //   control on CPU/thread usage
+// - benchmark 'const auto& sample' or 'const auto sample' to print out OTUs,
 
 // Assumptions
 
