@@ -22,7 +22,7 @@
 // France
 
 #include <array>
-#include <cstdlib>  // atoi, atof
+#include <cstdlib>  // atoi, atof, exit, EXIT_FAILURE, EXIT_SUCCESS
 #include <fstream>
 #include <getopt.h>
 #include <iostream>
@@ -180,33 +180,33 @@ auto validate_args (Parameters const &parameters) -> void {
   // check for mandatory arguments (file names)
   if (! parameters.is_otu_table) {
     std::cerr << "Error: missing mandatory argument --otu_table filename\n";
-    exit(EXIT_FAILURE);
+    std::exit(EXIT_FAILURE);
   }
   if (! parameters.is_match_list) {
     std::cerr << "Error: missing mandatory argument --match_list filename\n";
-    exit(EXIT_FAILURE);
+    std::exit(EXIT_FAILURE);
   }
   if (! parameters.is_new_otu_table) {
     std::cerr << "Error: missing mandatory argument --new_otu_table filename\n";
-    exit(EXIT_FAILURE);
+    std::exit(EXIT_FAILURE);
   }
   if (! parameters.is_log) {
     std::cerr << "Error: missing mandatory argument --log filename\n";
-    exit(EXIT_FAILURE);
+    std::exit(EXIT_FAILURE);
   }
 
   // check files can be opened
   std::ifstream otu_table {parameters.otu_table};
   if (! otu_table) {
     std::cerr << "Error: can't open input file " << parameters.otu_table << "\n";
-    exit(EXIT_FAILURE);
+    std::exit(EXIT_FAILURE);
   }
   otu_table.close();
 
   std::ifstream match_list {parameters.match_list};
   if (! match_list) {
     std::cerr << "Error: can't open input file " << parameters.match_list << "\n";
-    exit(EXIT_FAILURE);
+    std::exit(EXIT_FAILURE);
   }
   match_list.close();
 
@@ -214,14 +214,14 @@ auto validate_args (Parameters const &parameters) -> void {
   std::ofstream new_otu_table {parameters.new_otu_table};
   if (! new_otu_table) {
     std::cerr << "Error: can't open output file " << parameters.new_otu_table << "\n";
-    exit(EXIT_FAILURE);
+    std::exit(EXIT_FAILURE);
   }
   new_otu_table.close();
 
   std::ofstream log {parameters.log};
   if (! log) {
     std::cerr << "Error: can't open output file " << parameters.log << "\n";
-    exit(EXIT_FAILURE);
+    std::exit(EXIT_FAILURE);
   }
   log.close();
 
@@ -234,20 +234,20 @@ auto validate_args (Parameters const &parameters) -> void {
               << lowest_similarity
               << " and "
               << highest_similarity << "\n";
-    exit(EXIT_FAILURE);
+    std::exit(EXIT_FAILURE);
   }
 
   // minimum ratio (x >= 0)
   if (parameters.minimum_ratio < 0) {
     std::cerr << "Error: --minimum_ratio value must be greater than zero\n";
-    exit(EXIT_FAILURE);
+    std::exit(EXIT_FAILURE);
   }
 
   // minimum relative cooccurence (0 <= x <= 1.0)
   if (parameters.minimum_relative_cooccurence < 0
       || parameters.minimum_relative_cooccurence > 1.0) {
     std::cerr << "Error: --minimum_relative_cooccurence value must be between zero and one\n";
-    exit(EXIT_FAILURE);
+    std::exit(EXIT_FAILURE);
   }
 
   // threads (1 <= x <= 255)
@@ -255,7 +255,7 @@ auto validate_args (Parameters const &parameters) -> void {
   if (parameters.threads < 1 || parameters.threads > max_threads) {
     std::cerr << "Error: --threads value must be between "
               << 0 << " and " << max_threads << "\n";
-    exit(EXIT_FAILURE);
+    std::exit(EXIT_FAILURE);
   }
 
   // minimum ratio type ("min" or "avg")
@@ -264,6 +264,6 @@ auto validate_args (Parameters const &parameters) -> void {
     std::cerr << "Error: --minimum ratio type can only be \""
               << use_minimum_value << "\" or \""
               << use_average_value << "\"\n";
-    exit(EXIT_FAILURE);
+    std::exit(EXIT_FAILURE);
   }
 }

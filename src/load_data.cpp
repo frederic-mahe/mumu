@@ -89,7 +89,7 @@ auto parse_each_otu (std::unordered_map<std::string, struct OTU> &OTUs,
   // sanity check
   if ((n_values + 1) != header_columns) {
     std::cerr << "Error: variable number of columns in OTU table\n";
-    exit(EXIT_FAILURE);
+    std::exit(EXIT_FAILURE);
   }
 
   // add more results to the map
@@ -147,7 +147,7 @@ auto read_match_list (const std::string match_list_name,
       // sanity check
       if (getline(ss, buf, sepchar)) {
         std::cerr << "Error: match list entry has more than three columns\n";
-        exit(EXIT_FAILURE);
+        std::exit(EXIT_FAILURE);
       }
       
       // skip matches below our similarity threshold
