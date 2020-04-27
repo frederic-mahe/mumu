@@ -259,9 +259,11 @@ auto validate_args (Parameters const &parameters) -> void {
   }
 
   // minimum ratio type ("min" or "avg")
-  if (parameters.minimum_ratio_type != "min"
-      && parameters.minimum_ratio_type != "avg") {
-    std::cerr << "Error: --minimum ratio type can only be \"min\" or \"avg\"\n";
+  if (parameters.minimum_ratio_type != use_minimum_value and
+      parameters.minimum_ratio_type != use_average_value) {
+    std::cerr << "Error: --minimum ratio type can only be \""
+              << use_minimum_value << "\" or \""
+              << use_average_value << "\"\n";
     exit(EXIT_FAILURE);
   }
 }
