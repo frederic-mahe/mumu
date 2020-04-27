@@ -21,11 +21,12 @@
 // 34398 MONTPELLIER CEDEX 5
 // France
 
-#include <iostream>
 #include <fstream>
-#include <algorithm>
+#include <iostream>
 #include "mumu.h"
 
+constexpr auto accept_as_parent {"accepted"};
+constexpr auto reject_as_parent {"rejected"};
 
 struct Stats {
   std::string son_id;
@@ -44,7 +45,7 @@ struct Stats {
   double smallest_non_null_ratio {largest_double};
   double avg_non_null_ratio {0.0};
   double largest_ratio {0.0};
-  std::string status {"rejected"};
+  std::string status {reject_as_parent};
 };
 
 
@@ -145,16 +146,16 @@ auto test_parents (std::unordered_map<std::string, struct OTU> &OTUs,
       log_file << s;
       continue ;
     }
-    if ((parameters.minimum_ratio_type == "min" and
+    if ((parameters.minimum_ratio_type == use_minimum_value and
          s.smallest_non_null_ratio <= parameters.minimum_ratio)
-        or (parameters.minimum_ratio_type == "avg" and
+        or (parameters.minimum_ratio_type == use_average_value and
             s.avg_non_null_ratio <= parameters.minimum_ratio)) {
       log_file << s;
       continue ;
     }
 
     // update OTU and output stats
-    s.status = "accepted";
+    s.status = accept_as_parent;
     otu.is_mergeable = true;
     otu.father_id = match.hit_id;
     log_file << s;

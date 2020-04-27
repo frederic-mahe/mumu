@@ -21,11 +21,9 @@
 // 34398 MONTPELLIER CEDEX 5
 // France
 
-#include <ios>
 #include <fstream>
+#include <ios>
 #include <iostream>
-#include <algorithm>
-#include <string>
 #include "mumu.h"
 
 

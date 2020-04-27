@@ -22,9 +22,7 @@
 // France
 
 #include <ios>
-#include <string>
 #include <iostream>
-#include <algorithm>
 #include "mumu.h"
 #include "cli.h"
 #include "load_data.h"
@@ -49,16 +47,10 @@ auto main (int argc, char** argv) -> int {
   
   // find potential parents (multithreaded)
   search_parent(OTUs, parameters);
-
-  // // test
-  // OTUs["B"].is_mergeable = true;
-  // OTUs["B"].father_id = "A";
   
   // merge, sort and output
   merge_OTUs(OTUs);
   write_table(OTUs, parameters.new_otu_table);
-
-  // clean up?
   
   return 0;
 }
@@ -66,7 +58,7 @@ auto main (int argc, char** argv) -> int {
 
 // TODO:
 
-// - get rid of is_mergeable,
+// - get rid of is_mergeable?
 // - use 'sort(par_unseq' to get parallel and/or vectorized sort,
 // - use async() to test potential parents? not cluster-friendly, no
 //   control on CPU/thread usage
@@ -74,5 +66,5 @@ auto main (int argc, char** argv) -> int {
 // Assumptions
 
 // - a son cannot be as abundant as its father (to avoid circular
-//   linking among OTUs of the same abundance). OTUs of size one can
-//   only be linked to OTUs of size > 1.
+//   linking among OTUs of the same abundance),
+// - OTUs of size one can only be linked to OTUs of size > 1.

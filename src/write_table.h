@@ -21,8 +21,8 @@
 // 34398 MONTPELLIER CEDEX 5
 // France
 
-#include <unordered_map>
 #include <string>
+#include <unordered_map>
 
 auto write_table (std::unordered_map<std::string, struct OTU> &OTUs,
                   std::string new_otu_table_name) -> void;

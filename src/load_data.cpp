@@ -24,7 +24,6 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
-#include <vector>
 #include "mumu.h"
 #include "load_data.h"
 

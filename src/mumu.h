@@ -21,10 +21,11 @@
 // 34398 MONTPELLIER CEDEX 5
 // France
 
-#include <string>
-#include <vector>
+#include <algorithm>
 #include <climits>
+#include <string>
 #include <unordered_map>
+#include <vector>
 
 static_assert(UINT_MAX > UINT16_MAX, "unsigned integers are too small");
 static_assert(UINT_MAX >= UINT32_MAX, "unsigned integers are too small");
@@ -37,6 +38,8 @@ constexpr auto minimum_match_default {84.0};
 constexpr auto minimum_relative_cooccurence_default {0.95};
 constexpr auto minimum_ratio_default {1.0};
 constexpr auto largest_double {std::numeric_limits<double>::max()};
+constexpr auto use_minimum_value {"min"};
+constexpr auto use_average_value {"avg"};
 
 struct Parameters {
   // mandatory arguments

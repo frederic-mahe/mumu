@@ -22,7 +22,6 @@
 // France
 
 #include <iostream>
-#include <algorithm>
 #include "mumu.h"
 
 

@@ -21,11 +21,11 @@
 // 34398 MONTPELLIER CEDEX 5
 // France
 
-#include <iostream>
 #include <array>
 #include <cstdlib>  // atoi, atof
-#include <getopt.h>
 #include <fstream>
+#include <getopt.h>
+#include <iostream>
 #include "mumu.h"
 #include "cli.h"
 
