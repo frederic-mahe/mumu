@@ -25,30 +25,42 @@ PROG := mumu
 MAN := man/$(PROG).1
 
 CXX := g++
-CXXFLAGS := -std=c++17 -g
+CXXFLAGS := -std=c++17 -Wall -Wextra -g
+COMMON := -O3 -DNDEBUG
 
 srcfiles := $(shell find ./src/ -name "*.cpp")
 objects  := $(patsubst %.cpp, %.o, $(srcfiles))
 
+
 all: $(PROG)
 
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) $(COMMON) -c $< -o $@
+
+
 $(PROG): $(objects)
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $(PROG) $(objects) $(LDLIBS)
+	$(CXX) $(CXXFLAGS) $(COMMON) -o $@ $(objects) $(LIBS)
 
-depend: .depend
 
-.depend: $(srcfiles)
-	rm -f ./.depend
-	$(CXX) $(CXXFLAGS) -MM $^>>./.depend;
+debug: COMMON = -O0 -DDEBUG
+debug: all
+
+coverage:
+	COMMON = -O0 --coverage -fprofile-arcs -ftest-coverage
+	LIBS += -lgcov
+coverage: all
+
+profile: COMMON = -O3 -pg
+profile: all
+
+.PHONY: all clean coverage debug dist-clean install profile
 
 clean:
 	rm -f $(objects) $(PROG) compile_commands.json
 
 dist-clean: clean
-	rm -f *~ .depend ./src/*~
+	rm -f *~ ./src/*~
 
 install : $(PROG) $(MAN)
 	/usr/bin/install -c $(PROG) '/usr/local/bin'
 	/usr/bin/install -c $(MAN) '/usr/local/share/man/man1'
-
-include .depend
