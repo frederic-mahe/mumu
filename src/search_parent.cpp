@@ -45,30 +45,32 @@ struct Stats {
   double smallest_non_null_ratio {largest_double};
   double avg_non_null_ratio {0.0};
   double largest_ratio {0.0};
+  double relative_cooccurence {0.0};
   std::string status {reject_as_parent};
 };
 
 
 auto operator<< (std::ostream& os, const Stats& s) -> std::ostream& {
-  os.precision(2);
-  return os << std::fixed
-            << s.son_id << sepchar
-            << s.father_id << sepchar
-            << s.similarity << sepchar
-            << s.son_total_abundance << sepchar
-            << s.father_total_abundance << sepchar
-            << s.son_overlap_abundance << sepchar
-            << s.father_overlap_abundance << sepchar
-            << s.son_spread << sepchar
-            << s.father_spread << sepchar
-            << s.father_overlap_spread << sepchar
-            << s.smallest_ratio << sepchar
-            << s.sum_ratio << sepchar
-            << s.avg_ratio << sepchar
-            << s.smallest_non_null_ratio << sepchar
-            << s.avg_non_null_ratio << sepchar
-            << s.largest_ratio << sepchar
-            << s.status << "\n";
+   os.precision(2);
+   return os << std::fixed
+             << s.son_id << sepchar
+             << s.father_id << sepchar
+             << s.similarity << sepchar
+             << s.son_total_abundance << sepchar
+             << s.father_total_abundance << sepchar
+             << s.son_overlap_abundance << sepchar
+             << s.father_overlap_abundance << sepchar
+             << s.son_spread << sepchar
+             << s.father_spread << sepchar
+             << s.father_overlap_spread << sepchar
+             << s.smallest_ratio << sepchar
+             << s.sum_ratio << sepchar
+             << s.avg_ratio << sepchar
+             << s.smallest_non_null_ratio << sepchar
+             << s.avg_non_null_ratio << sepchar
+             << s.largest_ratio << sepchar
+             << s.relative_cooccurence << sepchar
+             << s.status << "\n";
 }
 
 
@@ -141,8 +143,8 @@ auto test_parents (std::unordered_map<std::string, struct OTU> &OTUs,
     }
 
     // not a parent if...
-    auto relative_cooccurence {1.0 * s.father_overlap_spread / s.son_spread};
-    if (relative_cooccurence < parameters.minimum_relative_cooccurence) {
+    s.relative_cooccurence = 1.0 * s.father_overlap_spread / s.son_spread;
+    if (s.relative_cooccurence < parameters.minimum_relative_cooccurence) {
       log_file << s;
       continue ;
     }
