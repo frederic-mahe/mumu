@@ -21,6 +21,7 @@
 // 34398 MONTPELLIER CEDEX 5
 // France
 
+#include <charconv>
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -45,7 +46,7 @@
 //     }
 //   return is;
 // }
-  
+
 
 auto count_columns (std::string line) -> unsigned int {
   auto columns {0U};
@@ -63,28 +64,30 @@ auto count_columns (std::string line) -> unsigned int {
 auto parse_each_otu (std::unordered_map<std::string, struct OTU> &OTUs,
                      std::string &line,
                      unsigned int header_columns) -> void {
+  // we know there are (columns - 1) samples
+  OTU otu;
+  otu.samples.reserve(header_columns - 1);
+
+  // get abundance values ('from_chars' faster methods)
   auto sum_reads {0U};  // 4,294,967,295 reads at most
   auto spread {0U};
   auto n_values {0U};
-  std::stringstream ss(line);
-  std::string OTU_id;
-  std::string buf;
-  OTU otu;
+  auto after_OTU_id {line.find_first_of(sepchar)};
+  const std::string OTU_id = line.substr(0, after_OTU_id);
+  const char* start = line.data() + after_OTU_id + 1;  // first sample after OTU id
+  const char* end = line.data() + line.length();  // ptr to end of string
+  auto last = start;  // ptr to last character not converted
+  auto i {0U};
 
-  // get OTU id (first item of the line)
-  getline(ss, OTU_id, sepchar);
-
-  // we know there are (columns - 1) samples
-  otu.samples.reserve(header_columns - 1);
-  
-  // get abundance values (rest of the line)
-  while (getline(ss, buf, sepchar)) {
-    auto i {std::stoul(buf)};
-    if (i > 0) { spread += 1; }
-    sum_reads += i;
-    otu.samples.push_back(i);  // push to map
-    ++n_values;
-  }
+  do {
+    for (start = last; (start < end) && (*start == sepchar); ++start) {};
+    if (last = std::from_chars(start, end, i).ptr; last != start) {
+      otu.samples.push_back(i);
+      sum_reads += i;
+      ++n_values;
+      if (i > 0) { spread += 1; }
+    }
+  } while (last != start);
 
   // sanity check
   if ((n_values + 1) != header_columns) {
@@ -92,7 +95,7 @@ auto parse_each_otu (std::unordered_map<std::string, struct OTU> &OTUs,
     std::exit(EXIT_FAILURE);
   }
 
-  // add more results to the map
+  // add results to the map
   otu.spread = spread;
   otu.sum_reads = sum_reads;
   OTUs[OTU_id] = otu;
@@ -106,14 +109,14 @@ auto read_otu_table (std::string otu_table_name,
   // input and output files
   std::ifstream otu_table {otu_table_name};
   std::ofstream new_otu_table {new_otu_table_name};
-  
+
   // first line: get number of columns, write to new OTU table
   std::string line;
   std::getline(otu_table, line);
   auto header_columns = count_columns(line);
   new_otu_table << line << "\n";
   new_otu_table.close();
-  
+
   // parse other lines, and map the values
   while (std::getline(otu_table, line))
     {
@@ -149,10 +152,10 @@ auto read_match_list (const std::string match_list_name,
         std::cerr << "Error: match list entry has more than three columns\n";
         std::exit(EXIT_FAILURE);
       }
-      
+
       // skip matches below our similarity threshold
       if (similarity < minimum_similarity) { continue; }
-      
+
       // update map only if query is less abundant than hit
       auto hit_sum_reads {OTUs[hit].sum_reads};
       if (OTUs[query].sum_reads < hit_sum_reads) {
