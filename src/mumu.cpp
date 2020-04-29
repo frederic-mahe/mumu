@@ -44,14 +44,14 @@ auto main (int argc, char** argv) -> int {
   std::unordered_map<std::string, struct OTU> OTUs;
   read_otu_table(parameters.otu_table, parameters.new_otu_table, OTUs);
   read_match_list(parameters.match_list, OTUs, parameters.minimum_match);
-  
+
   // find potential parents (multithreaded)
   search_parent(OTUs, parameters);
-  
+
   // merge, sort and output
   merge_OTUs(OTUs);
   write_table(OTUs, parameters.new_otu_table);
-  
+
   return 0;
 }
 
