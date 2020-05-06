@@ -68,7 +68,7 @@ auto parse_each_otu (std::unordered_map<std::string, struct OTU> &OTUs,
   OTU otu;
   otu.samples.reserve(header_columns - 1);
 
-  // get abundance values ('from_chars' faster methods)
+  // get abundance values ('from_chars', gcc >= 8)
   auto sum_reads {0U};  // 4,294,967,295 reads at most
   auto spread {0U};
   auto n_values {0U};
@@ -80,7 +80,7 @@ auto parse_each_otu (std::unordered_map<std::string, struct OTU> &OTUs,
   auto i {0U};
 
   do {
-    for (start = last; (start < end) && (*start == sepchar); ++start) {};
+    for (start = last; (start < end) && (*start == sepchar); ++start) {}; // is this skipping the first sample??
     if (last = std::from_chars(start, end, i).ptr; last != start) {
       otu.samples.push_back(i);
       sum_reads += i;
