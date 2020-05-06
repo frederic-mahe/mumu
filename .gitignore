@@ -2,8 +2,11 @@
 *.o
 mumu
 .depend
+.gdb_history
 compile_commands.json
 gmon.out
 *.gcno
 *.gcda
 *.gcov
+tmp*
+mumu.org
