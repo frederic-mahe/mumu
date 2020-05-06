@@ -21,7 +21,6 @@
 // 34398 MONTPELLIER CEDEX 5
 // France
 
-#include <charconv>
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -64,30 +63,28 @@ auto count_columns (std::string line) -> unsigned int {
 auto parse_each_otu (std::unordered_map<std::string, struct OTU> &OTUs,
                      std::string &line,
                      unsigned int header_columns) -> void {
-  // we know there are (columns - 1) samples
-  OTU otu;
-  otu.samples.reserve(header_columns - 1);
-
-  // get abundance values ('from_chars', gcc >= 8)
   auto sum_reads {0U};  // 4,294,967,295 reads at most
   auto spread {0U};
   auto n_values {0U};
-  auto after_OTU_id {line.find_first_of(sepchar)};
-  const std::string OTU_id = line.substr(0, after_OTU_id);
-  const char* start = line.data() + after_OTU_id + 1;  // first sample after OTU id
-  const char* end = line.data() + line.length();  // ptr to end of string
-  auto last = start;  // ptr to last character not converted
-  auto i {0U};
+  std::stringstream ss(line);
+  std::string OTU_id;
+  std::string buf;
+  OTU otu;
 
-  do {
-    for (start = last; (start < end) && (*start == sepchar); ++start) {}; // is this skipping the first sample??
-    if (last = std::from_chars(start, end, i).ptr; last != start) {
-      otu.samples.push_back(i);
-      sum_reads += i;
-      ++n_values;
-      if (i > 0) { spread += 1; }
-    }
-  } while (last != start);
+  // get OTU id (first item of the line)
+  getline(ss, OTU_id, sepchar);
+
+  // we know there are (columns - 1) samples
+  otu.samples.reserve(header_columns - 1);
+
+  // get abundance values (rest of the line)
+  while (getline(ss, buf, sepchar)) {
+    auto i {std::stoul(buf)};
+    if (i > 0) { spread += 1; }
+    sum_reads += i;
+    otu.samples.push_back(i);  // push to map
+    ++n_values;
+  }
 
   // sanity check
   if ((n_values + 1) != header_columns) {
@@ -95,7 +92,7 @@ auto parse_each_otu (std::unordered_map<std::string, struct OTU> &OTUs,
     std::exit(EXIT_FAILURE);
   }
 
-  // add results to the map
+  // add more results to the map
   otu.spread = spread;
   otu.sum_reads = sum_reads;
   OTUs[OTU_id] = otu;
