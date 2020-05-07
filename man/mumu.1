@@ -1,0 +1,314 @@
+.\" ============================================================================
+.TH mumu 1 "May 7th, 2020" "version 0.0.1" "USER COMMANDS"
+.\" ============================================================================
+.SH NAME
+mumu \(em post-clustering curation of metabarcoding data
+.\" ============================================================================
+.SH SYNOPSIS
+.SY mumu
+.B \-h|v
+.YS
+.PP
+.\" mumu's normal usage
+.SY mumu
+.B \-\-otu_table
+.I filename
+.B \-\-match_list
+.I filename
+.B \-\-log
+.I filename
+.B \-\-new_otu_table
+.I filename
+.OP \-\-threads int
+.OP \-\-minimum_match float
+.OP \-\-minimum_ratio float
+.OP \-\-minimum_ratio_type min|avg
+.OP \-\-minimum_relative_cooccurence float
+.YS
+.PP
+.\" ============================================================================
+.SH DESCRIPTION
+\fBmumu\fR reads from two input files: an OTU table and a list of OTU
+matches; and writes to two output files: a log file and a file that
+will receive the new reduced OTU table (see the \fIMandatory\fR
+section below).
+.SS Mandatory
+.TP 9
+.B \-h\fP,\fB\ \-\-help
+display a short help message and exit successfully.
+.TP
+.B \-v\fP,\fB\ \-\-version
+output version information and exit successfully.
+.TP
+.BI \-o\fP,\fB\ \-\-otu_table\~ "filename"
+Input file containing the contingency table. One OTU per line, one
+sample per column, columns are separated by tabulations. The first
+line contains sample names, and the first column contains OTU
+names. All OTU names must be unique. Abundance values are positive
+integers. Here is a simple example with three samples and two OTUs:
+.TS H
+center, tab (@);
+cb | cb cb cb.
+OTUs@sample1@sample2@sample3
+_
+A@12@9@24
+B@3@0@6
+.TE
+.TP
+.BI \-m\fP,\fB\ \-\-match_list\~ "filename"
+Input file containing OTU similarities. One pair of OTUs per line,
+three columns separated by tabulations:
+.RS
+.RS
+.nr step 1 1
+.IP \n[step]. 4
+name of query OTU.
+.IP \n+[step].
+name of hit OTU.
+.IP \n+[step].
+percentage of similarity (\fIfloat\fR value ranging from 50 to 100).
+.RE
+.PP
+For example, a match list corresponding to the OTU table above could
+be:
+.TS H
+center, tab (@);
+c c c.
+A@B@95.6
+.TE
+.PP
+OTU names in the match list must correspond to OTU names in the OTU
+table. Given a fasta file, a match list file can be produced with
+vsearch
+.UR https://github.com/torognes/vsearch
+.UE
+for all pairs of OTU with at least 84% similarity ('\-\-id 0.84', see
+option \-\-minimum_match for more details):
+.PP
+.EX
+.RS
+vsearch \\
+    \-\-usearch_global file.fasta \\
+    \-\-db file.fasta \\
+    \-\-self  \\
+    \-\-id 0.84 \\
+    \-\-iddef 1 \\
+    \-\-userfields query+target+id \\
+    \-\-maxaccepts 0 \\
+    \-\-query_cov 0.9 \\
+    \-\-maxhits 10 \\
+    \-\-userout match.list
+.RE
+.RE
+.EE
+.TP
+.BI \-l\fP,\fB\ \-\-log\~ "filename"
+Output file for OTU merging statistics (18 columns separated by
+tabulations). OTUs are not processed according to a specific
+order. For a given query OTU with potential parents, mumu will order
+potential parents by decreasing similarity with the query OTU, then by
+decreasing abundance, and finally by decreasing incidence. Each
+potential parent is tested, and the search stops if parenthood
+criteria are matched or if the list is exhausted. The different
+columns correspond to:
+.RS
+.RS
+.nr step 1 1
+.IP \n[step]. 4
+name of query OTU.
+.IP \n+[step].
+name of potential parent OTU.
+.IP \n+[step].
+percentage of similarity (\fIfloat\fR value ranging from 0 to 100).
+.IP \n+[step].
+total abundance of the query OTU (sum through all samples, \fIpositive
+integer\fR).
+.IP \n+[step].
+total abundance of the potential parent OTU (sum through all samples,
+\fIpositive integer\fR).
+.IP \n+[step].
+overlap abundance of the query OTU (sum through all samples where the
+potential parent OTU is also present, \fIpositive integer\fR).
+.IP \n+[step].
+overlap abundance of the potential parent OTU (sum through all samples
+where the query OTU is also present, \fIpositive integer\fR).
+.IP \n+[step].
+incidence of the query OTU (number of samples where the query OTU is
+present, \fIpositive integer\fR).
+.IP \n+[step].
+incidence of the potential parent OTU (number of samples where the
+potential parent OTU is present, \fIpositive integer\fR).
+.IP \n+[step].
+overlap incidence of the potential parent OTU (number of samples where
+the potential parent OTU and the query OTU are both present, \fIfloat\fR).
+.IP \n+[step].
+smallest abundance ratio (for each sample, compute the abundance of
+the potential parent OTU divided by the abundance of the query OTU,
+find the smallest value, \fIfloat\fR).
+.IP \n+[step].
+sum of the abundance ratios (\fIpositive integer\fR).
+.IP \n+[step].
+average value of abundance ratios (\fIfloat\fR).
+.IP \n+[step].
+smallest non-null abundance ratio (exclude ratios for samples where
+the query OTU is present but not the potential parent OTU,
+\fIfloat\fR).
+.IP \n+[step].
+average value of non-null abundance ratios (exclude ratios for samples
+where the query OTU is present but not the potential parent OTU,
+\fIfloat\fR).
+.IP \n+[step].
+largest ratio value (\fIfloat\fR).
+.IP \n+[step].
+relative co-occurence value (number of samples where both the
+potential parent OTU and the query OTU are present divided by the
+number of samples where the query OTU is present, \fIfloat\fR).
+.IP \n+[step].
+status: 'accepted' or 'rejected'. The potential parent OTU is either
+accepted as a parent, or rejected.
+.RE
+.RE
+.TP
+.BI \-n\fP,\fB\ \-\-new_otu_table\~ "filename"
+Output file for the newly computed contingency table. Same format as
+the input OTU table (see \-\-otu_table). Sample order is unchanged,
+but OTUs are reordered by decreasing abundance, incidence value, and
+OTU name. OTUs found to devive from 'parent' OTUs do not appear in the
+new OTU table, and their abundance values are added to the abundance
+values of their respective parents.
+.PP
+.\" .B \-\-
+.\" delimit the option list. Later arguments, if any, are treated as
+.\" operands even if they begin with '\-'. For example, 'swarm \-\-
+.\" \-file.fasta' reads from the file '\-file.fasta'.
+.\" This is a POSIX requirement for all utilities
+.\" (see POSIX chapter 12.02, guideline 10).
+.LP
+.\" ----------------------------------------------------------------------------
+.SS Optional
+.TP 9
+.BI \-a\fP,\fB\ \-\-minimum_match\~ "positive float"
+minimum similarity percentage threshold between an OTU and its
+potential parent. Similarity is defined as the edit distance between
+the two aligned sequences: matching columns divided by the alignment
+length. If the similarity percentage between a query OTU and a
+potential parent OTU is strictly smaller than the 'minimum_match'
+value, then the potential parent OTU is rejected. Accepted values
+range from 50 to 100, and the default value is 84.0.
+.TP
+.BI \-c\fP,\fB\ \-\-minimum_ratio\~ "positive float"
+minimum or average abundance ratio observed between a potential parent
+OTU and a query OTU (method is controlled by the option
+\-\-minimum_ratio_type). For each sample where both the potential
+parent OTU and the query OTU are present, the local abundance of the
+potential parent OTU is divided by the local abundance of the query
+OTU. If the minimum or average observed value is smaller or equal to
+the 'minimum_ratio' value, then the potential parent OTU is
+rejected. Accepted values range from 0 to infinity, and the default
+value is 1.0.
+.TP
+.BI \-b\fP,\fB\ \-\-minimum_ratio_type\~ "min|avg"
+method used to decide if a potential parent OTU must be rejected based
+on abundance ratios (threshold is controlled by the option
+\-\-minimum_ratio). Decision can be based on the \fIminimum\fR
+observed ratio ('min') or the \fIaverage\fR of observed ratios
+('avg'). Default value is 'min'.
+.TP
+.BI \-d\fP,\fB\ \-\-minimum_relative_cooccurence\~ "positive float"
+minimum incidence ratio observed between a potential parent OTU and a
+query OTU. The relative cooccurence ratio is computed as the number of
+samples where both the potential parent OTU and the query OTU are
+present divided by the number of samples where the query OTU is
+present. A potential parent OTU is rejected if its relative
+cooccurence is strictly smaller than
+the 'minimum_relative_cooccurence'. Accepted values range from 0 to
+infinity, and the default value is 0.95.
+.TP
+.BI \-t\fP,\fB\ \-\-threads\~ "positive integer"
+multithreading is not activated. This option has no effect, mumu
+always uses one thread.
+.LP
+.\" ============================================================================
+.\" .SH EXAMPLES
+.\" Give an example?
+.\" ============================================================================
+.\" .SH LIMITATIONS
+.\" List known limitations or bugs.
+.\" ============================================================================
+.SH AUTHORS
+Concept by Tobias Guldberg Frøslev, implementation by Frédéric Mahé.
+.\" ============================================================================
+.SH CITATION
+Frøslev, T. G., Kjøller, R., Bruun, H. H., Ejrnæs, R., Brunbjerg,
+A. K., Pietroni, C., & Hansen, A. J. (2017). Algorithm for
+post-clustering curation of DNA amplicon data yields reliable
+biodiversity estimates. \fINature Communications\fR, 8(1), 1188
+.UR https://www.nature.com/articles/s41467-017-01312-x
+.UE .
+.\" ============================================================================
+.SH REPORTING BUGS
+Submit suggestions and bug-reports at
+.UR https://github.com/frederic-mahe/mumu/issues
+.UE ,
+send a pull request at
+.UR https://github.com/frederic-mahe/mumu
+.UE ,
+or compose a friendly or curmudgeonly e-mail to
+.MT frederic.mahe@cirad.fr
+Frédéric Mahé
+.ME .
+.\" ============================================================================
+.SH AVAILABILITY
+Source code available at
+.UR https://github.com/frederic-mahe/mumu
+.UE .
+.\" ============================================================================
+.SH COPYRIGHT
+Copyright (C) 2020 Frédéric Mahé
+.PP
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or any later version.
+.PP
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+Affero General Public License for more details.
+.PP
+You should have received a copy of the GNU Affero General Public
+License along with this program.  If not, see
+.UR http://www.gnu.org/licenses/
+.UE .
+.PP
+.\" ============================================================================
+.SH SEE ALSO
+\fBlulu\fR, a R package for post-clustering curation of metabarcoding
+data, available at
+.UR https://github.com/tobiasgf/lulu
+.UE ;
+\fBswarm\fR, a fast clustering method, available at
+.UR https://github.com/torognes/swarm
+.UE ; and
+\fBvsearch\fR, a versatile open-source tool for metagenomics, available at
+.UR https://github.com/torognes/vsearch
+.UE .
+.PP
+.\" ============================================================================
+.SH VERSION HISTORY
+New features and important modifications of \fBmumu\fR (short lived
+or minor bug releases are not mentioned):
+.RS
+.TP
+.BR v1.0\~ "released September 1st, 2020"
+First public release.
+.LP
+.\" ============================================================================
+.\" NOTES
+.\" visualize and output to pdf
+.\" man -l mumu.1
+.\" man -t <(sed -e 's/\\-/-/g' ./mumu.1) | ps2pdf -sPAPERSIZE=a4 - > mumu_manual.pdf
+.\"
+.\" INSTALL (sysadmin)
+.\" gzip -c mumu.1 > mumu.1.gz
+.\" mv mumu.1.gz /usr/share/man/man1/
