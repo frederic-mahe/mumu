@@ -243,10 +243,9 @@ auto validate_args (Parameters const &parameters) -> void {
     std::exit(EXIT_FAILURE);
   }
 
-  // minimum relative cooccurence (0 <= x <= 1.0)
-  if (parameters.minimum_relative_cooccurence < 0
-      || parameters.minimum_relative_cooccurence > 1.0) {
-    std::cerr << "Error: --minimum_relative_cooccurence value must be between zero and one\n";
+  // minimum relative cooccurence (x >= 0)
+  if (parameters.minimum_relative_cooccurence <= 0) {
+    std::cerr << "Error: --minimum_relative_cooccurence value must be greater than zero\n";
     std::exit(EXIT_FAILURE);
   }
 
