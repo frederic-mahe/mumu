@@ -204,8 +204,8 @@ parent OTU and the query OTU are present, the local abundance of the
 potential parent OTU is divided by the local abundance of the query
 OTU. If the minimum or average observed value is smaller or equal to
 the 'minimum_ratio' value, then the potential parent OTU is
-rejected. Accepted values range from 0 to infinity, and the default
-value is 1.0.
+rejected. Any positive value greater than zero is accepted, and the
+default value is 1.0.
 .TP
 .BI \-b\fP,\fB\ \-\-minimum_ratio_type\~ "min|avg"
 method used to decide if a potential parent OTU must be rejected based
@@ -221,8 +221,8 @@ samples where both the potential parent OTU and the query OTU are
 present divided by the number of samples where the query OTU is
 present. A potential parent OTU is rejected if its relative
 cooccurence is strictly smaller than
-the 'minimum_relative_cooccurence'. Accepted values range from 0 to
-infinity, and the default value is 0.95.
+the 'minimum_relative_cooccurence'. Any positive value greater than
+zero is accepted, and the default value is 0.95.
 .TP
 .BI \-t\fP,\fB\ \-\-threads\~ "positive integer"
 multithreading is not activated. This option has no effect, mumu
