@@ -91,7 +91,7 @@ auto compare_two_matches (const Match& a, const Match& b) -> bool {
 auto per_sample_ratios (std::unordered_map<std::string, struct OTU> &OTUs,
                         Stats &s) -> void {
   // 'zip' two OTUs (https://www.cplusplus.com/forum/general/228918/)
-  // for (auto [x,y] : std::zip( xs, ys ))  // available in c++2x?
+  // for (auto [x,y] : std::ranges::zip( xs, ys ))  // available in c++23?
   auto& son = OTUs[s.son_id].samples;
   auto& father = OTUs[s.father_id].samples;
   auto xi = son.begin();
