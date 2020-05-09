@@ -238,7 +238,7 @@ auto validate_args (Parameters const &parameters) -> void {
   }
 
   // minimum ratio (x >= 0)
-  if (parameters.minimum_ratio < 0) {
+  if (parameters.minimum_ratio <= 0) {
     std::cerr << "Error: --minimum_ratio value must be greater than zero\n";
     std::exit(EXIT_FAILURE);
   }
