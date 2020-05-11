@@ -212,7 +212,7 @@ method used to decide if a potential parent OTU must be rejected based
 on abundance ratios (threshold is controlled by the option
 \-\-minimum_ratio). Decision can be based on the \fIminimum\fR
 observed ratio ('min') or the \fIaverage\fR of observed ratios
-('avg'). Default value is 'min'.
+('avg'). Default method is 'min'.
 .TP
 .BI \-d\fP,\fB\ \-\-minimum_relative_cooccurence\~ "positive float"
 minimum incidence ratio observed between a potential parent OTU and a
@@ -221,8 +221,8 @@ samples where both the potential parent OTU and the query OTU are
 present divided by the number of samples where the query OTU is
 present. A potential parent OTU is rejected if its relative
 cooccurence is strictly smaller than
-the 'minimum_relative_cooccurence'. Any positive value greater than
-zero is accepted, and the default value is 0.95.
+the 'minimum_relative_cooccurence'. Values greater than zero and up to
+one are accepted, and the default value is 0.95.
 .TP
 .BI \-t\fP,\fB\ \-\-threads\~ "positive integer"
 multithreading is not activated. This option has no effect, mumu
