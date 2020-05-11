@@ -243,9 +243,10 @@ auto validate_args (Parameters const &parameters) -> void {
     std::exit(EXIT_FAILURE);
   }
 
-  // minimum relative cooccurence (x >= 0)
-  if (parameters.minimum_relative_cooccurence <= 0) {
-    std::cerr << "Error: --minimum_relative_cooccurence value must be greater than zero\n";
+  // minimum relative cooccurence (0 < x <= 1)
+  if (parameters.minimum_relative_cooccurence <= 0 or
+      parameters.minimum_relative_cooccurence > 1) {
+    std::cerr << "Error: --minimum_relative_cooccurence value must be between zero and one\n";
     std::exit(EXIT_FAILURE);
   }
 
@@ -253,7 +254,7 @@ auto validate_args (Parameters const &parameters) -> void {
   constexpr auto max_threads {255};
   if (parameters.threads < 1 || parameters.threads > max_threads) {
     std::cerr << "Error: --threads value must be between "
-              << 0 << " and " << max_threads << "\n";
+              << 1 << " and " << max_threads << "\n";
     std::exit(EXIT_FAILURE);
   }
 
