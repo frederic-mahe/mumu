@@ -75,7 +75,6 @@ auto help () -> void {
             << " --minimum_ratio_type STRING          \"min\" or \"avg\" abundance ratio (\"min\")\n"
             << " --minimum_relative_cooccurence FLOAT relative father-son spread (0.95)\n"
             << "\n";
-  std::exit(EXIT_SUCCESS);
 }
 
 
@@ -84,7 +83,6 @@ auto version () -> void {
             << "Copyright (C) " << copyright_years << " Frederic Mahe\n"
             << "https://github.com/frederic-mahe/mumu\n"
             << "\n";
-  std::exit(EXIT_SUCCESS);
 }
 
 
@@ -128,7 +126,7 @@ auto parse_args (int argc, char ** argv, Parameters &parameters) -> void {
 
     case 'h':  // help message
       help();
-      break;
+      std::exit(EXIT_SUCCESS);
 
     case 'l':  // log file (output)
       parameters.log = optarg;
@@ -156,10 +154,7 @@ auto parse_args (int argc, char ** argv, Parameters &parameters) -> void {
 
     case 'v':  // version number
       version();
-      break;
-
-    case '?':
-      break;
+      std::exit(EXIT_SUCCESS);
 
     default:
       std::cout << "?? getopt returned character code " << c << " ??\n";
