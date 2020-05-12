@@ -45,9 +45,7 @@ $(PROG): $(objects)
 debug: COMMON = -O0 -DDEBUG
 debug: all
 
-coverage:
-	COMMON = -O0 --coverage -fprofile-arcs -ftest-coverage
-	LIBS += -lgcov
+coverage: COMMON = -O0 --coverage -fprofile-arcs -ftest-coverage -lgcov
 coverage: all
 
 profile: COMMON = -O3 -pg
@@ -56,7 +54,7 @@ profile: all
 .PHONY: all clean coverage debug dist-clean install profile
 
 clean:
-	rm -f $(objects) $(PROG) compile_commands.json
+	rm -f $(objects) $(PROG) compile_commands.json ./src/*.gcov ./src/*.gcda ./src/*.gcno ./*.gcov
 
 dist-clean: clean
 	rm -f *~ ./src/*~
