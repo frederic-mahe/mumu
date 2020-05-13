@@ -81,6 +81,14 @@ DESCRIPTION="mumu stops with an error if no argument is given"
     failure "${DESCRIPTION}" || \
         success "${DESCRIPTION}"
 
+## mumu outputs a warning if an unknow option is passed
+DESCRIPTION="mumu outputs a warning if an unknow option is passed"
+"${MUMU}" \
+    -z 2>&1 | \
+    grep -q "^Warning: unknown option" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
 ## mumu stops with an error if '--otu_table file' is missing
 DESCRIPTION="mumu stops with an error if '--otu_table file' is missing"
 "${MUMU}" 2>&1 | \
@@ -152,7 +160,7 @@ LOG=$(mktemp)
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
 ## mumu outputs a warning if input files can't be read
-DESCRIPTION="mumu outputs a warning if input files can\'t be read"
+DESCRIPTION="mumu outputs a warning if input files can\'t be read (1)"
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
 NEW_OTU_TABLE=$(mktemp)
@@ -167,6 +175,24 @@ chmod -r "${OTU_TABLE}"
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 chmod +r "${OTU_TABLE}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
+## mumu outputs a warning if input files can't be read
+DESCRIPTION="mumu outputs a warning if input files can\'t be read (2)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+chmod -r "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log "${LOG}" 2>&1 | \
+    grep -q "^Warning:*read*" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+chmod +r "${MATCH_LIST}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
 ## mumu outputs a warning if input files are empty
@@ -186,7 +212,7 @@ LOG=$(mktemp)
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
 ## mumu outputs a warning if output files can't be overwritten
-DESCRIPTION="mumu outputs a warning if output files can\'t be overwritten"
+DESCRIPTION="mumu outputs a warning if output files can\'t be overwritten (1)"
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
 NEW_OTU_TABLE=$(mktemp)
@@ -201,6 +227,24 @@ chmod -w "${NEW_OTU_TABLE}"
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 chmod +w "${NEW_OTU_TABLE}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
+## mumu outputs a warning if output files can't be overwritten
+DESCRIPTION="mumu outputs a warning if output files can\'t be overwritten (2)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+chmod -w "${LOG}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log "${LOG}" 2>&1 | \
+    grep -q "^Warning:*overwritten*" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+chmod +w "${LOG}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
 ## mumu clobbers output files
