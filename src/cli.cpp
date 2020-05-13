@@ -56,33 +56,31 @@ const struct option long_options[] =
 
 
 auto help () -> void {
-  std::cout << "Usage: mumu " << n_version << "\n"
+  std::cout << "Usage: mumu " << n_version << '\n'
             << " -h, --help                           display this help and exit\n"
             << " -v, --version                        display version information and exit\n"
             << " -t, --threads INTEGER                number of threads to use (1)\n"
-            << "\n"
+            << '\n'
             << "Input options (mandatory):\n"
             << " --otu_table FILE                     tab-separated, samples in columns\n"
             << " --match_list FILE                    tab-separated, OTU pairwise similarity scores\n"
-            << "\n"
+            << '\n'
             << "Output options (mandatory):\n"
             << " --new_otu_table FILE                 write an updated OTU table\n"
             << " --log FILE                           record operations\n"
-            << "\n"
+            << '\n'
             << "Computation parameters:\n"
             << " --minimum_match FLOAT                minimum similarity threshold (84.0)\n"
             << " --minimum_ratio FLOAT                minimum abundance ratio (1.0)\n"
             << " --minimum_ratio_type STRING          \"min\" or \"avg\" abundance ratio (\"min\")\n"
-            << " --minimum_relative_cooccurence FLOAT relative father-son spread (0.95)\n"
-            << "\n";
+            << " --minimum_relative_cooccurence FLOAT relative father-son spread (0.95)\n\n";
 }
 
 
 auto version () -> void {
-  std::cout << "mumu " << n_version << "\n"
+  std::cout << "mumu " << n_version << '\n'
             << "Copyright (C) " << copyright_years << " Frederic Mahe\n"
-            << "https://github.com/frederic-mahe/mumu\n"
-            << "\n";
+            << "https://github.com/frederic-mahe/mumu\n\n";
 }
 
 
@@ -177,14 +175,14 @@ auto validate_args (Parameters const &parameters) -> void {
   // check files can be opened
   std::ifstream otu_table {parameters.otu_table};
   if (! otu_table) {
-    std::cerr << "Error: can't open input file " << parameters.otu_table << "\n";
+    std::cerr << "Error: can't open input file " << parameters.otu_table << '\n';
     std::exit(EXIT_FAILURE);
   }
   otu_table.close();
 
   std::ifstream match_list {parameters.match_list};
   if (! match_list) {
-    std::cerr << "Error: can't open input file " << parameters.match_list << "\n";
+    std::cerr << "Error: can't open input file " << parameters.match_list << '\n';
     std::exit(EXIT_FAILURE);
   }
   match_list.close();
@@ -192,14 +190,14 @@ auto validate_args (Parameters const &parameters) -> void {
   // check if writing is possible (better now than after a lengthy computation)
   std::ofstream new_otu_table {parameters.new_otu_table};
   if (! new_otu_table) {
-    std::cerr << "Error: can't open output file " << parameters.new_otu_table << "\n";
+    std::cerr << "Error: can't open output file " << parameters.new_otu_table << '\n';
     std::exit(EXIT_FAILURE);
   }
   new_otu_table.close();
 
   std::ofstream log {parameters.log};
   if (! log) {
-    std::cerr << "Error: can't open output file " << parameters.log << "\n";
+    std::cerr << "Error: can't open output file " << parameters.log << '\n';
     std::exit(EXIT_FAILURE);
   }
   log.close();
@@ -212,7 +210,7 @@ auto validate_args (Parameters const &parameters) -> void {
     std::cerr << "Error: --minimum_match value must be between "
               << lowest_similarity
               << " and "
-              << highest_similarity << "\n";
+              << highest_similarity << '\n';
     std::exit(EXIT_FAILURE);
   }
 
@@ -233,7 +231,7 @@ auto validate_args (Parameters const &parameters) -> void {
   constexpr auto max_threads {255};
   if (parameters.threads < 1 || parameters.threads > max_threads) {
     std::cerr << "Error: --threads value must be between "
-              << 1 << " and " << max_threads << "\n";
+              << 1 << " and " << max_threads << '\n';
     std::exit(EXIT_FAILURE);
   }
 

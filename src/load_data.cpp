@@ -111,7 +111,7 @@ auto read_otu_table (std::string otu_table_name,
   std::string line;
   std::getline(otu_table, line);
   auto header_columns = count_columns(line);
-  new_otu_table << line << "\n";
+  new_otu_table << line << '\n';
   new_otu_table.close();
 
   // parse other lines, and map the values

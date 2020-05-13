@@ -70,7 +70,7 @@ auto operator<< (std::ostream& os, const Stats& s) -> std::ostream& {
              << s.avg_non_null_ratio << sepchar
              << s.largest_ratio << sepchar
              << s.relative_cooccurence << sepchar
-             << s.status << "\n";
+             << s.status << '\n';
 }
 
 
