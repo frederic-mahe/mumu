@@ -100,14 +100,6 @@ auto parse_args (int argc, char ** argv, Parameters &parameters) -> void {
     }
 
     switch (c) {
-    case 0:
-      std::cout << "option " << long_options[option_index].name;
-      if (optarg != nullptr) {
-        std::cout << " with arg " << optarg;
-      }
-      std::cout << "\n";
-      break;
-
     case 'a':  // minimum match (default is 84.0)
       parameters.minimum_match = std::atof(optarg);
       break;
@@ -157,16 +149,8 @@ auto parse_args (int argc, char ** argv, Parameters &parameters) -> void {
       std::exit(EXIT_SUCCESS);
 
     default:
-      std::cout << "?? getopt returned character code " << c << " ??\n";
+      std::cerr << "Warning: unknown option\n";
     }
-  }
-
-  if (optind < argc) {
-    std::cout << "non-option ARGV-elements: ";
-    while (optind < argc) {
-      std::cout << argv[optind++] << " ";
-    }
-    std::cout << "\n";
   }
 }
 
