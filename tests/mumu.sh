@@ -247,6 +247,19 @@ chmod -w "${LOG}"
 chmod +w "${LOG}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
+## mumu can write to the null device
+DESCRIPTION="mumu can write to the null device"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table /dev/null \
+    --log /dev/null > /dev/null && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}"
+
 ## mumu clobbers output files
 DESCRIPTION="mumu clobbers output files"
 OTU_TABLE=$(mktemp)
@@ -594,6 +607,128 @@ LOG=$(mktemp)
         success "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
+## mumu stops with an error if the OTU table is not properly formatted
+DESCRIPTION="mumu stops with an error if the OTU table has a variable number of columns"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+printf "OTUs\ts1\nA\t5\nB\t\n" > "${OTU_TABLE}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table /dev/null \
+    --log /dev/null > /dev/null 2>&1 && \
+    failure "${DESCRIPTION}" || \
+        success "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}"
+
+DESCRIPTION="mumu stops with an error message if the OTU table has a variable number of columns"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+printf "OTUs\ts1\nA\t5\nB\t\n" > "${OTU_TABLE}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table /dev/null \
+    --log /dev/null 2>&1 > /dev/null | \
+    grep -q "^Error" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}"
+
+DESCRIPTION="mumu stops with an error if the OTU table has a non-numerical value (NA)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+printf "OTUs\ts1\nA\t5\nB\tNA\n" > "${OTU_TABLE}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table /dev/null \
+    --log /dev/null > /dev/null 2>&1 && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}"
+
+## mumu stops with an error if the match list is not properly formatted
+DESCRIPTION="mumu stops with an error if the match list > 3 columns"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+printf "A\tB\t96.5\nB\tA\t96.5\textra\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table /dev/null \
+    --log /dev/null > /dev/null 2>&1 && \
+    failure "${DESCRIPTION}" || \
+        success "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}"
+
+DESCRIPTION="mumu stops with an error message if the match list > 3 columns"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+printf "A\tB\t96.5\nB\tA\t96.5\textra\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table /dev/null \
+    --log /dev/null 2>&1 > /dev/null | \
+    grep -q "^Error" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}"
+
+# issue with the exception throw
+DESCRIPTION="mumu stops with an error if the match list < 3 columns"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+printf "A\tB\t\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table /dev/null \
+    --log /dev/null 2> /dev/null > /dev/null && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}"
+
+DESCRIPTION="mumu stops with an error message if the match list < 3 columns"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+printf "A\tB\t\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table /dev/null \
+    --log /dev/null > /dev/null 2>&1 | \
+    grep -q "^Error" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}"
+
+# what if there is a match that is not in the table?
+# match can be a subset of table, but not the other way around.
+DESCRIPTION="mumu warns about match entries that are not in the OTU table"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\nA\t2\nB\t1\n" > "${OTU_TABLE}"
+printf "A\tC\t96.5\nC\tA\t96.5\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log "${LOG}" 2>&1 > /dev/null | \
+    grep -q "^Warning:" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+# cat $LOG
+# echo
+# cat "${NEW_OTU_TABLE}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
+# This is clearly a bug, 'C' is added to the new OTU table. It should
+# be discarded!
+
 
 #*****************************************************************************#
 #                                                                             #
@@ -842,11 +977,251 @@ awk '{exit $10 == 2 ? 0 : 1}' "${LOG}" && \
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
+DESCRIPTION="mumu log column 11 is the minimum ratio value (#1)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\nA\t10\nB\t1\n" > "${OTU_TABLE}"
+printf "A\tB\t96.5\nB\tA\t96.5\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log "${LOG}" > /dev/null 2>&1
+awk '{exit $11 == 10 ? 0 : 1}' "${LOG}" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
+DESCRIPTION="mumu log column 11 is the minimum ratio value (#2)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\ts2\nA\t10\t0\nB\t0\t1\n" > "${OTU_TABLE}"
+printf "A\tB\t96.5\nB\tA\t96.5\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log "${LOG}" > /dev/null 2>&1
+awk '{exit $11 == 0 ? 0 : 1}' "${LOG}" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
+DESCRIPTION="mumu log column 12 is the sum of abundance ratios"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\ts2\nA\t1\t0\nB\t1\t1\n" > "${OTU_TABLE}"
+printf "A\tB\t96.5\nB\tA\t96.5\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log "${LOG}" > /dev/null 2>&1
+awk '{exit $12 == 1 ? 0 : 1}' "${LOG}" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
+DESCRIPTION="mumu log column 13 is the average value of abundance ratios (integer)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\ts2\nA\t2\t0\nB\t1\t1\n" > "${OTU_TABLE}"
+printf "A\tB\t96.5\nB\tA\t96.5\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log "${LOG}" > /dev/null 2>&1
+awk '{exit $13 == 1 ? 0 : 1}' "${LOG}" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
+DESCRIPTION="mumu log column 13 is the average value of abundance ratios (non-integer)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\ts2\nA\t3\t0\nB\t1\t1\n" > "${OTU_TABLE}"
+printf "A\tB\t96.5\nB\tA\t96.5\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log "${LOG}" > /dev/null 2>&1
+awk '{exit $13 == 1.5 ? 0 : 1}' "${LOG}" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
+DESCRIPTION="mumu log column 13 is the average value of abundance ratios (non-integer, < 1)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\ts2\nA\t2\t1\nB\t0\t2\n" > "${OTU_TABLE}"
+printf "A\tB\t96.5\nB\tA\t96.5\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log "${LOG}" > /dev/null 2>&1
+awk '{exit $13 == 0.5 ? 0 : 1}' "${LOG}" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
+DESCRIPTION="mumu log column 13 is the average value of abundance ratios (= 0.0)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\ts2\nA\t2\t0\nB\t0\t1\n" > "${OTU_TABLE}"
+printf "A\tB\t96.5\nB\tA\t96.5\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log "${LOG}" > /dev/null 2>&1
+awk '{exit $13 == 0.0 ? 0 : 1}' "${LOG}" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
+DESCRIPTION="mumu log column 14 is the minimal non-null abundance ratio"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\ts2\nA\t1\t0\nB\t1\t1\n" > "${OTU_TABLE}"
+printf "A\tB\t96.5\nB\tA\t96.5\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log "${LOG}" > /dev/null 2>&1
+awk '{exit $14 == 1 ? 0 : 1}' "${LOG}" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
+DESCRIPTION="mumu log column 15 is the average value of non-null abundance ratios"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\ts2\nA\t1\t0\nB\t1\t1\n" > "${OTU_TABLE}"
+printf "A\tB\t96.5\nB\tA\t96.5\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log "${LOG}" > /dev/null 2>&1
+awk '{exit $15 == 1 ? 0 : 1}' "${LOG}" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
+DESCRIPTION="mumu log column 16 is the largest ratio value"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\ts2\nA\t2\t1\nB\t1\t1\n" > "${OTU_TABLE}"
+printf "A\tB\t96.5\nB\tA\t96.5\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log "${LOG}" > /dev/null 2>&1
+awk '{exit $16 == 2 ? 0 : 1}' "${LOG}" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
+DESCRIPTION="mumu log column 17 is the relative co-occurence value"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\ts2\nA\t2\t1\nB\t1\t1\n" > "${OTU_TABLE}"
+printf "A\tB\t96.5\nB\tA\t96.5\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log "${LOG}" > /dev/null 2>&1
+awk '{exit $17 == 1.0 ? 0 : 1}' "${LOG}" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
+DESCRIPTION="mumu log column 18 is the status (accepted)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\nA\t2\nB\t1\n" > "${OTU_TABLE}"
+printf "A\tB\t96.5\nB\tA\t96.5\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log "${LOG}" > /dev/null 2>&1
+awk '{exit $18 == "accepted" ? 0 : 1}' "${LOG}" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
+DESCRIPTION="mumu log column 18 is the status (rejected)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\ts2\nA\t2\t1\nB\t1\t1\n" > "${OTU_TABLE}"
+printf "A\tB\t96.5\nB\tA\t96.5\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log "${LOG}" > /dev/null 2>&1
+awk '{exit $18 == "rejected" ? 0 : 1}' "${LOG}" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
 
 # what happens if we have only one OTU (empty match list)? output OTU
 # to new_OTU, mumu should be transparent for empty files or datasets
 # without any parent OTU.
 
+# try two OTUs without overlap, do I get infinite values?
+
+# list all the reasons to reject a potential parent! Make a test for each.
+
+DESCRIPTION="mumu orders input OTUs by abundance (B > A)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\nA\t1\nB\t2\n" > "${OTU_TABLE}"
+printf "A\tB\t96.5\nB\tA\t96.5\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log "${LOG}" > /dev/null 2>&1
+awk '{exit ($1 == "A" && $2 == "B") ? 0 : 1}' "${LOG}" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
 exit 0
