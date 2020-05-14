@@ -63,6 +63,7 @@ auto main (int argc, char** argv) -> int {
 // - use async() to test potential parents? not cluster-friendly, no
 //   control on CPU/thread usage
 // - benchmark 'const auto& sample' or 'const auto sample' to print out OTUs,
+// - catch exception throw when reading input tables?
 
 // Assumptions
 
