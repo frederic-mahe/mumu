@@ -86,7 +86,7 @@ auto write_table (std::unordered_map<std::string, struct OTU> &OTUs,
   for (auto const& otu: sorted_OTUs) {
     new_otu_table << otu.OTU_id;
     for (auto const& sample: OTUs[otu.OTU_id].samples) {
-      new_otu_table << '\t' << sample;
+      new_otu_table << sepchar << sample;
     }
     new_otu_table << '\n';
   }
