@@ -1203,7 +1203,8 @@ rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 # to new_OTU, mumu should be transparent for empty files or datasets
 # without any parent OTU.
 
-# try two OTUs without overlap, do I get infinite values?
+# try two OTUs without overlap, do I get infinite values? make a list
+# of values that are set to null, report that in the manual.
 
 # list all the reasons to reject a potential parent! Make a test for each.
 
