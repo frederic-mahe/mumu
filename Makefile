@@ -42,7 +42,7 @@ $(PROG): $(objects)
 	$(CXX) $(CXXFLAGS) $(COMMON) -o $@ $(objects) $(LIBS)
 
 
-debug: COMMON = -O0 -DDEBUG
+debug: COMMON = -Og -DDEBUG
 debug: all
 
 coverage: COMMON = -O0 --coverage -fprofile-arcs -ftest-coverage -lgcov
