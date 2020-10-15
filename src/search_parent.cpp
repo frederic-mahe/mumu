@@ -146,14 +146,14 @@ auto test_parents (std::unordered_map<std::string, struct OTU> &OTUs,
     s.relative_cooccurence = 1.0 * s.father_overlap_spread / s.son_spread;
     if (s.relative_cooccurence < parameters.minimum_relative_cooccurence) {
       log_file << s;
-      continue ;
+      continue;
     }
     if ((parameters.minimum_ratio_type == use_minimum_value and
          s.smallest_non_null_ratio <= parameters.minimum_ratio)
         or (parameters.minimum_ratio_type == use_average_value and
             s.avg_non_null_ratio <= parameters.minimum_ratio)) {
       log_file << s;
-      continue ;
+      continue;
     }
 
     // update OTU and output stats
