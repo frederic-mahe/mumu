@@ -49,7 +49,8 @@ auto extract_OTU_stats (std::unordered_map<std::string, struct OTU> &OTUs)
     // spread must be re-computed :-(
     otu_stats.spread = std::count_if(OTUs[OTU_id].samples.begin(),
                                      OTUs[OTU_id].samples.end(),
-                                     [](const auto& i){return (i > 0);});
+                                     [](const auto& i) { return i > 0; }
+                                     );
     sorted_OTUs.push_back(otu_stats);
   }
   return sorted_OTUs;
@@ -75,7 +76,7 @@ auto write_table (std::unordered_map<std::string, struct OTU> &OTUs,
   auto sorted_OTUs = extract_OTU_stats(OTUs);
   if (sorted_OTUs.empty()) {
     new_otu_table << "done, empty table\n";
-    return ;
+    return;
   }
   if (sorted_OTUs.size() > 1) {
     // sort it by decreasing abundance, spread and id name
