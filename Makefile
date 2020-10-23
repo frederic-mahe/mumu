@@ -25,7 +25,11 @@ PROG := mumu
 MAN := man/$(PROG).1
 
 CXX := g++
-CXXFLAGS := -std=c++17 -Wall -Wextra -g
+CXXFLAGS := -std=c++17 -Wall -Wextra -g -Wshadow -Wnon-virtual-dtor \
+	-Wold-style-cast -Wcast-align -Wunused -Woverloaded-virtual \
+	-Wpedantic -Wconversion -Wsign-conversion -Wmisleading-indentation \
+	-Wduplicated-cond -Wduplicated-branches -Wlogical-op \
+	-Wnull-dereference -Wuseless-cast -Wdouble-promotion -Wformat=2
 COMMON := -O3 -DNDEBUG
 
 srcfiles := $(shell find ./src/ -name "*.cpp")
@@ -54,7 +58,8 @@ profile: all
 .PHONY: all clean coverage debug dist-clean install profile
 
 clean:
-	rm -f $(objects) $(PROG) compile_commands.json ./src/*.gcov ./src/*.gcda ./src/*.gcno ./*.gcov
+	rm -f $(objects) $(PROG) compile_commands.json ./src/*.gcov \
+	./src/*.gcda ./src/*.gcno ./*.gcov
 
 dist-clean: clean
 	rm -f *~ ./src/*~
