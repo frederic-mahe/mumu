@@ -30,21 +30,18 @@ CXXFLAGS := -std=c++17 -Wall -Wextra -g -Wshadow -Wnon-virtual-dtor \
 	-Wpedantic -Wconversion -Wsign-conversion -Wmisleading-indentation \
 	-Wduplicated-cond -Wduplicated-branches -Wlogical-op \
 	-Wnull-dereference -Wuseless-cast -Wdouble-promotion -Wformat=2
-SPECIFIC := -O3 -DNDEBUG
+SPECIFIC := -O3 -DNDEBUG -flto
 
 srcfiles := $(shell find ./src/ -name "*.cpp")
 objects  := $(patsubst %.cpp, %.o, $(srcfiles))
 
-
-all: $(PROG)
-
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) $(SPECIFIC) -c $< -o $@
-
 
 $(PROG): $(objects)
 	$(CXX) $(CXXFLAGS) $(SPECIFIC) -o $@ $(objects) $(LIBS)
 
+all: $(PROG)
 
 debug: SPECIFIC = -Og -DDEBUG
 debug: all
