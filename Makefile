@@ -55,8 +55,6 @@ coverage: all
 profile: COMMON = -O3 -pg
 profile: all
 
-.PHONY: all clean coverage debug dist-clean install profile
-
 clean:
 	rm -f $(objects) $(PROG) compile_commands.json ./src/*.gcov \
 	./src/*.gcda ./src/*.gcno ./*.gcov
@@ -67,3 +65,5 @@ dist-clean: clean
 install : $(PROG) $(MAN)
 	/usr/bin/install -c $(PROG) '/usr/local/bin'
 	/usr/bin/install -c $(MAN) '/usr/local/share/man/man1'
+
+.PHONY: all clean coverage debug dist-clean install profile
