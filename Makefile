@@ -30,7 +30,7 @@ CXXFLAGS := -std=c++17 -Wall -Wextra -g -Wshadow -Wnon-virtual-dtor \
 	-Wpedantic -Wconversion -Wsign-conversion -Wmisleading-indentation \
 	-Wduplicated-cond -Wduplicated-branches -Wlogical-op \
 	-Wnull-dereference -Wuseless-cast -Wdouble-promotion -Wformat=2
-COMMON := -O3 -DNDEBUG
+SPECIFIC := -O3 -DNDEBUG
 
 srcfiles := $(shell find ./src/ -name "*.cpp")
 objects  := $(patsubst %.cpp, %.o, $(srcfiles))
@@ -39,20 +39,20 @@ objects  := $(patsubst %.cpp, %.o, $(srcfiles))
 all: $(PROG)
 
 %.o: %.cpp
-	$(CXX) $(CXXFLAGS) $(COMMON) -c $< -o $@
+	$(CXX) $(CXXFLAGS) $(SPECIFIC) -c $< -o $@
 
 
 $(PROG): $(objects)
-	$(CXX) $(CXXFLAGS) $(COMMON) -o $@ $(objects) $(LIBS)
+	$(CXX) $(CXXFLAGS) $(SPECIFIC) -o $@ $(objects) $(LIBS)
 
 
-debug: COMMON = -Og -DDEBUG
+debug: SPECIFIC = -Og -DDEBUG
 debug: all
 
-coverage: COMMON = -O0 --coverage -fprofile-arcs -ftest-coverage -lgcov
+coverage: SPECIFIC = -O0 --coverage -fprofile-arcs -ftest-coverage -lgcov
 coverage: all
 
-profile: COMMON = -O3 -pg
+profile: SPECIFIC = -O3 -pg
 profile: all
 
 clean:
