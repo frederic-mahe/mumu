@@ -1,5 +1,7 @@
 # mumu
 
+![C/C++ CI](https://github.com/frederic-mahe/mumu/workflows/C/C++%20CI/badge.svg)
+
 stand-alone C++ implementation and enhancement of [lulu](https://github.com/tobiasgf/lulu), a R package for post-clustering curation of metabarcoding data
 
 The first goal is to produce a thoroughly tested and fast alternative for lulu. Testing is done using a black-box approach: feed mumu with carefully designed input values and observe the results. All these tests are written using common Unix/Linux shell utilities. Some C++ internal tests are also used (_assertions_), but these are only active when compiling in _dev_ mode.
