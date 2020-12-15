@@ -25,9 +25,9 @@ PROG := mumu
 MAN := man/$(PROG).1
 
 CXX := g++
-CXXFLAGS := -std=c++2a -Wall -Wextra -g -Wshadow -Wnon-virtual-dtor \
+CXXFLAGS := -std=c++17 -Wall -Wextra -g -Wshadow -Wnon-virtual-dtor \
 	-Wold-style-cast -Wcast-align -Wunused -Woverloaded-virtual \
-	-Wpedantic -Wconversion -Wsign-conversion -Wmisleading-indentation \
+	-Wconversion -Wsign-conversion -Wmisleading-indentation \
 	-Wduplicated-cond -Wduplicated-branches -Wlogical-op \
 	-Wnull-dereference -Wuseless-cast -Wdouble-promotion -Wformat=2
 SPECIFIC := -O3 -DNDEBUG -flto
@@ -43,7 +43,7 @@ $(PROG): $(objects)
 
 all: $(PROG)
 
-debug: SPECIFIC = -Og -DDEBUG -fsanitize=address -fno-omit-frame-pointer
+debug: SPECIFIC = -Og -DDEBUG -fsanitize=address -fno-omit-frame-pointer -Wpedantic
 debug: all
 
 coverage: SPECIFIC = -O0 --coverage -fprofile-arcs -ftest-coverage -lgcov
