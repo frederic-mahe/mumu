@@ -25,7 +25,7 @@ PROG := mumu
 MAN := man/$(PROG).1
 
 CXX := g++
-CXXFLAGS := -std=c++20 -Wall -Wextra -g -Wshadow -Wnon-virtual-dtor \
+CXXFLAGS := -std=c++2a -Wall -Wextra -g -Wshadow -Wnon-virtual-dtor \
 	-Wold-style-cast -Wcast-align -Wunused -Woverloaded-virtual \
 	-Wpedantic -Wconversion -Wsign-conversion -Wmisleading-indentation \
 	-Wduplicated-cond -Wduplicated-branches -Wlogical-op \
