@@ -17,7 +17,7 @@ success () {
 ## use the first mumu binary in $PATH by default, unless user wants
 ## to test another binary
 MUMU=$(which mumu 2> /dev/null)
-[[ "${1}" ]] && MUMU="${1}"
+[[ "${1}" ]] && MUMU="$(readlink -f "${1}")"
 
 DESCRIPTION="check if mumu is executable"
 [[ -x "${MUMU}" ]] && \

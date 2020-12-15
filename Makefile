@@ -27,7 +27,7 @@ MAN := man/$(PROG).1
 CXX := g++
 CXXFLAGS := -std=c++17 -Wall -Wextra -g -Wshadow -Wnon-virtual-dtor \
 	-Wold-style-cast -Wcast-align -Wunused -Woverloaded-virtual \
-	-Wconversion -Wsign-conversion -Wmisleading-indentation \
+	-Wpedantic -Wconversion -Wsign-conversion -Wmisleading-indentation \
 	-Wduplicated-cond -Wduplicated-branches -Wlogical-op \
 	-Wnull-dereference -Wuseless-cast -Wdouble-promotion -Wformat=2
 SPECIFIC := -O3 -DNDEBUG -flto
@@ -43,7 +43,7 @@ $(PROG): $(objects)
 
 all: $(PROG)
 
-debug: SPECIFIC = -Og -DDEBUG -fsanitize=address -fno-omit-frame-pointer -Wpedantic
+debug: SPECIFIC = -Og -DDEBUG -fsanitize=address -fno-omit-frame-pointer
 debug: all
 
 coverage: SPECIFIC = -O0 --coverage -fprofile-arcs -ftest-coverage -lgcov
@@ -64,6 +64,6 @@ install : $(PROG) $(MAN)
 	/usr/bin/install -c $(MAN) '/usr/local/share/man/man1'
 
 check:
-	bash ./tests/mumu.sh
+	bash ./tests/mumu.sh $(PROG)
 
 .PHONY: all clean coverage debug dist-clean install profile
