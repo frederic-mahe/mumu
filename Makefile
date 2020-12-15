@@ -63,4 +63,7 @@ install : $(PROG) $(MAN)
 	/usr/bin/install -c $(PROG) '/usr/local/bin'
 	/usr/bin/install -c $(MAN) '/usr/local/share/man/man1'
 
+check:
+	bash ./tests/mumu.sh
+
 .PHONY: all clean coverage debug dist-clean install profile
