@@ -56,7 +56,7 @@ profile: all
 
 clean:
 	rm -f $(objects) $(PROG) compile_commands.json ./src/*.gcov \
-	./src/*.gcda ./src/*.gcno ./*.gcov
+	./src/*.gcda ./src/*.gcno ./*.gcov ./src/main_coverage.info
 
 dist-clean: clean
 	rm -f *~ ./src/*~
