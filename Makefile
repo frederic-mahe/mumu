@@ -68,4 +68,4 @@ install : $(PROG) $(MAN)
 check:
 	bash ./tests/mumu.sh $(PROG)
 
-.PHONY: all clean coverage debug dist-clean install profile
+.PHONY: all clean coverage debug dist-clean install profile check
