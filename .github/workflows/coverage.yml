@@ -18,6 +18,8 @@ jobs:
     - name: make coverage
       run: make coverage
     - name: coverage
-      run: bash ./tests/coverage.sh
-      status: ${{ steps.coverage.outputs.coverage }}
-      label: 'coverage'
+      id: coverage
+      # Generates a GitHub Workflow output named `coverage`
+      run: |
+        COVERAGE="$( bash ./tests/coverage.sh )"
+        echo "##[set-output name=coverage;]${COVERAGE}%"
