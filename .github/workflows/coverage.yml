@@ -17,9 +17,6 @@ jobs:
     - uses: actions/checkout@v2
     - name: make coverage
       run: make coverage
-    - name: coverage
-      id: coverage
-      # Generates a GitHub Workflow output named `coverage`
+    - name: print coverage
       run: |
-        COVERAGE="$( bash ./tests/coverage.sh )"
-        echo "##[set-output name=coverage;]${COVERAGE}%"
+        echo "coverage: $( bash ./tests/coverage.sh )%"
