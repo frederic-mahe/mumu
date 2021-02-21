@@ -40,12 +40,12 @@ auto main (int argc, char** argv) -> int {
   parse_args(argc, argv, parameters);
   validate_args(parameters);
 
-  // index data
+  // load and index data
   std::unordered_map<std::string, struct OTU> OTUs;
   read_otu_table(parameters.otu_table, parameters.new_otu_table, OTUs);
   read_match_list(parameters.match_list, OTUs, parameters.minimum_match);
 
-  // find potential parents (multithreaded)
+  // find potential parents (could be multithreaded)
   search_parent(OTUs, parameters);
 
   // merge, sort and output
@@ -64,6 +64,7 @@ auto main (int argc, char** argv) -> int {
 //   control on CPU/thread usage
 // - benchmark 'const auto& sample' or 'const auto sample' to print out OTUs,
 // - catch exception throw when reading input tables?
+// - more user-defined types: replace "std::string" with "sequence_id" (semantic code)
 
 // Assumptions
 

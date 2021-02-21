@@ -1,6 +1,6 @@
 // MUMU
 
-// Copyright (C) 2020 Frederic Mahe
+// Copyright (C) 2020-2021 Frederic Mahe
 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -57,7 +57,7 @@ auto extract_OTU_stats (std::unordered_map<std::string, struct OTU> &OTUs)
 }
 
 
-auto compare_two_OTUs (const OTU_stats& a, const OTU_stats& b) -> bool {
+auto compare_two_OTUs (const OTU_stats& a, const OTU_stats& b) -> bool {  // bug? it should be a named lambda in write_table?
   // by decreasing abundance
   if (a.abundance > b.abundance) {
     return true;
