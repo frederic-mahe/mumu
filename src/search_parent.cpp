@@ -75,17 +75,17 @@ auto operator<< (std::ostream& output_stream, const Stats& stats) -> std::ostrea
 }
 
 
-auto compare_two_matches (const Match& a, const Match& b) -> bool {
+auto compare_two_matches (const Match& matchA, const Match& matchB) -> bool {
   // by decreasing similarity
-  if (a.similarity > b.similarity) {
+  if (matchA.similarity > matchB.similarity) {
     return true;
   }
   // then by decreasing abundance
-  if (a.hit_sum_reads > b.hit_sum_reads) {
+  if (matchA.hit_sum_reads > matchB.hit_sum_reads) {
     return true;
   }
   // then by decreasing spread
-  return  (a.hit_spread > b.hit_spread);
+  return  (matchA.hit_spread > matchB.hit_spread);
 }
 
 
