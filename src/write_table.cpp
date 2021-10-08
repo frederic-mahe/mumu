@@ -30,7 +30,7 @@
 struct OTU_stats {
   std::string OTU_id;
   unsigned int abundance {0};
-  unsigned int spread {0};
+  long int spread {0};
 };
 
 
@@ -47,10 +47,10 @@ auto extract_OTU_stats (std::unordered_map<std::string, struct OTU> &OTUs)
     otu_stats.abundance = OTUs[OTU_id].sum_reads;
     
     // spread must be re-computed :-(
-    otu_stats.spread = std::count_if(OTUs[OTU_id].samples.begin(),
-                                     OTUs[OTU_id].samples.end(),
-                                     [](const auto& n_reads) { return n_reads > 0; }
-                                     );
+    otu_stats.spread =
+      std::ranges::count_if(OTUs[OTU_id].samples,
+                            [](const auto& n_reads) { return n_reads > 0; }
+                            );
     sorted_OTUs.push_back(otu_stats);
   }
   return sorted_OTUs;
