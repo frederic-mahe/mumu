@@ -23,6 +23,7 @@
 
 #include <algorithm>
 #include <climits>
+#include <iostream>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -60,7 +61,6 @@ struct Parameters {
   double minimum_relative_cooccurence {minimum_relative_cooccurence_default};
 };
 
-
 struct Match {
   double similarity {0.0};
   unsigned int hit_sum_reads {0};
@@ -77,3 +77,9 @@ struct OTU {
   std::vector<struct Match> matches;
   std::vector<unsigned int> samples;
 };
+
+// [[ noreturn ]]
+// auto fatal(const std::string &message) -> void {
+//   std::cerr << "Error: " << message << "\n";
+//   std::exit(EXIT_FAILURE);
+// }
