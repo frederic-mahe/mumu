@@ -90,28 +90,28 @@ auto compare_two_matches (const Match& a, const Match& b) -> bool {
 
 
 auto per_sample_ratios (std::unordered_map<std::string, struct OTU> &OTUs,
-                        Stats &s) -> void {
+                        Stats &stats) -> void {
   // 'zip' two OTUs (https://www.cplusplus.com/forum/general/228918/)
   // for (auto [x,y] : std::ranges::zip( xs, ys ))  // available in c++23? http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2021/p2321r2.html
-  auto& son = OTUs[s.son_id].samples;
-  auto& father = OTUs[s.father_id].samples;
-  auto xi = son.begin();
-  auto yi = father.begin();
-  while (xi != son.end()) {  // check only one end, vectors have the same length
-    auto son_abundance = *xi++;
-    const auto& father_abundance = *yi++;
+  auto& son = OTUs[stats.son_id].samples;
+  auto& father = OTUs[stats.father_id].samples;
+  auto current_son_sample = son.begin();
+  auto current_father_sample = father.begin();
+  while (current_son_sample != son.end()) {  // check only one end, vectors have the same length
+    auto son_abundance = *current_son_sample++;
+    const auto& father_abundance = *current_father_sample++;
     if (son_abundance == 0) { continue; }  // skip this sample
-    s.son_overlap_abundance += son_abundance;
+    stats.son_overlap_abundance += son_abundance;
     double ratio { 1.0 * father_abundance / son_abundance};
-    if (ratio < s.smallest_ratio) { s.smallest_ratio = ratio; }
-    if (ratio > s.largest_ratio) { s.largest_ratio = ratio; }
-    if (ratio < s.smallest_non_null_ratio and ratio > 0.0) {
-      s.smallest_non_null_ratio = ratio;
+    if (ratio < stats.smallest_ratio) { stats.smallest_ratio = ratio; }
+    if (ratio > stats.largest_ratio) { stats.largest_ratio = ratio; }
+    if (ratio < stats.smallest_non_null_ratio and ratio > 0.0) {
+      stats.smallest_non_null_ratio = ratio;
     }
-    s.sum_ratio += ratio;
+    stats.sum_ratio += ratio;
     if (father_abundance > 0) {
-      ++s.father_overlap_spread;
-      s.father_overlap_abundance += father_abundance;
+      ++stats.father_overlap_spread;
+      stats.father_overlap_abundance += father_abundance;
     }
   }
 }
@@ -123,7 +123,7 @@ auto test_parents (std::unordered_map<std::string, struct OTU> &OTUs,
                    Parameters const &parameters,
                    std::ofstream &log_file) -> void {
   for (auto& match : otu.matches) {
-    Stats s {.son_id = OTU_id,
+    Stats stats {.son_id = OTU_id,
       .father_id = match.hit_id,
       .similarity = match.similarity,
       .son_total_abundance = otu.sum_reads,
@@ -132,36 +132,36 @@ auto test_parents (std::unordered_map<std::string, struct OTU> &OTUs,
       .father_spread = OTUs[match.hit_id].spread};
 
     // compute father/son ratios for all samples
-    per_sample_ratios(OTUs, s);
+    per_sample_ratios(OTUs, stats);
 
     // compute average ratios and prep for stats output
-    s.avg_ratio = s.sum_ratio / s.son_spread;
-    if (s.father_overlap_spread > 0) {  // avoid dividing by zero
-      s.avg_non_null_ratio = s.sum_ratio / s.father_overlap_spread;
+    stats.avg_ratio = stats.sum_ratio / stats.son_spread;
+    if (stats.father_overlap_spread > 0) {  // avoid dividing by zero
+      stats.avg_non_null_ratio = stats.sum_ratio / stats.father_overlap_spread;
     }
-    if (s.smallest_non_null_ratio == largest_double) {
-      s.smallest_non_null_ratio = 0.0;  // avoid printing a giant value
+    if (stats.smallest_non_null_ratio == largest_double) {
+      stats.smallest_non_null_ratio = 0.0;  // avoid printing a giant value
     }
 
     // not a parent if...
-    s.relative_cooccurence = 1.0 * s.father_overlap_spread / s.son_spread;
-    if (s.relative_cooccurence < parameters.minimum_relative_cooccurence) {
-      log_file << s;
+    stats.relative_cooccurence = 1.0 * stats.father_overlap_spread / stats.son_spread;
+    if (stats.relative_cooccurence < parameters.minimum_relative_cooccurence) {
+      log_file << stats;
       continue;
     }
     if ((parameters.minimum_ratio_type == use_minimum_value and
-         s.smallest_non_null_ratio <= parameters.minimum_ratio)
+         stats.smallest_non_null_ratio <= parameters.minimum_ratio)
         or (parameters.minimum_ratio_type == use_average_value and
-            s.avg_non_null_ratio <= parameters.minimum_ratio)) {
-      log_file << s;
+            stats.avg_non_null_ratio <= parameters.minimum_ratio)) {
+      log_file << stats;
       continue;
     }
 
     // update OTU and output stats
-    s.status = accept_as_parent;
+    stats.status = accept_as_parent;
     otu.is_mergeable = true;
     otu.father_id = match.hit_id;
-    log_file << s;
+    log_file << stats;
     break;
   }
 }
