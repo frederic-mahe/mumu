@@ -64,7 +64,7 @@ auto parse_each_otu (std::unordered_map<std::string, struct OTU> &OTUs,
                      unsigned int header_columns) -> void {
   auto sum_reads {0U};  // 4,294,967,295 reads at most
   auto spread {0U};
-  auto n_values {0U};
+  auto n_values {0U};  // rename to n_columns?
   std::stringstream ss(line);
   std::string OTU_id;
   std::string buf;
