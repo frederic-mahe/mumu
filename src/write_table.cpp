@@ -57,13 +57,13 @@ auto extract_OTU_stats (std::unordered_map<std::string, struct OTU> &OTUs)
 }
 
 
-auto compare_two_OTUs (const OTU_stats& a, const OTU_stats& b) -> bool {  // bug? it should be a named lambda in write_table?
+auto compare_two_OTUs (const OTU_stats& OTUa, const OTU_stats& OTUb) -> bool {  // bug? it should be a named lambda in write_table?
   // by decreasing abundance
-  if (a.abundance > b.abundance) {
+  if (OTUa.abundance > OTUb.abundance) {
     return true;
   }
   // then by decreasing spread
-  return (a.spread > b.spread);
+  return (OTUa.spread > OTUb.spread);
 }
 
 
