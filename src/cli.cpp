@@ -54,6 +54,10 @@ const struct option long_options[] =
   };
 
 
+// legitimate option characters (colon means that the option requires an argument)
+const std::string optstring {"a:b:c:d:hl:m:n:o:t:v"};
+
+
 auto help () -> void {
   std::cout << "Usage: mumu " << n_version << '\n'
             << " -h, --help                           display this help and exit\n"
@@ -84,19 +88,25 @@ auto version () -> void {
 
 
 auto parse_args (int argc, char ** argv, Parameters &parameters) -> void {
-  auto c {0};
+  auto option_character {0};
 
   while (true) {
-    auto option_index {0};
+    auto option_index {0};  // should be declared only once??
 
-    c = getopt_long(argc, argv, "a:b:c:d:hl:m:n:o:t:v",
-                    static_cast<const struct option *>(long_options),
-                    &option_index);
-    if (c == -1) {
+    // An element of argv that starts with '-' (and is not exactly "-"
+    // or "--") is an option element. The characters of this element
+    // (aside from the initial '-') are option characters. If getopt()
+    // is called repeatedly, it returns successively each of the
+    // option characters from each of the option elements.
+    option_character = getopt_long(argc, argv, optstring.c_str(),
+                                   static_cast<const struct option *>(long_options),
+                                   &option_index);
+
+    if (option_character == -1) { // no more option characters to parse
       break;
     }
 
-    switch (c) {
+    switch (option_character) {
     case 'a':  // minimum match (default is 84.0)
       parameters.minimum_match = std::atof(optarg);
       break;
