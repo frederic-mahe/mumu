@@ -25,7 +25,6 @@
 #include <iostream>
 #include <sstream>
 #include "mumu.h"
-#include "load_data.h"
 
 // // work in progress: use operator overload to parse match list file
 // struct Match_line {
@@ -89,7 +88,7 @@ auto parse_each_otu (std::unordered_map<std::string, struct OTU> &OTUs,
   // sanity check
   if ((n_values + 1) != header_columns) {
     std::cerr << "Error: variable number of columns in OTU table\n";
-    std::exit(EXIT_FAILURE);
+    std::exit(EXIT_FAILURE);  // move to a [[noreturn]] fatal function
   }
 
   // add more results to the map
@@ -107,7 +106,8 @@ auto read_otu_table (std::string otu_table_name,
   std::ifstream otu_table {otu_table_name};
   std::ofstream new_otu_table {new_otu_table_name};
 
-  // first line: get number of columns, write to new OTU table
+  // first line: get number of columns, write headers to new OTU table
+  // (move that block to a function)!!!!!!!!!!!!!!
   std::string line;
   std::getline(otu_table, line);
   auto header_columns = count_columns(line);
@@ -156,7 +156,7 @@ auto read_match_list (const std::string match_list_name,
       // update map only if query is less abundant than hit
       auto hit_sum_reads {OTUs[hit].sum_reads};
       if (OTUs[query].sum_reads < hit_sum_reads) {
-        Match match;
+        Match match;  // use direct value initialization here!!!
         match.similarity = similarity;
         match.hit_sum_reads = hit_sum_reads;
         match.hit_spread = OTUs[hit].spread;

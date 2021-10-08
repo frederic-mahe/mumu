@@ -27,7 +27,6 @@
 #include <getopt.h>
 #include <iostream>
 #include "mumu.h"
-#include "cli.h"
 
 // additional options?
 //  --minimum_spread n (spread threshold to consider as potential father)
