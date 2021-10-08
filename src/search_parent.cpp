@@ -50,28 +50,28 @@ struct Stats {
 };
 
 
-auto operator<< (std::ostream& output_stream, const Stats& s) -> std::ostream& {
+auto operator<< (std::ostream& output_stream, const Stats& stats) -> std::ostream& {
   output_stream.precision(2);
   return output_stream
     << std::fixed
-    << s.son_id << sepchar
-    << s.father_id << sepchar
-    << s.similarity << sepchar
-    << s.son_total_abundance << sepchar
-    << s.father_total_abundance << sepchar
-    << s.son_overlap_abundance << sepchar
-    << s.father_overlap_abundance << sepchar
-    << s.son_spread << sepchar
-    << s.father_spread << sepchar
-    << s.father_overlap_spread << sepchar
-    << s.smallest_ratio << sepchar
-    << s.sum_ratio << sepchar
-    << s.avg_ratio << sepchar
-    << s.smallest_non_null_ratio << sepchar
-    << s.avg_non_null_ratio << sepchar
-    << s.largest_ratio << sepchar
-    << s.relative_cooccurence << sepchar
-    << s.status << '\n';
+    << stats.son_id << sepchar
+    << stats.father_id << sepchar
+    << stats.similarity << sepchar
+    << stats.son_total_abundance << sepchar
+    << stats.father_total_abundance << sepchar
+    << stats.son_overlap_abundance << sepchar
+    << stats.father_overlap_abundance << sepchar
+    << stats.son_spread << sepchar
+    << stats.father_spread << sepchar
+    << stats.father_overlap_spread << sepchar
+    << stats.smallest_ratio << sepchar
+    << stats.sum_ratio << sepchar
+    << stats.avg_ratio << sepchar
+    << stats.smallest_non_null_ratio << sepchar
+    << stats.avg_non_null_ratio << sepchar
+    << stats.largest_ratio << sepchar
+    << stats.relative_cooccurence << sepchar
+    << stats.status << '\n';
 }
 
 
