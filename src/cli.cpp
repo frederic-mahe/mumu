@@ -171,7 +171,7 @@ auto validate_args (Parameters const &parameters) -> void {
     std::exit(EXIT_FAILURE);
   }
 
-  // check files can be opened
+  // check if input files are reachable
   std::ifstream otu_table {parameters.otu_table};
   if (! otu_table) {
     std::cerr << "Error: can't open input file " << parameters.otu_table << '\n';
@@ -186,7 +186,8 @@ auto validate_args (Parameters const &parameters) -> void {
   }
   match_list.close();
 
-  // check if writing is possible (better now than after a lengthy computation)
+  // check if output files are writable (better now than after a
+  // lengthy computation)
   std::ofstream new_otu_table {parameters.new_otu_table};
   if (! new_otu_table) {
     std::cerr << "Error: can't open output file " << parameters.new_otu_table << '\n';
