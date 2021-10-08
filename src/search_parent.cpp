@@ -50,27 +50,28 @@ struct Stats {
 };
 
 
-auto operator<< (std::ostream& os, const Stats& s) -> std::ostream& {
-   os.precision(2);
-   return os << std::fixed
-             << s.son_id << sepchar
-             << s.father_id << sepchar
-             << s.similarity << sepchar
-             << s.son_total_abundance << sepchar
-             << s.father_total_abundance << sepchar
-             << s.son_overlap_abundance << sepchar
-             << s.father_overlap_abundance << sepchar
-             << s.son_spread << sepchar
-             << s.father_spread << sepchar
-             << s.father_overlap_spread << sepchar
-             << s.smallest_ratio << sepchar
-             << s.sum_ratio << sepchar
-             << s.avg_ratio << sepchar
-             << s.smallest_non_null_ratio << sepchar
-             << s.avg_non_null_ratio << sepchar
-             << s.largest_ratio << sepchar
-             << s.relative_cooccurence << sepchar
-             << s.status << '\n';
+auto operator<< (std::ostream& output_stream, const Stats& s) -> std::ostream& {
+  output_stream.precision(2);
+  return output_stream
+    << std::fixed
+    << s.son_id << sepchar
+    << s.father_id << sepchar
+    << s.similarity << sepchar
+    << s.son_total_abundance << sepchar
+    << s.father_total_abundance << sepchar
+    << s.son_overlap_abundance << sepchar
+    << s.father_overlap_abundance << sepchar
+    << s.son_spread << sepchar
+    << s.father_spread << sepchar
+    << s.father_overlap_spread << sepchar
+    << s.smallest_ratio << sepchar
+    << s.sum_ratio << sepchar
+    << s.avg_ratio << sepchar
+    << s.smallest_non_null_ratio << sepchar
+    << s.avg_non_null_ratio << sepchar
+    << s.largest_ratio << sepchar
+    << s.relative_cooccurence << sepchar
+    << s.status << '\n';
 }
 
 
@@ -123,12 +124,12 @@ auto test_parents (std::unordered_map<std::string, struct OTU> &OTUs,
                    std::ofstream &log_file) -> void {
   for (auto& match : otu.matches) {
     Stats s {.son_id = OTU_id,
-             .father_id = match.hit_id,
-             .similarity = match.similarity,
-             .son_total_abundance = otu.sum_reads,
-             .father_total_abundance = OTUs[match.hit_id].sum_reads,
-             .son_spread = otu.spread,
-             .father_spread = OTUs[match.hit_id].spread};
+      .father_id = match.hit_id,
+      .similarity = match.similarity,
+      .son_total_abundance = otu.sum_reads,
+      .father_total_abundance = OTUs[match.hit_id].sum_reads,
+      .son_spread = otu.spread,
+      .father_spread = OTUs[match.hit_id].spread};
 
     // compute father/son ratios for all samples
     per_sample_ratios(OTUs, s);
