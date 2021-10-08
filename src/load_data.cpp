@@ -62,7 +62,7 @@ auto count_columns (std::string line) -> unsigned int {
 auto parse_each_otu (std::unordered_map<std::string, struct OTU> &OTUs,
                      std::string &line,
                      unsigned int header_columns) -> void {
-  auto sum_reads {0U};  // 4,294,967,295 reads at most
+  auto sum_reads {0U};  // 4,294,967,295 reads at most (test with assert)
   auto spread {0U};
   auto n_values {0U};  // rename to n_columns?
   std::stringstream ss(line);
@@ -78,7 +78,7 @@ auto parse_each_otu (std::unordered_map<std::string, struct OTU> &OTUs,
 
   // get abundance values (rest of the line)
   while (getline(ss, buf, sepchar)) {
-    auto abundance {std::stoul(buf)};
+    auto abundance {std::stoul(buf)};  // test if abundance > unsigned int!!!!!
     if (abundance > 0) { spread += 1; }
     sum_reads += abundance;
     otu.samples.push_back(abundance);  // push to map
