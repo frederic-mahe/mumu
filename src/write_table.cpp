@@ -49,7 +49,7 @@ auto extract_OTU_stats (std::unordered_map<std::string, struct OTU> &OTUs)
     // spread must be re-computed :-(
     otu_stats.spread = std::count_if(OTUs[OTU_id].samples.begin(),
                                      OTUs[OTU_id].samples.end(),
-                                     [](const auto& i) { return i > 0; }
+                                     [](const auto& n_reads) { return n_reads > 0; }
                                      );
     sorted_OTUs.push_back(otu_stats);
   }
