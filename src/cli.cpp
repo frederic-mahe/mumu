@@ -54,10 +54,6 @@ const struct option long_options[] =
   };
 
 
-// legitimate option characters (colon means that the option requires an argument)
-const std::string optstring {"a:b:c:d:hl:m:n:o:t:v"};
-
-
 auto help () -> void {
   std::cout << "Usage: mumu " << n_version << '\n'
             << " -h, --help                           display this help and exit\n"
@@ -88,6 +84,8 @@ auto version () -> void {
 
 
 auto parse_args (int argc, char ** argv, Parameters &parameters) -> void {
+  // legitimate option characters (colon = option requires an argument)
+  const std::string mumu_optstring {"a:b:c:d:hl:m:n:o:t:v"};
   auto option_character {0};
 
   while (true) {
@@ -98,7 +96,7 @@ auto parse_args (int argc, char ** argv, Parameters &parameters) -> void {
     // (aside from the initial '-') are option characters. If getopt()
     // is called repeatedly, it returns successively each of the
     // option characters from each of the option elements.
-    option_character = getopt_long(argc, argv, optstring.c_str(),
+    option_character = getopt_long(argc, argv, mumu_optstring.c_str(),
                                    static_cast<const struct option *>(long_options),
                                    &option_index);
 
