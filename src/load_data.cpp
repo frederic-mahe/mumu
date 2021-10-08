@@ -78,10 +78,10 @@ auto parse_each_otu (std::unordered_map<std::string, struct OTU> &OTUs,
 
   // get abundance values (rest of the line)
   while (getline(ss, buf, sepchar)) {
-    auto i {std::stoul(buf)};
-    if (i > 0) { spread += 1; }
-    sum_reads += i;
-    otu.samples.push_back(i);  // push to map
+    auto abundance {std::stoul(buf)};
+    if (abundance > 0) { spread += 1; }
+    sum_reads += abundance;
+    otu.samples.push_back(abundance);  // push to map
     ++n_values;
   }
 
