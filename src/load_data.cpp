@@ -142,7 +142,7 @@ auto read_match_list (const std::string match_list_name,
       getline(ss, buf, sepchar);
       auto hit {buf};
       getline(ss, buf, sepchar);
-      auto similarity {std::stof(buf)};
+      auto similarity {std::stod(buf)};
 
       // sanity check
       if (getline(ss, buf, sepchar)) {
