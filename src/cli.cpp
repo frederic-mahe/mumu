@@ -146,7 +146,7 @@ auto parse_args (int argc, char ** argv, Parameters &parameters) -> void {
       break;
 
     case 't':  // threads (default is 1)
-      parameters.threads = std::atoi(optarg);
+      parameters.threads = std::stoul(optarg);
       break;
 
     case 'v':  // version number
