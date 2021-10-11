@@ -50,8 +50,8 @@ auto count_columns (std::string line) -> unsigned int {
   auto columns {0U};
 
   std::string buf;                  // Have a buffer string
-  std::stringstream ss(line);       // Insert the string into a stream
-  while (getline(ss, buf, sepchar)) {
+  std::stringstream otu_raw_data(line);       // Insert the string into a stream
+  while (getline(otu_raw_data, buf, sepchar)) {
     columns++;
   }
 
@@ -136,11 +136,11 @@ auto read_match_list (const std::string match_list_name,
   while (std::getline(match_list, line))
     {
       std::string buf;
+      std::string query;
+      std::string hit;
       std::stringstream match_raw_data(line);
-      getline(match_raw_data, buf, sepchar);
-      auto query {buf};
-      getline(match_raw_data, buf, sepchar);
-      auto hit {buf};
+      getline(match_raw_data, query, sepchar);
+      getline(match_raw_data, hit, sepchar);
       getline(match_raw_data, buf, sepchar);
       auto similarity {std::stod(buf)};
 
