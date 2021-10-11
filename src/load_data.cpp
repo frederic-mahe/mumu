@@ -65,19 +65,19 @@ auto parse_each_otu (std::unordered_map<std::string, struct OTU> &OTUs,
   auto sum_reads {0U};  // 4,294,967,295 reads at most (test with assert)
   auto spread {0U};
   auto n_values {0U};  // rename to n_columns?
-  std::stringstream ss(line);
+  std::stringstream otu_raw_data(line);
   std::string OTU_id;
   std::string buf;
   OTU otu;
 
   // get OTU id (first item of the line)
-  getline(ss, OTU_id, sepchar);
+  getline(otu_raw_data, OTU_id, sepchar);
 
   // we know there are (columns - 1) samples
   otu.samples.reserve(header_columns - 1);
 
   // get abundance values (rest of the line)
-  while (getline(ss, buf, sepchar)) {
+  while (getline(otu_raw_data, buf, sepchar)) {
     auto abundance {std::stoul(buf)};  // test if abundance > unsigned int!!!!!
     if (abundance > 0) { spread += 1; }
     sum_reads += abundance;
@@ -136,16 +136,16 @@ auto read_match_list (const std::string match_list_name,
   while (std::getline(match_list, line))
     {
       std::string buf;
-      std::stringstream ss(line);
-      getline(ss, buf, sepchar);
+      std::stringstream match_raw_data(line);
+      getline(match_raw_data, buf, sepchar);
       auto query {buf};
-      getline(ss, buf, sepchar);
+      getline(match_raw_data, buf, sepchar);
       auto hit {buf};
-      getline(ss, buf, sepchar);
+      getline(match_raw_data, buf, sepchar);
       auto similarity {std::stod(buf)};
 
       // sanity check
-      if (getline(ss, buf, sepchar)) {
+      if (getline(match_raw_data, buf, sepchar)) {
         std::cerr << "Error: match list entry has more than three columns\n";
         std::exit(EXIT_FAILURE);
       }
