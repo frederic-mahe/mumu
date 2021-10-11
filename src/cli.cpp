@@ -108,7 +108,7 @@ auto parse_args (int argc, char ** argv, Parameters &parameters) -> void {
 
     switch (option_character) {
     case 'a':  // minimum match (default is 84.0)
-      parameters.minimum_match = std::atof(optarg);
+      parameters.minimum_match = std::stof(optarg);
       break;
 
     case 'b':  // minimum ratio type (default is "min")
@@ -116,11 +116,11 @@ auto parse_args (int argc, char ** argv, Parameters &parameters) -> void {
       break;
 
     case 'c':  // minimum ratio (default is 1.0)
-      parameters.minimum_ratio = std::atof(optarg);
+      parameters.minimum_ratio = std::stof(optarg);
       break;
 
     case 'd':  // minimum relative cooccurence (default is 0.95)
-      parameters.minimum_relative_cooccurence = std::atof(optarg);
+      parameters.minimum_relative_cooccurence = std::stof(optarg);
       break;
 
     case 'h':  // help message
