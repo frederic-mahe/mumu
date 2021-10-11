@@ -25,4 +25,4 @@
 #include <unordered_map>
 
 auto write_table (std::unordered_map<std::string, struct OTU> &OTUs,
-                  std::string new_otu_table_name) -> void;
+                  const std::string &new_otu_table_name) -> void;
