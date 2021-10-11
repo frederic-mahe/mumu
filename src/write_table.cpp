@@ -66,7 +66,7 @@ auto compare_two_OTUs (const OTU_stats& OTUa, const OTU_stats& OTUb) -> bool {  
 
 
 auto write_table (std::unordered_map<std::string, struct OTU> &OTUs,
-                  const std::string new_otu_table_name) -> void {
+                  const std::string &new_otu_table_name) -> void {
   std::cout << "write new OTU table... ";
   // re-open output file
   std::ofstream new_otu_table {new_otu_table_name, std::ios_base::app};
