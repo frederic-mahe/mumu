@@ -93,6 +93,8 @@ auto per_sample_ratios (std::unordered_map<std::string, struct OTU> &OTUs,
                         Stats &stats) -> void {
   // 'zip' two OTUs (https://www.cplusplus.com/forum/general/228918/)
   // for (auto [x,y] : std::ranges::zip( xs, ys ))  // available in c++23? http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2021/p2321r2.html
+
+  // assert(v1.length() == v2.length())
   auto& son = OTUs[stats.son_id].samples;
   auto& father = OTUs[stats.father_id].samples;
   auto current_son_sample = son.begin();
@@ -184,7 +186,7 @@ auto search_parent (std::unordered_map<std::string, struct OTU> &OTUs,
       std::stable_sort(OTUs[OTU_id].matches.begin(),
                        OTUs[OTU_id].matches.end(),
                        compare_two_matches);
-    }
+    }  // does not work?!?!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     // test potential parents (thread safe: one OTU per thread, thread
     // only modifies the OTU it is working on, other OTUs are
