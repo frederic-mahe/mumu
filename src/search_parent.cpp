@@ -119,7 +119,7 @@ auto per_sample_ratios (std::unordered_map<std::string, struct OTU> &OTUs,
 
 auto test_parents (std::unordered_map<std::string, struct OTU> &OTUs,
                    OTU &otu,
-                   const std::string OTU_id,
+                   const std::string &OTU_id,
                    Parameters const &parameters,
                    std::ofstream &log_file) -> void {
   for (auto& match : otu.matches) {
