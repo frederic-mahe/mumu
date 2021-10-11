@@ -42,8 +42,8 @@ auto main (int argc, char** argv) -> int {
 
   // load and index data
   std::unordered_map<std::string, struct OTU> OTUs;
-  read_otu_table(parameters.otu_table, parameters.new_otu_table, OTUs);  // should be (OTUs, parameters) for clarity
-  read_match_list(parameters.match_list, OTUs, parameters.minimum_match);
+  read_otu_table(OTUs, parameters);
+  read_match_list(OTUs, parameters);
 
   // find potential parents (could be multithreaded)
   search_parent(OTUs, parameters);

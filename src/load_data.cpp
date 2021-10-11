@@ -98,13 +98,12 @@ auto parse_each_otu (std::unordered_map<std::string, struct OTU> &OTUs,
 }
 
 
-auto read_otu_table (std::string otu_table_name,
-                     std::string new_otu_table_name,
-                     std::unordered_map<std::string, struct OTU> &OTUs) -> void {
+auto read_otu_table (std::unordered_map<std::string, struct OTU> &OTUs,
+                     struct Parameters const &parameters) -> void {
   std::cout << "parse OTU table... ";
   // input and output files
-  std::ifstream otu_table {otu_table_name};
-  std::ofstream new_otu_table {new_otu_table_name};
+  std::ifstream otu_table {parameters.otu_table};
+  std::ofstream new_otu_table {parameters.new_otu_table};
 
   // first line: get number of columns, write headers to new OTU table
   // (move that block to a function)!!!!!!!!!!!!!!
@@ -124,12 +123,11 @@ auto read_otu_table (std::string otu_table_name,
 }
 
 
-auto read_match_list (const std::string match_list_name,
-                      std::unordered_map<std::string, struct OTU> &OTUs,
-                      const double minimum_similarity) -> void {
+auto read_match_list (std::unordered_map<std::string, struct OTU> &OTUs,
+                      struct Parameters const &parameters) -> void {
   std::cout << "parse match list... ";
   // open input file
-  std::ifstream match_list {match_list_name};
+  std::ifstream match_list {parameters.match_list};
 
   // expect three columns
   std::string line;
@@ -151,7 +149,7 @@ auto read_match_list (const std::string match_list_name,
       }
 
       // skip matches below our similarity threshold
-      if (similarity < minimum_similarity) { continue; }
+      if (similarity < parameters.minimum_match) { continue; }
 
       // update map only if query is less abundant than hit (should I
       // swap query and hit to make sure the match is taken into
