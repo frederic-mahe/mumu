@@ -25,6 +25,7 @@
 #include <climits>
 #include <iostream>
 #include <string>
+#include <string_view>
 #include <unordered_map>
 #include <vector>
 
@@ -39,8 +40,8 @@ constexpr auto minimum_match_default {84.0};
 constexpr auto minimum_relative_cooccurence_default {0.95};
 constexpr auto minimum_ratio_default {1.0};
 constexpr auto largest_double {std::numeric_limits<double>::max()};
-constexpr auto use_minimum_value {"min"};
-constexpr auto use_average_value {"avg"};
+constexpr std::string_view use_minimum_value {"min"};
+constexpr std::string_view use_average_value {"avg"};
 
 struct Parameters {
   // mandatory arguments
@@ -77,9 +78,3 @@ struct OTU {
   std::vector<struct Match> matches;
   std::vector<unsigned int> samples;
 };
-
-// [[ noreturn ]]
-// auto fatal(const std::string &message) -> void {
-//   std::cerr << "Error: " << message << "\n";
-//   std::exit(EXIT_FAILURE);
-// }
