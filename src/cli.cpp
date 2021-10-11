@@ -55,31 +55,33 @@ const struct option long_options[] =
 
 
 auto help () -> void {
-  std::cout << "Usage: mumu " << n_version << '\n'
-            << " -h, --help                           display this help and exit\n"
-            << " -v, --version                        display version information and exit\n"
-            << " -t, --threads INTEGER                number of threads to use (1)\n"
-            << '\n'
-            << "Input options (mandatory):\n"
-            << " --otu_table FILE                     tab-separated, samples in columns\n"
-            << " --match_list FILE                    tab-separated, OTU pairwise similarity scores\n"
-            << '\n'
-            << "Output options (mandatory):\n"
-            << " --new_otu_table FILE                 write an updated OTU table\n"
-            << " --log FILE                           record operations\n"
-            << '\n'
-            << "Computation parameters:\n"
-            << " --minimum_match FLOAT                minimum similarity threshold (84.0)\n"
-            << " --minimum_ratio FLOAT                minimum abundance ratio (1.0)\n"
-            << " --minimum_ratio_type STRING          \"min\" or \"avg\" abundance ratio (\"min\")\n"
-            << " --minimum_relative_cooccurence FLOAT relative father-son spread (0.95)\n\n";
+  std::cout
+    << "Usage: mumu " << n_version << '\n'
+    << " -h, --help                           display this help and exit\n"
+    << " -v, --version                        display version information and exit\n"
+    << " -t, --threads INTEGER                number of threads to use (1)\n"
+    << '\n'
+    << "Input options (mandatory):\n"
+    << " --otu_table FILE                     tab-separated, samples in columns\n"
+    << " --match_list FILE                    tab-separated, OTU pairwise similarity scores\n"
+    << '\n'
+    << "Output options (mandatory):\n"
+    << " --new_otu_table FILE                 write an updated OTU table\n"
+    << " --log FILE                           record operations\n"
+    << '\n'
+    << "Computation parameters:\n"
+    << " --minimum_match FLOAT                minimum similarity threshold (84.0)\n"
+    << " --minimum_ratio FLOAT                minimum abundance ratio (1.0)\n"
+    << " --minimum_ratio_type STRING          \"min\" or \"avg\" abundance ratio (\"min\")\n"
+    << " --minimum_relative_cooccurence FLOAT relative father-son spread (0.95)\n\n";
 }
 
 
 auto version () -> void {
-  std::cout << "mumu " << n_version << '\n'
-            << "Copyright (C) " << copyright_years << " Frederic Mahe\n"
-            << "https://github.com/frederic-mahe/mumu\n\n";
+  std::cout
+    << "mumu " << n_version << '\n'
+    << "Copyright (C) " << copyright_years << " Frederic Mahe\n"
+    << "https://github.com/frederic-mahe/mumu\n\n";
 }
 
 
@@ -88,7 +90,7 @@ auto parse_args (int argc, char ** argv, Parameters &parameters) -> void {
   const std::string mumu_optstring {"a:b:c:d:hl:m:n:o:t:v"};
   auto option_character {0};
 
-  while (true) {
+  while (true) {  // while (option_character != -1) !!!!!!!!!!!!!!!!!!!
     auto option_index {0};  // should be declared only once??
 
     // An element of argv that starts with '-' (and is not exactly "-"
@@ -102,7 +104,7 @@ auto parse_args (int argc, char ** argv, Parameters &parameters) -> void {
 
     if (option_character == -1) { // no more option characters to parse
       break;
-    }
+    }  // this could be removed if the test is done in the while condition!!!!
 
     switch (option_character) {
     case 'a':  // minimum match (default is 84.0)
@@ -160,6 +162,7 @@ auto parse_args (int argc, char ** argv, Parameters &parameters) -> void {
 }
 
 
+// move function to a separated module
 auto validate_args (Parameters const &parameters) -> void {
   // check for mandatory arguments (file names)
   if (! parameters.is_otu_table) {
