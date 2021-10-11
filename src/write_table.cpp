@@ -47,10 +47,8 @@ auto extract_OTU_stats (std::unordered_map<std::string, struct OTU> &OTUs)
     otu_stats.abundance = OTUs[OTU_id].sum_reads;
     
     // spread must be re-computed :-(
-    otu_stats.spread =
-      std::ranges::count_if(OTUs[OTU_id].samples,
-                            [](const auto& n_reads) { return n_reads > 0; }
-                            );
+    const auto has_reads = [](const auto n_reads) { return n_reads > 0; };
+    otu_stats.spread = std::ranges::count_if(OTUs[OTU_id].samples, has_reads);
     sorted_OTUs.push_back(otu_stats);
   }
   return sorted_OTUs;
