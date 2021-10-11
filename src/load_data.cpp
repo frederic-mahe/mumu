@@ -46,11 +46,11 @@
 // }
 
 
-auto count_columns (std::string line) -> unsigned int {
+auto count_columns (const std::string &line) -> unsigned int {
   auto columns {0U};
 
-  std::string buf;                  // Have a buffer string
-  std::stringstream otu_raw_data(line);       // Insert the string into a stream
+  std::string buf;
+  std::stringstream otu_raw_data(line);
   while (getline(otu_raw_data, buf, sepchar)) {
     columns++;
   }
