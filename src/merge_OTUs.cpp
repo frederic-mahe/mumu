@@ -21,6 +21,8 @@
 // 34398 MONTPELLIER CEDEX 5
 // France
 
+#include <algorithm>
+#include <functional>
 #include <iostream>
 #include "mumu.h"
 
@@ -46,11 +48,10 @@ auto merge_OTUs (std::unordered_map<std::string, struct OTU> &OTUs) -> void {
     // find the end of the merging chain
     auto root = find_root(OTUs, OTUs[OTU_id].father_id);
     // add son's reads to root's reads
-    std::transform(OTUs[OTU_id].samples.begin(),
-                   OTUs[OTU_id].samples.end(),
-                   OTUs[root].samples.begin(),
-                   OTUs[root].samples.begin(),  // write results back to root
-                   std::plus<>());  // C++14: no need to repeat the type
+    std::ranges::transform(OTUs[OTU_id].samples,
+                           OTUs[root].samples,
+                           OTUs[root].samples.begin(),
+                           std::plus{});
     // update status
     OTUs[OTU_id].is_merged = true;
     OTUs[root].sum_reads += OTUs[OTU_id].sum_reads;
