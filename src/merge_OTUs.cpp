@@ -30,13 +30,8 @@
 // Hence, OTU C should be merged with OTU A.
 auto find_root (std::unordered_map<std::string, struct OTU> &OTUs,
                 std::string root) -> std::string {
-  while (true) {
-    if (OTUs[root].is_mergeable) {
-      root = {OTUs[root].father_id};
-    }
-    else {
-      break;
-    }
+  while (OTUs[root].is_mergeable) {
+    root = {OTUs[root].father_id};
   }
   return root;
 }
