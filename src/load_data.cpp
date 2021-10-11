@@ -153,7 +153,9 @@ auto read_match_list (const std::string match_list_name,
       // skip matches below our similarity threshold
       if (similarity < minimum_similarity) { continue; }
 
-      // update map only if query is less abundant than hit
+      // update map only if query is less abundant than hit (should I
+      // swap query and hit to make sure the match is taken into
+      // account if the comparison matrix is not complete?)
       auto hit_sum_reads {OTUs[hit].sum_reads};
       if (OTUs[query].sum_reads < hit_sum_reads) {
         Match match;  // use direct value initialization here!!!
