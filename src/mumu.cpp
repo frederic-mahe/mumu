@@ -52,7 +52,7 @@ auto main (int argc, char** argv) -> int {
   merge_OTUs(OTUs);
   write_table(OTUs, parameters.new_otu_table);
 
-  return 0;
+  return 0;  // should be EXIT_SUCCESS??
 }
 
 
