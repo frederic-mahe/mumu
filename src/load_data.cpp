@@ -25,6 +25,7 @@
 #include <iostream>
 #include <sstream>
 #include "mumu.h"
+#include "utils.h"
 
 // // work in progress: use operator overload to parse match list file
 // struct Match_line {
@@ -87,8 +88,7 @@ auto parse_each_otu (std::unordered_map<std::string, struct OTU> &OTUs,
 
   // sanity check
   if ((n_values + 1) != header_columns) {
-    std::cerr << "Error: variable number of columns in OTU table\n";
-    std::exit(EXIT_FAILURE);  // move to a [[noreturn]] fatal function
+    fatal("variable number of columns in OTU table");
   }
 
   // add more results to the map
@@ -144,8 +144,7 @@ auto read_match_list (std::unordered_map<std::string, struct OTU> &OTUs,
 
       // sanity check
       if (getline(match_raw_data, buf, sepchar)) {
-        std::cerr << "Error: match list entry has more than three columns\n";
-        std::exit(EXIT_FAILURE);
+        fatal("match list entry has more than three columns");
       }
 
       // skip matches below our similarity threshold
