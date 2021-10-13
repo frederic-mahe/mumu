@@ -39,7 +39,7 @@ auto extract_OTU_stats (std::unordered_map<std::string, struct OTU> &OTUs)
   // goal is to get a sortable list of OTUs
   std::vector<struct OTU_stats> sorted_OTUs;
   sorted_OTUs.reserve(OTUs.size());  // probably 25-50% too much
-  for (auto const& otu: OTUs) {
+  for (auto const& otu: OTUs) {  // replace with copy_if()?
     const std::string& OTU_id {otu.first};
     if (OTUs[OTU_id].is_merged) { continue; }  // skip merged OTUs
     OTU_stats otu_stats;
@@ -55,7 +55,7 @@ auto extract_OTU_stats (std::unordered_map<std::string, struct OTU> &OTUs)
 }
 
 
-auto compare_two_OTUs (const OTU_stats& OTUa, const OTU_stats& OTUb) -> bool {  // bug? it should be a named lambda in write_table?
+auto compare_two_OTUs (const OTU_stats& OTUa, const OTU_stats& OTUb) -> bool {  // bug? it should be a named lambda in write_table? or an operator overload for OTU_stats
   // by decreasing abundance
   if (OTUa.abundance > OTUb.abundance) {
     return true;
@@ -78,7 +78,7 @@ auto write_table (std::unordered_map<std::string, struct OTU> &OTUs,
   }
   if (sorted_OTUs.size() > 1) {
     // sort it by decreasing abundance, spread and id name
-    std::stable_sort(sorted_OTUs.begin(), sorted_OTUs.end(), compare_two_OTUs);
+    std::ranges::stable_sort(sorted_OTUs, compare_two_OTUs);
   }
 
   // output 
