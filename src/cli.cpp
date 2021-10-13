@@ -27,6 +27,7 @@
 #include <getopt.h>
 #include <iostream>
 #include "mumu.h"
+#include "utils.h"
 
 // additional options?
 //  --minimum_spread n (spread threshold to consider as potential father)
@@ -159,13 +160,6 @@ auto parse_args (int argc, char ** argv, Parameters &parameters) -> void {
       std::cerr << "Warning: unknown option\n";
     }
   }
-}
-
-
-[[ noreturn ]]
-auto fatal(const std::string &message) -> void {
-  std::cerr << "Error: " << message << "\n";
-  std::exit(EXIT_FAILURE);
 }
 
 
