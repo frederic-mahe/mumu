@@ -29,30 +29,33 @@
 #include "mumu.h"
 #include "utils.h"
 
+
+constexpr unsigned int n_options {12};
+constexpr std::array<struct option, n_options> long_options {{
+    // standard options
+    {"help",    no_argument,       nullptr, 'h'},
+    {"threads", required_argument, nullptr, 't'},
+    {"version", no_argument,       nullptr, 'v'},
+
+    // input
+    {"otu_table",  required_argument, nullptr, 'o'},
+    {"match_list", required_argument, nullptr, 'm'},
+
+    // parameters
+    {"minimum_match",      required_argument, nullptr, 'a'},
+    {"minimum_ratio_type", required_argument, nullptr, 'b'},
+    {"minimum_ratio",      required_argument, nullptr, 'c'},
+    {"minimum_relative_cooccurence", required_argument, nullptr, 'd'},
+
+    // output
+    {"new_otu_table", required_argument, nullptr, 'n'},
+    {"log",           required_argument, nullptr, 'l'},
+
+    // mandatory terminal empty option struct
+    {nullptr, 0, nullptr, 0}
+  }};
 // additional options?
 //  --minimum_spread n (spread threshold to consider as potential father)
-const struct option long_options[] =
-  {// standard options
-   {"help",    no_argument,       nullptr, 'h'},
-   {"threads", required_argument, nullptr, 't'},
-   {"version", no_argument,       nullptr, 'v'},
-
-   // input
-   {"otu_table",  required_argument, nullptr, 'o'},
-   {"match_list", required_argument, nullptr, 'm'},
-
-   // parameters
-   {"minimum_match",      required_argument, nullptr, 'a'},
-   {"minimum_ratio_type", required_argument, nullptr, 'b'},
-   {"minimum_ratio",      required_argument, nullptr, 'c'},
-   {"minimum_relative_cooccurence", required_argument, nullptr, 'd'},
-
-   // output
-   {"new_otu_table", required_argument, nullptr, 'n'},
-   {"log",           required_argument, nullptr, 'l'},
-
-   {nullptr, 0, nullptr, 0}
-  };
 
 
 auto help () -> void {
@@ -100,7 +103,7 @@ auto parse_args (int argc, char ** argv, Parameters &parameters) -> void {
     // is called repeatedly, it returns successively each of the
     // option characters from each of the option elements.
     option_character = getopt_long(argc, argv, mumu_optstring.c_str(),
-                                   static_cast<const struct option *>(long_options),
+                                   long_options.data(),
                                    &option_index);
 
     if (option_character == -1) { // no more option characters to parse
