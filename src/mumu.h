@@ -43,6 +43,7 @@ constexpr auto largest_double {std::numeric_limits<double>::max()};
 constexpr std::string_view use_minimum_value {"min"};  // replace with enum?
 constexpr std::string_view use_average_value {"avg"};
 
+
 struct Parameters {
   // mandatory arguments
   bool is_otu_table {false};
@@ -62,12 +63,14 @@ struct Parameters {
   double minimum_relative_cooccurence {minimum_relative_cooccurence_default};
 };
 
+
 struct Match {
   double similarity {0.0};
   unsigned int hit_sum_reads {0};
   unsigned int hit_spread {0};
   std::string hit_id;
 };
+
 
 struct OTU {
   unsigned int spread {0};
