@@ -70,7 +70,7 @@ auto write_table (std::unordered_map<std::string, struct OTU> &OTUs,
   std::cout << "write new OTU table... ";
   // re-open output file
   std::ofstream new_otu_table {new_otu_table_name, std::ios_base::app};
-  // get a list of OTUs
+  // get a list of OTUs (move to an independent function: extract_and_sort_OTUs
   auto sorted_OTUs = extract_OTU_stats(OTUs);
   if (sorted_OTUs.empty()) {
     new_otu_table << "done, empty table\n";
