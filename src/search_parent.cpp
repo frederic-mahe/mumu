@@ -141,7 +141,7 @@ auto test_parents (std::unordered_map<std::string, struct OTU> &OTUs,
     if (stats.father_overlap_spread > 0) {  // avoid dividing by zero
       stats.avg_non_null_ratio = stats.sum_ratio / stats.father_overlap_spread;
     }
-    if (stats.smallest_non_null_ratio == largest_double) {
+    if (largest_double - stats.smallest_non_null_ratio <= tolerance) {
       stats.smallest_non_null_ratio = 0.0;  // avoid printing a giant value
     }
 
