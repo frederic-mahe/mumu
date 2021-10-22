@@ -59,9 +59,9 @@ struct Parameters {
   // default values
   unsigned long int threads {threads_default};
   double minimum_match {minimum_match_default};
-  std::string minimum_ratio_type {use_minimum_value};
   double minimum_ratio {minimum_ratio_default};
   double minimum_relative_cooccurence {minimum_relative_cooccurence_default};
+  std::string_view minimum_ratio_type {use_minimum_value};
 };
 
 
@@ -74,11 +74,11 @@ struct Match {
 
 
 struct OTU {
+  std::vector<struct Match> matches;
+  std::vector<unsigned int> samples;
+  std::string father_id;  // std::string_view?
   unsigned int spread {0};
   unsigned int sum_reads {0};
   bool is_mergeable {false};
   bool is_merged {false};
-  std::string father_id;
-  std::vector<struct Match> matches;
-  std::vector<unsigned int> samples;
 };
