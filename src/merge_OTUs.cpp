@@ -46,7 +46,7 @@ auto merge_OTUs (std::unordered_map<std::string, struct OTU> &OTUs) -> void {
     // skip orphans
     if (not OTUs[OTU_id].is_mergeable) { continue; }
     // find the end of the merging chain
-    auto root = find_root(OTUs, OTUs[OTU_id].father_id);
+    const auto root = find_root(OTUs, OTUs[OTU_id].father_id);
     // add son's reads to root's reads
     std::ranges::transform(OTUs[OTU_id].samples,
                            OTUs[root].samples,
