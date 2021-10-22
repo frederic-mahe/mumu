@@ -61,7 +61,7 @@ clean:
 dist-clean: clean
 	rm -f *~ ./src/*~
 
-install : $(PROG) $(MAN)
+install: $(PROG) $(MAN)
 	/usr/bin/install -c $(PROG) '/usr/local/bin'
 	/usr/bin/install -c $(MAN) '/usr/local/share/man/man1'
 
