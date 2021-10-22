@@ -34,6 +34,7 @@ struct OTU_stats {
 };
 
 
+[[nodiscard]]
 auto extract_OTU_stats (std::unordered_map<std::string, struct OTU> &OTUs)
   -> std::vector<struct OTU_stats> {
   // goal is to get a sortable list of OTUs
