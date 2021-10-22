@@ -76,7 +76,7 @@ struct Match {
 struct OTU {
   std::vector<struct Match> matches;
   std::vector<unsigned int> samples;
-  std::string father_id;  // std::string_view?
+  std::string father_id;  // std::string_view? no
   unsigned int spread {0};
   unsigned int sum_reads {0};
   bool is_mergeable {false};
