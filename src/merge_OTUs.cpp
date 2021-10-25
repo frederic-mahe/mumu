@@ -30,6 +30,7 @@
 // find the root of  the merging chain:
 // OTU C can be merged with OTU B, that can merge with OTU A.
 // Hence, OTU C should be merged with OTU A.
+[[nodiscard]]
 auto find_root (std::unordered_map<std::string, struct OTU> &OTUs,
                 std::string root) -> std::string {
   while (OTUs[root].is_mergeable) {
