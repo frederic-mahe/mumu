@@ -25,10 +25,12 @@
 #include <iostream>
 #include "mumu.h"
 #include "cli.h"
+#include "validate_args.h"
 #include "load_data.h"
 #include "search_parent.h"
 #include "merge_OTUs.h"
 #include "write_table.h"
+
 
 auto main (int argc, char** argv) -> int {
 
