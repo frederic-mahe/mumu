@@ -21,16 +21,21 @@
 // 34398 MONTPELLIER CEDEX 5
 // France
 
-#include <array>
-#include <cstdlib>  // atoi, atof, exit, EXIT_FAILURE, EXIT_SUCCESS
-#include <fstream>
-#include <getopt.h>
-#include <iostream>
+#include <getopt.h>  // see 'man getopt_long'
 #include "mumu.h"
 #include "utils.h"
 
+#include <array>
+#include <cassert>
+#include <cstdlib>  // atoi, atof, exit, EXIT_FAILURE, EXIT_SUCCESS
+#include <fstream>
+#include <iostream>
+#include <limits>
 
-constexpr unsigned int n_options {12};
+constexpr auto n_options{12U};
+constexpr auto max_n_chars_per_option{3U};  // three at most: 'f::'
+constexpr auto option_string_max_length{n_options * max_n_chars_per_option};
+
 constexpr std::array<struct option, n_options> long_options {{
     // standard options
     {"help",    no_argument,       nullptr, 'h'},
@@ -56,6 +61,41 @@ constexpr std::array<struct option, n_options> long_options {{
   }};
 // additional options?
 //  --minimum_spread n (spread threshold to consider as potential father)
+
+static_assert(not long_options.empty(), "long_options must have at least one (empty) option");
+static_assert(long_options.back().val == 0, "last option must be empty");
+
+
+[[nodiscard]]
+constexpr auto build_short_option_array(const std::array<struct option, n_options>& long_options_array)
+  -> std::array<char, option_string_max_length> {
+  auto index{0U};
+  std::array<char, option_string_max_length> short_options{'\0'};
+
+  for (const auto& option : long_options_array) {
+    assert(option.val >= 0);  // val must fit in a signed char
+    assert(option.val <= std::numeric_limits<signed char>::max());
+
+    if (option.val == 0) {  // skip empty options
+      continue;
+    }
+    short_options[index] = static_cast<char>(option.val);
+    ++index;
+
+    if (option.has_arg == required_argument) {
+      short_options[index] = ':';
+      ++index;
+    }
+    if (option.has_arg == optional_argument) {
+      short_options[index] = ':';
+      ++index;
+      short_options[index] = ':';
+      ++index;
+    }
+  }
+
+  return short_options;
+}
 
 
 auto help () -> void {
@@ -90,27 +130,23 @@ auto version () -> void {
 
 
 auto parse_args (int argc, char ** argv, Parameters &parameters) -> void {
-  // legitimate option characters (colon = option requires an argument)
-  const std::string mumu_optstring {"a:b:c:d:hl:m:n:o:t:v"};
+  constexpr auto short_options {build_short_option_array(long_options)};
+  static_assert(short_options.size() >= n_options, "some short options were not parsed");
   auto option_character {0};
+  auto option_index {0};
 
-  while (true) {  // while (option_character != -1) !!!!!!!!!!!!!!!!!!!
-    auto option_index {0};  // should be declared only once??
+  while (option_character != -1) {
 
-    // An element of argv that starts with '-' (and is not exactly "-"
-    // or "--") is an option element. The characters of this element
-    // (aside from the initial '-') are option characters. If getopt()
-    // is called repeatedly, it returns successively each of the
-    // option characters from each of the option elements.
-    option_character = getopt_long(argc, argv, mumu_optstring.c_str(),
+    // see 'man getopt_long' for details
+    option_character = getopt_long(argc, argv,
+                                   short_options.data(),
                                    long_options.data(),
                                    &option_index);
 
-    if (option_character == -1) { // no more option characters to parse
-      break;
-    }  // this could be removed if the test is done in the while condition!!!!
-
     switch (option_character) {
+    case -1:  // no more option characters to parse
+      break;
+
     case 'a':  // minimum match (default is 84.0)
       parameters.minimum_match = std::stof(optarg);
       break;
