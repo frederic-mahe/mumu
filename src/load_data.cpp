@@ -47,6 +47,7 @@
 // }
 
 
+[[nodiscard]]
 auto count_columns (const std::string &line) -> unsigned int {
   auto columns {0U};
 

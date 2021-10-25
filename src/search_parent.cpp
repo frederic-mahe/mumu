@@ -75,6 +75,7 @@ auto operator<< (std::ostream& output_stream, const Stats& stats) -> std::ostrea
 }
 
 
+[[nodiscard]]
 auto compare_two_matches (const Match& matchA, const Match& matchB) -> bool {
   // by decreasing similarity
   if (matchA.similarity > matchB.similarity) {
