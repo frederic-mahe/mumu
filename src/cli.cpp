@@ -69,6 +69,7 @@ static_assert(long_options.back().val == 0, "last option must be empty");
 [[nodiscard]]
 constexpr auto build_short_option_array(const std::array<struct option, n_options>& long_options_array)
   -> std::array<char, optstring_max_length> {
+  // when available, refactor with constexpr std::vector
   auto index {0U};
   std::array<char, optstring_max_length> short_options {'\0'};
 
