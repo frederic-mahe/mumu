@@ -39,8 +39,6 @@ constexpr auto threads_default {1U};
 constexpr auto minimum_match_default {84.0};
 constexpr auto minimum_relative_cooccurence_default {0.95};
 constexpr auto minimum_ratio_default {1.0};
-constexpr auto largest_double {std::numeric_limits<double>::max()};
-constexpr auto tolerance {std::numeric_limits<double>::epsilon()};
 constexpr std::string_view use_minimum_value {"min"};  // replace with enum?
 constexpr std::string_view use_average_value {"avg"};
 

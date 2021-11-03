@@ -32,9 +32,9 @@
 #include <iostream>
 #include <limits>
 
-constexpr auto n_options{12U};
-constexpr auto max_n_chars_per_option{3U};  // three at most: 'f::'
-constexpr auto option_string_max_length{n_options * max_n_chars_per_option};
+constexpr auto n_options {12U};
+constexpr auto max_n_chars_per_option {3U};  // three at most: 'f::'
+constexpr auto optstring_max_length {n_options * max_n_chars_per_option};
 
 constexpr std::array<struct option, n_options> long_options {{
     // standard options
@@ -68,9 +68,10 @@ static_assert(long_options.back().val == 0, "last option must be empty");
 
 [[nodiscard]]
 constexpr auto build_short_option_array(const std::array<struct option, n_options>& long_options_array)
-  -> std::array<char, option_string_max_length> {
-  auto index{0U};
-  std::array<char, option_string_max_length> short_options{'\0'};
+  -> std::array<char, optstring_max_length> {
+  // when available, refactor with constexpr std::vector
+  auto index {0U};
+  std::array<char, optstring_max_length> short_options {'\0'};
 
   for (const auto& option : long_options_array) {
     assert(option.val >= 0);  // val must fit in a signed char

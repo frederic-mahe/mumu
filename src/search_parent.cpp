@@ -23,8 +23,11 @@
 
 #include <fstream>
 #include <iostream>
+#include <limits>
 #include "mumu.h"
 
+constexpr auto largest_double {std::numeric_limits<double>::max()};
+constexpr auto tolerance {std::numeric_limits<double>::epsilon()};
 constexpr auto accept_as_parent {"accepted"};
 constexpr auto reject_as_parent {"rejected"};
 
