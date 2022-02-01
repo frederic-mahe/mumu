@@ -705,10 +705,8 @@ printf "A\tB\tNA\n" > "${MATCH_LIST}"
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}"
 
-
-# what if there is a match that is not in the table?
 # match can be a subset of table, but not the other way around.
-DESCRIPTION="mumu warns about match entries that are not in the OTU table"
+DESCRIPTION="mumu skips match entries that are not in the OTU table"
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
 NEW_OTU_TABLE=$(mktemp)
@@ -719,17 +717,45 @@ printf "A\tC\t96.5\nC\tA\t96.5\n" > "${MATCH_LIST}"
     --otu_table "${OTU_TABLE}" \
     --match_list "${MATCH_LIST}" \
     --new_otu_table "${NEW_OTU_TABLE}" \
-    --log "${LOG}" 2>&1 > /dev/null | \
-    grep -q "^Warning:" && \
+    --log "${LOG}" > /dev/null 2>&1 && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
-# cat $LOG
-# echo
-# cat "${NEW_OTU_TABLE}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
-# This is clearly a bug, 'C' is added to the new OTU table. It should
-# be discarded!
+# extra entries should be discarded and not be present in the new OTU table
+DESCRIPTION="mumu skips match entries that are not in the OTU table (not in output table)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\nA\t2\nB\t1\n" > "${OTU_TABLE}"
+printf "A\tC\t96.5\nC\tA\t96.5\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log "${LOG}" > /dev/null 2>&1
+grep -oq "C" "${NEW_OTU_TABLE}" && \
+    failure "${DESCRIPTION}" || \
+        success "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
+DESCRIPTION="mumu warns about match entries that are not in the OTU table (warning)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\nA\t2\nB\t1\n" > "${OTU_TABLE}"
+printf "A\tC\t96.5\nC\tA\t96.5\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log "${LOG}" 2> /dev/null | \
+    grep -q "^warning: " && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
 
 #*****************************************************************************#
@@ -1233,3 +1259,4 @@ exit 0
 # - read from substitution processes,
 # - read from anonymous pipes,
 # - read from named pipes,
+# - what happens to OTU table entries without matches?
