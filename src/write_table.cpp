@@ -75,7 +75,8 @@ auto write_table (std::unordered_map<std::string, struct OTU> &OTUs,
   // get a list of OTUs (move to an independent function: extract_and_sort_OTUs
   auto sorted_OTUs = extract_OTU_stats(OTUs);
   if (sorted_OTUs.empty()) {
-    new_otu_table << "done, empty table\n";
+    std::cout << "done, empty table\n";
+    new_otu_table.close();
     return;
   }
   if (sorted_OTUs.size() > 1) {
