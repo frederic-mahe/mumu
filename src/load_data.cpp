@@ -24,6 +24,7 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <stdexcept>
 #include "mumu.h"
 #include "utils.h"
 
@@ -80,6 +81,12 @@ auto parse_each_otu (std::unordered_map<std::string, struct OTU> &OTUs,
 
   // get abundance values (rest of the line)
   while (getline(otu_raw_data, buf, sepchar)) {
+    try {
+      std::stoul(buf);
+    } catch (std::invalid_argument const& ex) {
+      fatal("illegal similarity value in line: " + line);
+    }
+
     auto abundance {std::stoul(buf)};  // test if abundance > unsigned int!!!!!
     if (abundance > 0) { spread += 1; }
     sum_reads += abundance;
@@ -141,12 +148,23 @@ auto read_match_list (std::unordered_map<std::string, struct OTU> &OTUs,
       getline(match_raw_data, query, sepchar);
       getline(match_raw_data, hit, sepchar);
       getline(match_raw_data, buf, sepchar);
-      auto similarity {std::stod(buf)};
 
       // sanity check
       if (getline(match_raw_data, buf, sepchar)) {
         fatal("match list entry has more than three columns");
       }
+
+      if (buf.empty()) {
+        fatal("empty similarity value in line: " + line);
+      }
+
+      try {
+        std::stod(buf);
+      } catch (std::invalid_argument const& ex) {
+        fatal("illegal similarity value in line: " + line);
+      }
+
+      auto similarity {std::stod(buf)};
 
       // skip matches below our similarity threshold
       if (similarity < parameters.minimum_match) { continue; }
