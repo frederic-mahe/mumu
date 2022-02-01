@@ -62,6 +62,17 @@ auto count_columns (const std::string &line) -> unsigned int {
 }
 
 
+[[nodiscard]]
+auto parse_and_output_first_line (const std::string &line,
+                                  struct Parameters const &parameters) -> unsigned int {
+  // first line: get number of columns, write headers to new OTU table
+  std::ofstream new_otu_table {parameters.new_otu_table};
+  new_otu_table << line << '\n';
+  new_otu_table.close();
+  return count_columns(line);
+}
+
+
 auto parse_each_otu (std::unordered_map<std::string, struct OTU> &OTUs,
                      std::string &line,
                      unsigned int header_columns) -> void {
@@ -109,17 +120,15 @@ auto parse_each_otu (std::unordered_map<std::string, struct OTU> &OTUs,
 auto read_otu_table (std::unordered_map<std::string, struct OTU> &OTUs,
                      struct Parameters const &parameters) -> void {
   std::cout << "parse OTU table... ";
-  // input and output files
+  // input and output files, buffer
   std::ifstream otu_table {parameters.otu_table};
   std::ofstream new_otu_table {parameters.new_otu_table};
+  std::string line;
 
   // first line: get number of columns, write headers to new OTU table
   // (move that block to a function)!!!!!!!!!!!!!!
-  std::string line;
   std::getline(otu_table, line);
-  auto header_columns = count_columns(line);
-  new_otu_table << line << '\n';
-  new_otu_table.close();
+  auto header_columns {parse_and_output_first_line(line, parameters)};
 
   // parse other lines, and map the values
   while (std::getline(otu_table, line))
