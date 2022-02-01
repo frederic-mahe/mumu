@@ -769,6 +769,83 @@ SECTION_NAME="mumu: functionality tests"
 LINE=$(printf "%076s\n" | tr " " "-")
 printf "# %s %s\n" "${LINE:${#SECTION_NAME}}" "${SECTION_NAME}"
 
+## mumu accepts empty input files
+DESCRIPTION="mumu accepts empty input files"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log "${LOG}" > /dev/null 2>&1 && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
+DESCRIPTION="mumu accepts empty input files and creates empty output files (OTU table)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE="tmp.table"
+LOG="tmp.log"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log "${LOG}" > /dev/null 2>&1
+[[ -e "${NEW_OTU_TABLE}" ]] && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
+DESCRIPTION="mumu accepts empty input files and creates empty output files (log file)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE="tmp.table"
+LOG="tmp.log"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log "${LOG}" > /dev/null 2>&1
+[[ -e "${LOG}" ]] && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
+## mumu accepts input with a single OTU (empty match list)
+DESCRIPTION="mumu accepts input with a single OTU (empty match list)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\ts2\ts3\nA\t1\t5\t10\n" > "${OTU_TABLE}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log "${LOG}" > /dev/null 2>&1 && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
+DESCRIPTION="mumu accepts input with a single OTU (output to new OTU table)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\ts2\ts3\nA\t1\t5\t10\n" > "${OTU_TABLE}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log "${LOG}" > /dev/null 2>&1
+diff --brief "${OTU_TABLE}" "${NEW_OTU_TABLE}" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
 ## toy-example:
 
 # OTUs	s1	s2	s3
@@ -1226,10 +1303,6 @@ awk '{exit $18 == "rejected" ? 0 : 1}' "${LOG}" && \
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
-
-# what happens if we have only one OTU (empty match list)? output OTU
-# to new_OTU, mumu should be transparent for empty files or datasets
-# without any parent OTU.
 
 # try two OTUs without overlap, do I get infinite values? make a list
 # of values that are set to null, report that in the manual.
