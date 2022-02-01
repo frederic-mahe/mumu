@@ -177,6 +177,12 @@ auto read_match_list (std::unordered_map<std::string, struct OTU> &OTUs,
       // skip matches below our similarity threshold
       if (similarity < parameters.minimum_match) { continue; }
 
+      // skip match entries that are not in the OTU table
+      if ((not OTUs.contains(hit)) or (not OTUs.contains(query))) {
+        std::cout << "\nwarning: one of these is not in the OTU table: " << line << '\n';
+        continue;
+      }
+
       // update map only if query is less abundant than hit (should I
       // swap query and hit to make sure the match is taken into
       // account if the comparison matrix is not complete?)
