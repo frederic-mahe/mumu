@@ -24,6 +24,7 @@
 #include "mumu.h"
 
 
+// transform into a variadic template
 [[ noreturn ]]
 auto fatal(const std::string &message) -> void {
   std::cerr << "Error: " << message << "\n";
