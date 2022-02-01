@@ -788,7 +788,7 @@ DESCRIPTION="mumu accepts empty input files and creates empty output files (OTU 
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
 NEW_OTU_TABLE="tmp.table"
-LOG="tmp.log"
+LOG=$(mktemp)
 "${MUMU}" \
     --otu_table "${OTU_TABLE}" \
     --match_list "${MATCH_LIST}" \
@@ -802,7 +802,7 @@ rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 DESCRIPTION="mumu accepts empty input files and creates empty output files (log file)"
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
-NEW_OTU_TABLE="tmp.table"
+NEW_OTU_TABLE=$(mktemp)
 LOG="tmp.log"
 "${MUMU}" \
     --otu_table "${OTU_TABLE}" \
@@ -846,6 +846,22 @@ diff --brief "${OTU_TABLE}" "${NEW_OTU_TABLE}" && \
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
+DESCRIPTION="mumu accepts input with a single OTU (log is empty)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\ts2\ts3\nA\t1\t5\t10\n" > "${OTU_TABLE}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log "${LOG}" > /dev/null 2>&1
+[[ -s "${LOG}" ]] && \
+    failure "${DESCRIPTION}" || \
+        success "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
 ## toy-example:
 
 # OTUs	s1	s2	s3
@@ -886,6 +902,24 @@ printf "A\tB\t96.5\nB\tA\t96.5\n" > "${MATCH_LIST}"
     --new_otu_table "${NEW_OTU_TABLE}" \
     --log "${LOG}" > /dev/null 2>&1
 awk 'END {exit NR == 1 ? 0 : 1}' "${LOG}" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
+# mumu can find the root of chained merges (A <- B <- C)
+DESCRIPTION="mumu can find the root of chained merges"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\nA\t5\nB\t2\nC\t1\n" > "${OTU_TABLE}"
+printf "A\tB\t96.5\nB\tA\t96.5\nB\tC\t96.5\nC\tB\t96.5\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log "${LOG}" 2>&1 > /dev/null
+awk '{if (NR > 1) {exit ($1 == "A" && $2 == 8) ? 0 : 1}}' "${NEW_OTU_TABLE}" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
@@ -1330,6 +1364,6 @@ exit 0
 
 ## TODO:
 # - read from substitution processes,
-# - read from anonymous pipes,
-# - read from named pipes,
-# - what happens to OTU table entries without matches?
+# - read from named pipes
+# - list all the reasons to reject a potential parent! Make a test for each.
+# - make a test that requires output sorting
