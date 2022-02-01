@@ -126,7 +126,6 @@ auto read_otu_table (std::unordered_map<std::string, struct OTU> &OTUs,
   std::string line;
 
   // first line: get number of columns, write headers to new OTU table
-  // (move that block to a function)!!!!!!!!!!!!!!
   std::getline(otu_table, line);
   auto header_columns {parse_and_output_first_line(line, parameters)};
 
