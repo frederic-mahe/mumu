@@ -93,7 +93,7 @@ auto check_numerical_parameters(Parameters const &parameters) -> void {
     fatal("--threads value must be between 1 and " + std::to_string(max_threads));
   }
 
-  // minimum ratio type ("min" or "avg")
+  // minimum ratio type ("min" or "avg")  // replace != with not_eq?
   if (parameters.minimum_ratio_type != use_minimum_value and
       parameters.minimum_ratio_type != use_average_value) {
     fatal("--minimum ratio type can only be " +
