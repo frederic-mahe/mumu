@@ -27,6 +27,6 @@
 // transform into a variadic template
 [[ noreturn ]]
 auto fatal(const std::string &message) -> void {
-  std::cerr << "Error: " << message << "\n";
+  std::cerr << '\n' << "Error: " << message << "\n";
   std::exit(EXIT_FAILURE);
 }
