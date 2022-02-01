@@ -643,7 +643,8 @@ printf "OTUs\ts1\nA\t5\nB\tNA\n" > "${OTU_TABLE}"
     --otu_table "${OTU_TABLE}" \
     --match_list "${MATCH_LIST}" \
     --new_otu_table /dev/null \
-    --log /dev/null > /dev/null 2>&1 && \
+    --log /dev/null 2>&1 > /dev/null | \
+    grep -q "^Error" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}"
@@ -676,8 +677,7 @@ printf "A\tB\t96.5\nB\tA\t96.5\textra\n" > "${MATCH_LIST}"
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}"
 
-# issue with the exception throw
-DESCRIPTION="mumu stops with an error if the match list < 3 columns"
+DESCRIPTION="mumu stops with an error if the match list similarity is empty"
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
 printf "A\tB\t\n" > "${MATCH_LIST}"
@@ -685,24 +685,26 @@ printf "A\tB\t\n" > "${MATCH_LIST}"
     --otu_table "${OTU_TABLE}" \
     --match_list "${MATCH_LIST}" \
     --new_otu_table /dev/null \
-    --log /dev/null 2> /dev/null > /dev/null && \
-    success "${DESCRIPTION}" || \
-        failure "${DESCRIPTION}"
-rm -f "${OTU_TABLE}" "${MATCH_LIST}"
-
-DESCRIPTION="mumu stops with an error message if the match list < 3 columns"
-OTU_TABLE=$(mktemp)
-MATCH_LIST=$(mktemp)
-printf "A\tB\t\n" > "${MATCH_LIST}"
-"${MUMU}" \
-    --otu_table "${OTU_TABLE}" \
-    --match_list "${MATCH_LIST}" \
-    --new_otu_table /dev/null \
-    --log /dev/null > /dev/null 2>&1 | \
+    --log /dev/null 2>&1 > /dev/null | \
     grep -q "^Error" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}"
+
+DESCRIPTION="mumu stops with an error if the match list has a non-numerical value (NA)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+printf "A\tB\tNA\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table /dev/null \
+    --log /dev/null 2>&1 > /dev/null | \
+    grep -q "^Error" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}"
+
 
 # what if there is a match that is not in the table?
 # match can be a subset of table, but not the other way around.
@@ -1226,3 +1228,8 @@ awk '{exit ($1 == "A" && $2 == "B") ? 0 : 1}' "${LOG}" && \
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
 exit 0
+
+## TODO:
+# - read from substitution processes,
+# - read from anonymous pipes,
+# - read from named pipes,
