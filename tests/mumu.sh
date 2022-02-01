@@ -278,7 +278,7 @@ grep -q ".*" "${LOG}" && \
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
 ## mumu accepts duplicated parameters (last one is used)
-DESCRIPTION="mumu needs only four mandatory parameters"
+DESCRIPTION="mumu accepts duplicated parameters (last one is used)"
 OTU_TABLE=$(mktemp)
 OTU_TABLE2=$(mktemp)
 MATCH_LIST=$(mktemp)
@@ -592,7 +592,7 @@ LOG=$(mktemp)
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
 ## mumu refuses high thread value
-DESCRIPTION="mumu refuses high thread value"
+DESCRIPTION="mumu refuses high thread value (255 threads max)"
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
 NEW_OTU_TABLE=$(mktemp)
