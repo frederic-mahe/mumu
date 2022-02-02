@@ -55,15 +55,25 @@ auto extract_OTU_stats (std::unordered_map<std::string, struct OTU> &OTUs)
   return sorted_OTUs;
 }
 
-
+// refactor: should be an operator overload for OTU_stats
 [[nodiscard]]
-auto compare_two_OTUs (const OTU_stats& OTUa, const OTU_stats& OTUb) -> bool {  // bug? it should be a named lambda in write_table? or an operator overload for OTU_stats
+auto compare_two_OTUs (const OTU_stats& OTUa, const OTU_stats& OTUb) -> bool {
   // by decreasing abundance
   if (OTUa.abundance > OTUb.abundance) {
     return true;
   }
-  // then by decreasing spread
-  return (OTUa.spread > OTUb.spread);
+  if (OTUa.abundance < OTUb.abundance) {
+    return false;
+  }
+  // if equal, then by decreasing spread
+  if (OTUa.spread > OTUb.spread) {
+    return true;
+  }
+  if (OTUa.spread < OTUb.spread) {
+    return false;
+  }
+  // if equal, then by ASCIIbetical order (A, B, ..., a, b, c, ...)
+  return (OTUa.OTU_id < OTUb.OTU_id);
 }
 
 
@@ -79,7 +89,7 @@ auto write_table (std::unordered_map<std::string, struct OTU> &OTUs,
     new_otu_table.close();
     return;
   }
-  if (sorted_OTUs.size() > 1) {
+  if (sorted_OTUs.size() > 1) { // remove that test??
     // sort it by decreasing abundance, spread and id name
     std::ranges::stable_sort(sorted_OTUs, compare_two_OTUs);
   }
