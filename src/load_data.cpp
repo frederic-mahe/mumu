@@ -87,6 +87,11 @@ auto parse_each_otu (std::unordered_map<std::string, struct OTU> &OTUs,
   // get OTU id (first item of the line)
   getline(otu_raw_data, OTU_id, sepchar);
 
+  // check for duplicates
+  if (OTUs.contains(OTU_id)) {
+    fatal("duplicated OTU name: " + OTU_id);
+  }
+
   // we know there are (columns - 1) samples
   otu.samples.reserve(header_columns - 1);
 
