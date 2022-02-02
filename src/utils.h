@@ -24,3 +24,5 @@
 #include <string>
 
 [[ noreturn ]] auto fatal(const std::string &message) -> void;
+
+[[ noreturn ]] auto exit_successfully() -> void;

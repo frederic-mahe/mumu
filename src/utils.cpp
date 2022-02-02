@@ -24,9 +24,14 @@
 #include "mumu.h"
 
 
-// transform into a variadic template
+// C++20 refactor: transform into a variadic template
 [[ noreturn ]]
 auto fatal(const std::string &message) -> void {
   std::cerr << '\n' << "Error: " << message << "\n";
   std::exit(EXIT_FAILURE);
+}
+
+[[ noreturn ]]
+auto exit_successfully() -> void {
+  std::exit(EXIT_SUCCESS);
 }
