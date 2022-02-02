@@ -996,7 +996,7 @@ OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
 NEW_OTU_TABLE=$(mktemp)
 LOG=$(mktemp)
-printf "OTUs\ts1\ts2\nB\t2\t0\nA\t1\t1\n" > "${OTU_TABLE}"
+printf "OTUs\ts1\ts2\nA\t1\t1\nB\t2\t0\n" > "${OTU_TABLE}"
 "${MUMU}" \
     --otu_table "${OTU_TABLE}" \
     --match_list "${MATCH_LIST}" \
