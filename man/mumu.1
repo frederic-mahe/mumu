@@ -114,10 +114,10 @@ Output file for OTU merging statistics (18 columns separated by
 tabulations). OTUs are not processed according to a specific
 order. For a given query OTU with potential parents, mumu will order
 potential parents by decreasing similarity with the query OTU, then by
-decreasing abundance, and finally by decreasing incidence. Each
-potential parent is tested, and the search stops if parenthood
-criteria are matched or if the list is exhausted. The different
-columns correspond to:
+decreasing abundance, then by decreasing incidence (or spread), and
+finally by names. Each potential parent is tested, and the search
+stops if parenthood criteria are matched or if the list is
+exhausted. The different columns correspond to:
 .RS
 .RS
 .nr step 1 1
@@ -179,10 +179,10 @@ accepted as a parent, or rejected.
 .BI \-n\fP,\fB\ \-\-new_otu_table\~ "filename"
 Output file for the newly computed contingency table. Same format as
 the input OTU table (see \-\-otu_table). Sample order is unchanged,
-but OTUs are reordered by decreasing abundance, incidence value, and
-OTU name. An OTU found to derive from a 'parent' OTU does not appear
-in the new OTU table, and its abundance values are added to the
-abundance values of its parent OTU.
+but OTUs are reordered by decreasing abundance, incidence value (or
+spread), and OTU name. An OTU found to derive from a 'parent' OTU does
+not appear in the new OTU table, and its abundance values are added to
+the abundance values of its parent OTU.
 .PP
 .\" .B \-\-
 .\" delimit the option list. Later arguments, if any, are treated as
