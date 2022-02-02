@@ -159,8 +159,8 @@ LOG=$(mktemp)
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
-## mumu outputs a warning if input files can't be read
-DESCRIPTION="mumu outputs a warning if input files can\'t be read (1)"
+## mumu stops with an error if input files can't be read
+DESCRIPTION="mumu stops with an error if input files can\'t be read (1)"
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
 NEW_OTU_TABLE=$(mktemp)
@@ -171,14 +171,14 @@ chmod -r "${OTU_TABLE}"
     --match_list "${MATCH_LIST}" \
     --new_otu_table "${NEW_OTU_TABLE}" \
     --log "${LOG}" 2>&1 | \
-    grep -q "^Warning:*read*" && \
+    grep -q "^Error:" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 chmod +r "${OTU_TABLE}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
-## mumu outputs a warning if input files can't be read
-DESCRIPTION="mumu outputs a warning if input files can\'t be read (2)"
+## mumu stops with an error if input files can't be read
+DESCRIPTION="mumu stops with an error if input files can\'t be read (2)"
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
 NEW_OTU_TABLE=$(mktemp)
@@ -189,30 +189,14 @@ chmod -r "${MATCH_LIST}"
     --match_list "${MATCH_LIST}" \
     --new_otu_table "${NEW_OTU_TABLE}" \
     --log "${LOG}" 2>&1 | \
-    grep -q "^Warning:*read*" && \
+    grep -q "^Error:" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 chmod +r "${MATCH_LIST}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
-## mumu outputs a warning if input files are empty
-DESCRIPTION="mumu outputs a warning if input files are empty"
-OTU_TABLE=$(mktemp)
-MATCH_LIST=$(mktemp)
-NEW_OTU_TABLE=$(mktemp)
-LOG=$(mktemp)
-"${MUMU}" \
-    --otu_table "${OTU_TABLE}" \
-    --match_list "${MATCH_LIST}" \
-    --new_otu_table "${NEW_OTU_TABLE}" \
-    --log "${LOG}" 2>&1 | \
-    grep -q "^Warning:*empty*" && \
-    success "${DESCRIPTION}" || \
-        failure "${DESCRIPTION}"
-rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
-
-## mumu outputs a warning if output files can't be overwritten
-DESCRIPTION="mumu outputs a warning if output files can\'t be overwritten (1)"
+## mumu stopts with an error if output files can't be overwritten
+DESCRIPTION="mumu stopts with an error if output files can\'t be overwritten (1)"
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
 NEW_OTU_TABLE=$(mktemp)
@@ -223,7 +207,7 @@ chmod -w "${NEW_OTU_TABLE}"
     --match_list "${MATCH_LIST}" \
     --new_otu_table "${NEW_OTU_TABLE}" \
     --log "${LOG}" 2>&1 | \
-    grep -q "^Warning:*overwritten*" && \
+    grep -q "^Error:" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 chmod +w "${NEW_OTU_TABLE}"
@@ -241,7 +225,7 @@ chmod -w "${LOG}"
     --match_list "${MATCH_LIST}" \
     --new_otu_table "${NEW_OTU_TABLE}" \
     --log "${LOG}" 2>&1 | \
-    grep -q "^Warning:*overwritten*" && \
+    grep -q "^Error:" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 chmod +w "${LOG}"
@@ -555,6 +539,21 @@ LOG=$(mktemp)
     --new_otu_table "${NEW_OTU_TABLE}" \
     --log "${LOG}" \
     --threads 1 > /dev/null 2>&1 && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
+DESCRIPTION="mumu accepts thread values (2)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log "${LOG}" \
+    --threads 2 > /dev/null 2>&1 && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
@@ -1809,4 +1808,4 @@ exit 0
 # - read from substitution processes,
 # - read from named pipes
 # - list all the reasons to reject a potential parent! Make a test for each.
-# - make a test that requires output sorting
+# - test -- -weird_file_name (POSIX requirement)
