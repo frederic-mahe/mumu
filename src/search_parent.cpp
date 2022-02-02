@@ -78,18 +78,34 @@ auto operator<< (std::ostream& output_stream, const Stats& stats) -> std::ostrea
 }
 
 
+// refactor: operator overload
 [[nodiscard]]
 auto compare_two_matches (const Match& matchA, const Match& matchB) -> bool {
   // by decreasing similarity
   if (matchA.similarity > matchB.similarity) {
     return true;
   }
-  // then by decreasing abundance
+  if (matchA.similarity < matchB.similarity) {
+    return false;
+  }
+
+  // if equal, then by decreasing abundance
   if (matchA.hit_sum_reads > matchB.hit_sum_reads) {
     return true;
   }
-  // then by decreasing spread
-  return  (matchA.hit_spread > matchB.hit_spread);
+  if (matchA.hit_sum_reads < matchB.hit_sum_reads) {
+    return false;
+  }
+
+  // if equal, then by decreasing spread
+  if (matchA.hit_spread > matchB.hit_spread) {
+    return true;
+  }
+  if (matchA.hit_spread < matchB.hit_spread) {
+    return false;
+  }
+  // if equal, then by ASCIIbetical order (A, B, ..., a, b, c, ...)
+  return  (matchA.hit_id < matchB.hit_id);
 }
 
 
@@ -190,7 +206,7 @@ auto search_parent (std::unordered_map<std::string, struct OTU> &OTUs,
       std::stable_sort(OTUs[OTU_id].matches.begin(),
                        OTUs[OTU_id].matches.end(),
                        compare_two_matches);
-    }  // does not work?!?!!!!!!!!!!!!!!!!!!!!!!!!!!
+    }
 
     // test potential parents (thread safe: one OTU per thread, thread
     // only modifies the OTU it is working on, other OTUs are
