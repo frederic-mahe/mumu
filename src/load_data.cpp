@@ -1,6 +1,6 @@
 // MUMU
 
-// Copyright (C) 2020-2021 Frederic Mahe
+// Copyright (C) 2020-2022 Frederic Mahe
 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <stdexcept>
 #include "mumu.h"
 #include "utils.h"
 
@@ -54,17 +55,28 @@ auto count_columns (const std::string &line) -> unsigned int {
   std::string buf;
   std::stringstream otu_raw_data(line);
   while (getline(otu_raw_data, buf, sepchar)) {
-    columns++;
+    ++columns;
   }
 
   return columns;
 }
 
 
+[[nodiscard]]
+auto parse_and_output_first_line (const std::string &line,
+                                  struct Parameters const &parameters) -> unsigned int {
+  // first line: get number of columns, write headers to new OTU table
+  std::ofstream new_otu_table {parameters.new_otu_table};
+  new_otu_table << line << '\n';
+  new_otu_table.close();
+  return count_columns(line);
+}
+
+
 auto parse_each_otu (std::unordered_map<std::string, struct OTU> &OTUs,
                      std::string &line,
                      unsigned int header_columns) -> void {
-  auto sum_reads {0U};  // 4,294,967,295 reads at most (test with assert)
+  auto sum_reads {0UL};
   auto spread {0U};
   auto n_values {0U};  // rename to n_columns?
   std::stringstream otu_raw_data(line);
@@ -75,11 +87,22 @@ auto parse_each_otu (std::unordered_map<std::string, struct OTU> &OTUs,
   // get OTU id (first item of the line)
   getline(otu_raw_data, OTU_id, sepchar);
 
+  // check for duplicates
+  if (OTUs.contains(OTU_id)) {
+    fatal("duplicated OTU name: " + OTU_id);
+  }
+
   // we know there are (columns - 1) samples
   otu.samples.reserve(header_columns - 1);
 
   // get abundance values (rest of the line)
   while (getline(otu_raw_data, buf, sepchar)) {
+    try {
+      static_cast<void>(std::stoul(buf));
+    } catch (std::invalid_argument const& ex) {
+      fatal("illegal similarity value in line: " + line);
+    }
+
     auto abundance {std::stoul(buf)};  // test if abundance > unsigned int!!!!!
     if (abundance > 0) { spread += 1; }
     sum_reads += abundance;
@@ -102,17 +125,14 @@ auto parse_each_otu (std::unordered_map<std::string, struct OTU> &OTUs,
 auto read_otu_table (std::unordered_map<std::string, struct OTU> &OTUs,
                      struct Parameters const &parameters) -> void {
   std::cout << "parse OTU table... ";
-  // input and output files
+  // input and output files, buffer
   std::ifstream otu_table {parameters.otu_table};
   std::ofstream new_otu_table {parameters.new_otu_table};
+  std::string line;
 
   // first line: get number of columns, write headers to new OTU table
-  // (move that block to a function)!!!!!!!!!!!!!!
-  std::string line;
   std::getline(otu_table, line);
-  auto header_columns = count_columns(line);
-  new_otu_table << line << '\n';
-  new_otu_table.close();
+  auto header_columns {parse_and_output_first_line(line, parameters)};
 
   // parse other lines, and map the values
   while (std::getline(otu_table, line))
@@ -141,15 +161,32 @@ auto read_match_list (std::unordered_map<std::string, struct OTU> &OTUs,
       getline(match_raw_data, query, sepchar);
       getline(match_raw_data, hit, sepchar);
       getline(match_raw_data, buf, sepchar);
-      auto similarity {std::stod(buf)};
 
       // sanity check
       if (getline(match_raw_data, buf, sepchar)) {
         fatal("match list entry has more than three columns");
       }
 
+      if (buf.empty()) {
+        fatal("empty similarity value in line: " + line);
+      }
+
+      try {
+        static_cast<void>(std::stod(buf));
+      } catch (std::invalid_argument const& ex) {
+        fatal("illegal similarity value in line: " + line);
+      }
+
+      auto similarity {std::stod(buf)};
+
       // skip matches below our similarity threshold
       if (similarity < parameters.minimum_match) { continue; }
+
+      // skip match entries that are not in the OTU table
+      if ((not OTUs.contains(hit)) or (not OTUs.contains(query))) {
+        std::cout << "\nwarning: one of these is not in the OTU table: " << line << '\n';
+        continue;
+      }
 
       // update map only if query is less abundant than hit (should I
       // swap query and hit to make sure the match is taken into

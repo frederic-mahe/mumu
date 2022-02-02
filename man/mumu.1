@@ -1,5 +1,5 @@
 .\" ============================================================================
-.TH mumu 1 "January 6, 2021" "version 0.0.1" "USER COMMANDS"
+.TH mumu 1 "February 2, 2022" "version 0.0.2" "USER COMMANDS"
 .\" ============================================================================
 .SH NAME
 mumu \(em post-clustering curation of metabarcoding data
@@ -31,11 +31,16 @@ mumu \(em post-clustering curation of metabarcoding data
 \fBmumu\fR reads from two input files: an OTU table and a list of OTU
 matches; and writes to two output files: a log file and a file that
 will receive the new reduced OTU table (see the \fIMandatory\fR
-section below).
+section below for more details).
 .SS Mandatory
 .TP 9
 .B \-h\fP,\fB\ \-\-help
 display a short help message and exit successfully.
+.TP
+.BI \-t\fP,\fB\ \-\-threads\~ "positive integer"
+number of computation threads to use. Values between 1 and 256 are
+accepted, but we recommend to use a number of threads lesser or equal
+to the number of available CPU cores. Default number of threads is 1.
 .TP
 .B \-v\fP,\fB\ \-\-version
 output version information and exit successfully.
@@ -43,9 +48,10 @@ output version information and exit successfully.
 .BI \-o\fP,\fB\ \-\-otu_table\~ "filename"
 Input file containing the contingency table. One OTU per line, one
 sample per column, columns are separated by tabulations. The first
-line contains sample names, and the first column contains OTU
-names. All OTU names must be unique. Abundance values are positive
-integers. Here is a simple example with three samples and two OTUs:
+line contains sample names (names are irrelevant), and the first
+column contains OTU names. All OTU names must be unique. Abundance
+values are positive integers. Here is a simple example with three
+samples and two OTUs:
 .TS H
 center, tab (@);
 cb | cb cb cb.
@@ -56,8 +62,8 @@ B@3@0@6
 .TE
 .TP
 .BI \-m\fP,\fB\ \-\-match_list\~ "filename"
-Input file containing OTU similarities. One pair of OTUs per line,
-three columns separated by tabulations:
+Input file containing OTU similarities. No header line, one pair of
+OTUs per line, three columns separated by tabulations:
 .RS
 .RS
 .nr step 1 1
@@ -66,7 +72,8 @@ name of query OTU.
 .IP \n+[step].
 name of hit OTU.
 .IP \n+[step].
-percentage of similarity (\fIfloat\fR value ranging from 50 to 100).
+percentage of similarity (\fIfloating point\fR value, ranging from
+50.0 to 100.0 included).
 .RE
 .PP
 For example, a match list corresponding to the OTU table above could
@@ -107,10 +114,10 @@ Output file for OTU merging statistics (18 columns separated by
 tabulations). OTUs are not processed according to a specific
 order. For a given query OTU with potential parents, mumu will order
 potential parents by decreasing similarity with the query OTU, then by
-decreasing abundance, and finally by decreasing incidence. Each
-potential parent is tested, and the search stops if parenthood
-criteria are matched or if the list is exhausted. The different
-columns correspond to:
+decreasing abundance, then by decreasing incidence (or spread), and
+finally by names. Each potential parent is tested, and the search
+stops if parenthood criteria are matched or if the list is
+exhausted. The different columns correspond to:
 .RS
 .RS
 .nr step 1 1
@@ -172,10 +179,10 @@ accepted as a parent, or rejected.
 .BI \-n\fP,\fB\ \-\-new_otu_table\~ "filename"
 Output file for the newly computed contingency table. Same format as
 the input OTU table (see \-\-otu_table). Sample order is unchanged,
-but OTUs are reordered by decreasing abundance, incidence value, and
-OTU name. OTUs found to devive from 'parent' OTUs do not appear in the
-new OTU table, and their abundance values are added to the abundance
-values of their respective parents.
+but OTUs are reordered by decreasing abundance, incidence value (or
+spread), and OTU name. An OTU found to derive from a 'parent' OTU does
+not appear in the new OTU table, and its abundance values are added to
+the abundance values of its parent OTU.
 .PP
 .\" .B \-\-
 .\" delimit the option list. Later arguments, if any, are treated as
@@ -264,7 +271,7 @@ Source code available at
 .UE .
 .\" ============================================================================
 .SH COPYRIGHT
-Copyright (C) 2020-2021 Frédéric Mahé
+Copyright (C) 2020-2022 Frédéric Mahé
 .PP
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as
@@ -300,7 +307,7 @@ New features and important modifications of \fBmumu\fR (short lived
 or minor bug releases are not mentioned):
 .RS
 .TP
-.BR v1.0\~ "released September 1st, 2020"
+.BR v1.0\~ "released February 2nd, 2022"
 First public release.
 .LP
 .\" ============================================================================

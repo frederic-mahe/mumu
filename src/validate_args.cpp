@@ -1,6 +1,6 @@
 // MUMU
 
-// Copyright (C) 2020-2021 Frederic Mahe
+// Copyright (C) 2020-2022 Frederic Mahe
 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -89,11 +89,14 @@ auto check_numerical_parameters(Parameters const &parameters) -> void {
 
   // threads (1 <= x <= 255)
   constexpr auto max_threads {255};
+  if (parameters.threads != 1) {
+    std::cout << "warning: mumu is not yet multithreaded.\n";
+  }
   if (parameters.threads < 1 or parameters.threads > max_threads) {
     fatal("--threads value must be between 1 and " + std::to_string(max_threads));
   }
 
-  // minimum ratio type ("min" or "avg")
+  // minimum ratio type ("min" or "avg")  // replace != with not_eq?
   if (parameters.minimum_ratio_type != use_minimum_value and
       parameters.minimum_ratio_type != use_average_value) {
     fatal("--minimum ratio type can only be " +

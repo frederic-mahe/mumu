@@ -1,6 +1,6 @@
 // MUMU
 
-// Copyright (C) 2020-2021 Frederic Mahe
+// Copyright (C) 2020-2022 Frederic Mahe
 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 // 34398 MONTPELLIER CEDEX 5
 // France
 
+#include <cassert>
 #include <fstream>
 #include <iostream>
 #include <limits>
@@ -28,6 +29,8 @@
 
 constexpr auto largest_double {std::numeric_limits<double>::max()};
 constexpr auto tolerance {std::numeric_limits<double>::epsilon()};
+// C++23 refactor: std::pow(2, std::numeric_limits<double>::digits)
+constexpr auto largest_int_without_precision_loss {9'007'199'254'740'992};
 constexpr auto accept_as_parent {"accepted"};
 constexpr auto reject_as_parent {"rejected"};
 
@@ -35,10 +38,10 @@ struct Stats {
   std::string son_id;
   std::string father_id;
   double similarity {0.0};
-  unsigned int son_total_abundance {1};
-  unsigned int father_total_abundance {0};
-  unsigned int son_overlap_abundance {0};
-  unsigned int father_overlap_abundance {0};
+  unsigned long int son_total_abundance {1};
+  unsigned long int father_total_abundance {0};
+  unsigned long int son_overlap_abundance {0};
+  unsigned long int father_overlap_abundance {0};
   unsigned int son_spread {0};
   unsigned int father_spread {0};
   unsigned int father_overlap_spread {0};
@@ -78,18 +81,34 @@ auto operator<< (std::ostream& output_stream, const Stats& stats) -> std::ostrea
 }
 
 
+// refactor: operator overload
 [[nodiscard]]
 auto compare_two_matches (const Match& matchA, const Match& matchB) -> bool {
   // by decreasing similarity
   if (matchA.similarity > matchB.similarity) {
     return true;
   }
-  // then by decreasing abundance
+  if (matchA.similarity < matchB.similarity) {
+    return false;
+  }
+
+  // if equal, then by decreasing abundance
   if (matchA.hit_sum_reads > matchB.hit_sum_reads) {
     return true;
   }
-  // then by decreasing spread
-  return  (matchA.hit_spread > matchB.hit_spread);
+  if (matchA.hit_sum_reads < matchB.hit_sum_reads) {
+    return false;
+  }
+
+  // if equal, then by decreasing spread
+  if (matchA.hit_spread > matchB.hit_spread) {
+    return true;
+  }
+  if (matchA.hit_spread < matchB.hit_spread) {
+    return false;
+  }
+  // if equal, then by ASCIIbetical order (A, B, ..., a, b, c, ...)
+  return  (matchA.hit_id < matchB.hit_id);
 }
 
 
@@ -108,7 +127,8 @@ auto per_sample_ratios (std::unordered_map<std::string, struct OTU> &OTUs,
     const auto& father_abundance = *current_father_sample++;
     if (son_abundance == 0) { continue; }  // skip this sample
     stats.son_overlap_abundance += son_abundance;
-    double ratio { 1.0 * father_abundance / son_abundance};
+    assert(father_abundance <= largest_int_without_precision_loss);
+    double ratio { static_cast<double>(father_abundance) / static_cast<double>(son_abundance) };
     if (ratio < stats.smallest_ratio) { stats.smallest_ratio = ratio; }
     if (ratio > stats.largest_ratio) { stats.largest_ratio = ratio; }
     if (ratio < stats.smallest_non_null_ratio and ratio > 0.0) {
@@ -190,7 +210,7 @@ auto search_parent (std::unordered_map<std::string, struct OTU> &OTUs,
       std::stable_sort(OTUs[OTU_id].matches.begin(),
                        OTUs[OTU_id].matches.end(),
                        compare_two_matches);
-    }  // does not work?!?!!!!!!!!!!!!!!!!!!!!!!!!!!
+    }
 
     // test potential parents (thread safe: one OTU per thread, thread
     // only modifies the OTU it is working on, other OTUs are

@@ -57,9 +57,10 @@ profile: all
 clean:
 	rm -f $(objects) $(PROG) compile_commands.json ./src/*.gcov \
 	./src/*.gcda ./src/*.gcno ./*.gcov ./src/main_coverage.info
+	rm -rf ./src/out
 
 dist-clean: clean
-	rm -f *~ ./src/*~
+	rm -f *~ ./src/*~ ./test/*~ ./man/*~
 
 install: $(PROG) $(MAN)
 	/usr/bin/install -c $(PROG) '/usr/local/bin'

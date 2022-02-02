@@ -1,6 +1,6 @@
 // MUMU
 
-// Copyright (C) 2020-2021 Frederic Mahe
+// Copyright (C) 2020-2022 Frederic Mahe
 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -24,3 +24,5 @@
 #include <string>
 
 [[ noreturn ]] auto fatal(const std::string &message) -> void;
+
+[[ noreturn ]] auto exit_successfully() -> void;

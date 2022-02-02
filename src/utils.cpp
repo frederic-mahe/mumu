@@ -1,6 +1,6 @@
 // MUMU
 
-// Copyright (C) 2020-2021 Frederic Mahe
+// Copyright (C) 2020-2022 Frederic Mahe
 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -24,8 +24,14 @@
 #include "mumu.h"
 
 
+// C++20 refactor: transform into a variadic template
 [[ noreturn ]]
 auto fatal(const std::string &message) -> void {
-  std::cerr << "Error: " << message << "\n";
+  std::cerr << '\n' << "Error: " << message << "\n";
   std::exit(EXIT_FAILURE);
+}
+
+[[ noreturn ]]
+auto exit_successfully() -> void {
+  std::exit(EXIT_SUCCESS);
 }

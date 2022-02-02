@@ -12,4 +12,6 @@ gcov ./src/*.cpp 2> /dev/null | \
              printf "%.0f\n", 100.0 * (total_lines - missed_lines) / total_lines
          }'
 
+rm -f ./*.gcov
+
 exit 0
