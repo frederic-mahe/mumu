@@ -964,7 +964,7 @@ rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 # B	1	1
 # A	2	0
 #
-DESCRIPTION="mumu sorts merged OTUs by decreasing abundance, then by spread"
+DESCRIPTION="mumu sorts merged OTUs by decreasing abundance, then by spread (B > A)"
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
 NEW_OTU_TABLE=$(mktemp)
@@ -976,6 +976,33 @@ printf "OTUs\ts1\ts2\nA\t2\t0\nB\t1\t1\n" > "${OTU_TABLE}"
     --new_otu_table "${NEW_OTU_TABLE}" \
     --log "${LOG}" 2>&1 > /dev/null
 awk '{if (NR == 2) {exit ($1 == "B" && $2 == 1 && $3 == 1) ? 0 : 1}}' "${NEW_OTU_TABLE}" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
+## abundance is the same, spread (A > B)
+## input
+# OTUs	s1	s2
+# A	1	1
+# B	2	0
+#
+## expect
+# OTUs	s1	s2
+# A	1	1
+# B	2	0
+#
+DESCRIPTION="mumu sorts merged OTUs by decreasing abundance, then by spread (A > B)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\ts2\nB\t2\t0\nA\t1\t1\n" > "${OTU_TABLE}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log "${LOG}" 2>&1 > /dev/null
+awk '{if (NR == 2) {exit ($1 == "A" && $2 == 1 && $3 == 1) ? 0 : 1}}' "${NEW_OTU_TABLE}" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
