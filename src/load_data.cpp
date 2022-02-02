@@ -93,7 +93,7 @@ auto parse_each_otu (std::unordered_map<std::string, struct OTU> &OTUs,
   // get abundance values (rest of the line)
   while (getline(otu_raw_data, buf, sepchar)) {
     try {
-      std::stoul(buf);
+      static_cast<void>(std::stoul(buf));
     } catch (std::invalid_argument const& ex) {
       fatal("illegal similarity value in line: " + line);
     }
@@ -167,7 +167,7 @@ auto read_match_list (std::unordered_map<std::string, struct OTU> &OTUs,
       }
 
       try {
-        std::stod(buf);
+        static_cast<void>(std::stod(buf));
       } catch (std::invalid_argument const& ex) {
         fatal("illegal similarity value in line: " + line);
       }
