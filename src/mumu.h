@@ -65,7 +65,7 @@ struct Parameters {
 
 struct Match {
   double similarity {0.0};
-  unsigned int hit_sum_reads {0};
+  unsigned long int hit_sum_reads {0};
   unsigned int hit_spread {0};
   std::string hit_id;
 };
@@ -73,10 +73,10 @@ struct Match {
 
 struct OTU {
   std::vector<struct Match> matches;
-  std::vector<unsigned int> samples;
+  std::vector<unsigned long int> samples;
   std::string father_id;  // std::string_view? no
   unsigned int spread {0};
-  unsigned int sum_reads {0};
+  unsigned long int sum_reads {0};
   bool is_mergeable {false};
   bool is_merged {false};
 };

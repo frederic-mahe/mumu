@@ -35,10 +35,10 @@ struct Stats {
   std::string son_id;
   std::string father_id;
   double similarity {0.0};
-  unsigned int son_total_abundance {1};
-  unsigned int father_total_abundance {0};
-  unsigned int son_overlap_abundance {0};
-  unsigned int father_overlap_abundance {0};
+  unsigned long int son_total_abundance {1};
+  unsigned long int father_total_abundance {0};
+  unsigned long int son_overlap_abundance {0};
+  unsigned long int father_overlap_abundance {0};
   unsigned int son_spread {0};
   unsigned int father_spread {0};
   unsigned int father_overlap_spread {0};
@@ -124,7 +124,7 @@ auto per_sample_ratios (std::unordered_map<std::string, struct OTU> &OTUs,
     const auto& father_abundance = *current_father_sample++;
     if (son_abundance == 0) { continue; }  // skip this sample
     stats.son_overlap_abundance += son_abundance;
-    double ratio { 1.0 * father_abundance / son_abundance};
+    double ratio { static_cast<double>(father_abundance) / static_cast<double>(son_abundance) };
     if (ratio < stats.smallest_ratio) { stats.smallest_ratio = ratio; }
     if (ratio > stats.largest_ratio) { stats.largest_ratio = ratio; }
     if (ratio < stats.smallest_non_null_ratio and ratio > 0.0) {

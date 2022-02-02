@@ -30,7 +30,7 @@
 struct OTU_stats {
   std::string OTU_id;
   long int spread {0};
-  unsigned int abundance {0};
+  unsigned long int abundance {0};
 };
 
 

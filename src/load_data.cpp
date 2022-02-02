@@ -76,7 +76,7 @@ auto parse_and_output_first_line (const std::string &line,
 auto parse_each_otu (std::unordered_map<std::string, struct OTU> &OTUs,
                      std::string &line,
                      unsigned int header_columns) -> void {
-  auto sum_reads {0U};  // 4,294,967,295 reads at most (test with assert)
+  auto sum_reads {0UL};
   auto spread {0U};
   auto n_values {0U};  // rename to n_columns?
   std::stringstream otu_raw_data(line);
