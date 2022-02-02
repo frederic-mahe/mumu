@@ -55,7 +55,7 @@ auto count_columns (const std::string &line) -> unsigned int {
   std::string buf;
   std::stringstream otu_raw_data(line);
   while (getline(otu_raw_data, buf, sepchar)) {
-    columns++;
+    ++columns;
   }
 
   return columns;
