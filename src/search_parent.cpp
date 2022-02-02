@@ -29,7 +29,7 @@
 
 constexpr auto largest_double {std::numeric_limits<double>::max()};
 constexpr auto tolerance {std::numeric_limits<double>::epsilon()};
-constexpr auto largest_int_without_precision_loss {1UL << std::numeric_limits<double>::digits};
+constexpr unsigned long int largest_int_without_precision_loss {1L << std::numeric_limits<double>::digits};
 constexpr auto accept_as_parent {"accepted"};
 constexpr auto reject_as_parent {"rejected"};
 
