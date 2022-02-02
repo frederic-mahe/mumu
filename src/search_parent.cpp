@@ -29,7 +29,8 @@
 
 constexpr auto largest_double {std::numeric_limits<double>::max()};
 constexpr auto tolerance {std::numeric_limits<double>::epsilon()};
-constexpr unsigned long int largest_int_without_precision_loss {1L << std::numeric_limits<double>::digits};
+// C++23 refactor: std::pow(2, std::numeric_limits<double>::digits)
+constexpr auto largest_int_without_precision_loss {9'007'199'254'740'992};
 constexpr auto accept_as_parent {"accepted"};
 constexpr auto reject_as_parent {"rejected"};
 
