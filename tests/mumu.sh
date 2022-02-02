@@ -1076,6 +1076,267 @@ printf "A\tB\t96.5\nB\tA\t96.5\n" > "${MATCH_LIST}"
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}"
 
+## when there are several matches, sort them by similarity, abundance, spread, names
+#
+# C can be linked to A or B (same abundance values, but different similarity values):
+# A	C	95
+# B	C	98
+#
+# expect C to be merged with B
+# OTUs	s1
+# B	4
+# A	3
+#
+DESCRIPTION="mumu sorts matches by decreasing similarities when searching for a parent (input A before B)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\nA\t3\nB\t3\nC\t1\n" > "${OTU_TABLE}"
+printf "A\tC\t95.0\nC\tA\t95.0\nB\tC\t98.0\nC\tB\t98.0\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --minimum_ratio_type "avg" \
+    --minimum_ratio 1.5 \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log /dev/null 2>&1 > /dev/null
+awk '{if (NR == 2) {exit ($1 == "B" && $2 == 4) ? 0 : 1}}' "${NEW_OTU_TABLE}" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
+## when there are several matches, sort them by similarity, abundance, spread, names
+#
+# C can be linked to A or B (same abundance values, but different similarity values):
+# B	C	98
+# A	C	95
+#
+# expect C to be merged with B
+# OTUs	s1
+# B	4
+# A	3
+#
+DESCRIPTION="mumu sorts matches by decreasing similarities when searching for a parent (input B before A)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\nA\t3\nB\t3\nC\t1\n" > "${OTU_TABLE}"
+printf "B\tC\t98.0\nC\tB\t98.0\nA\tC\t95.0\nC\tA\t95.0\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --minimum_ratio_type "avg" \
+    --minimum_ratio 1.5 \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log /dev/null 2>&1 > /dev/null
+awk '{if (NR == 2) {exit ($1 == "B" && $2 == 4) ? 0 : 1}}' "${NEW_OTU_TABLE}" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
+
+## when there are several matches, sort them by similarity, abundance, spread, names
+#
+# C can be linked to A or B (same similarity, different abundance values):
+# A	C	98
+# B	C	98
+#
+# expect C to be merged with B
+# OTUs	s1
+# B	4
+# A	3
+#
+DESCRIPTION="mumu sorts matches by decreasing abundance when searching for a parent (input A before B)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\nA\t2\nB\t3\nC\t1\n" > "${OTU_TABLE}"
+printf "A\tC\t98.0\nC\tA\t98.0\nB\tC\t98.0\nC\tB\t98.0\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --minimum_ratio_type "avg" \
+    --minimum_ratio 1.5 \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log /dev/null 2>&1 > /dev/null
+awk '{if (NR == 2) {exit ($1 == "B" && $2 == 4) ? 0 : 1}}' "${NEW_OTU_TABLE}" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
+## when there are several matches, sort them by similarity, abundance, spread, names
+#
+# C can be linked to A or B (same similarity, different abundance values):
+# B	C	98
+# A	C	98
+#
+# expect C to be merged with B
+# OTUs	s1
+# B	4
+# A	3
+#
+DESCRIPTION="mumu sorts matches by decreasing abundance when searching for a parent (input B before A)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\nA\t2\nB\t3\nC\t1\n" > "${OTU_TABLE}"
+printf "B\tC\t98.0\nC\tB\t98.0\nA\tC\t98.0\nC\tA\t98.0\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --minimum_ratio_type "avg" \
+    --minimum_ratio 1.5 \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log /dev/null 2>&1 > /dev/null
+awk '{if (NR == 2) {exit ($1 == "B" && $2 == 4) ? 0 : 1}}' "${NEW_OTU_TABLE}" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
+## when there are several matches, sort them by similarity, abundance, spread, names
+#
+# C can be linked to A or B (same similarity, same abundance value, but different spread):
+# A	C	98
+# B	C	98
+#
+# OTUs	s1	s2
+# A	3	0
+# B	2	1
+# C	1	0
+#
+# expect C to be merged with B
+# OTUs	s1	s2
+# B	3	1
+# A	3	0
+#
+DESCRIPTION="mumu sorts matches by decreasing spread when searching for a parent (input A before B)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\ts2\nA\t3\t0\nB\t2\t1\nC\t1\t0\n" > "${OTU_TABLE}"
+printf "A\tC\t98.0\nC\tA\t98.0\nB\tC\t98.0\nC\tB\t98.0\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --minimum_ratio_type "avg" \
+    --minimum_ratio 1.5 \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log /dev/null 2>&1 > /dev/null
+awk '{if (NR == 2) {exit ($1 == "B" && $2 == 3 && $3 == 1) ? 0 : 1}}' "${NEW_OTU_TABLE}" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
+## when there are several matches, sort them by similarity, abundance, spread, names
+#
+# C can be linked to A or B (same similarity, same abundance value, but different spread):
+# B	C	98
+# A	C	98
+#
+# OTUs	s1	s2
+# A	3	0
+# B	2	1
+# C	1	0
+#
+# expect C to be merged with B
+# OTUs	s1	s2
+# B	3	1
+# A	3	0
+#
+DESCRIPTION="mumu sorts matches by decreasing spread when searching for a parent (input B before A)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\ts2\nA\t3\t0\nB\t2\t1\nC\t1\t0\n" > "${OTU_TABLE}"
+printf "B\tC\t98.0\nC\tB\t98.0\nA\tC\t98.0\nC\tA\t98.0\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --minimum_ratio_type "avg" \
+    --minimum_ratio 1.5 \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log /dev/null 2>&1 > /dev/null
+awk '{if (NR == 2) {exit ($1 == "B" && $2 == 3 && $3 == 1) ? 0 : 1}}' "${NEW_OTU_TABLE}" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
+## when there are several matches, sort them by similarity, abundance, spread, names
+#
+# C can be linked to a or A (same similarity, same abundance value, same spread):
+# a	C	98
+# A	C	98
+#
+# OTUs	s1
+# a	3
+# A	3
+# C	1
+#
+# expect C to be merged with A
+# OTUs	s1
+# A	4
+# a	3
+#
+DESCRIPTION="mumu sorts matches by ASCIIbetical order when searching for a parent (input a before A)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\na\t3\nA\t3\nC\t1\n" > "${OTU_TABLE}"
+printf "a\tC\t98.0\nC\ta\t98.0\nA\tC\t98.0\nC\tA\t98.0\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --minimum_ratio_type "avg" \
+    --minimum_ratio 1.5 \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log /dev/null 2>&1 > /dev/null
+awk '{if (NR == 2) {exit ($1 == "A" && $2 == 4) ? 0 : 1}}' "${NEW_OTU_TABLE}" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
+## when there are several matches, sort them by similarity, abundance, spread, names
+#
+# C can be linked to a or A (same similarity, same abundance value, same spread):
+# A	C	98
+# a	C	98
+#
+# OTUs	s1
+# a	3
+# A	3
+# C	1
+#
+# expect C to be merged with A
+# OTUs	s1
+# A	4
+# a	3
+#
+DESCRIPTION="mumu sorts matches by ASCIIbetical order when searching for a parent (input A before a)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\na\t3\nA\t3\nC\t1\n" > "${OTU_TABLE}"
+printf "A\tC\t98.0\nC\tA\t98.0\na\tC\t98.0\nC\ta\t98.0\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --minimum_ratio_type "avg" \
+    --minimum_ratio 1.5 \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log /dev/null 2>&1 > /dev/null
+awk '{if (NR == 2) {exit ($1 == "A" && $2 == 4) ? 0 : 1}}' "${NEW_OTU_TABLE}" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
 
 ## ------------------------------------------------------------------- log file
 
