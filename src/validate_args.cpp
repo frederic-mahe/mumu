@@ -89,6 +89,9 @@ auto check_numerical_parameters(Parameters const &parameters) -> void {
 
   // threads (1 <= x <= 255)
   constexpr auto max_threads {255};
+  if (parameters.threads != 1) {
+    std::cout << "warning: mumu is not yet multithreaded.\n";
+  }
   if (parameters.threads < 1 or parameters.threads > max_threads) {
     fatal("--threads value must be between 1 and " + std::to_string(max_threads));
   }
