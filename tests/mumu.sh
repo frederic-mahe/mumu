@@ -1050,6 +1050,32 @@ printf "OTUs\ts1\nA\t1\n" > "${OTU_TABLE}"
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
+## reject match if...
+# if ((parameters.minimum_ratio_type == use_minimum_value and
+#      stats.smallest_non_null_ratio <= parameters.minimum_ratio)
+#     or (parameters.minimum_ratio_type == use_average_value and
+#         stats.avg_non_null_ratio <= parameters.minimum_ratio)) {
+#
+## the second part is never computed with the current tests
+#
+DESCRIPTION="mumu rejects parent when using 'avg' minimum ratio"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+printf "OTUs\ts1\nA\t3\nB\t2\n" > "${OTU_TABLE}"
+printf "A\tB\t96.5\nB\tA\t96.5\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --minimum_ratio_type "avg" \
+    --minimum_ratio 1.5 \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log /dev/stdout | \
+    grep -oq "rejected$" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}"
+
 
 ## ------------------------------------------------------------------- log file
 
