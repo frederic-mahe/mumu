@@ -89,10 +89,8 @@ auto write_table (std::unordered_map<std::string, struct OTU> &OTUs,
     new_otu_table.close();
     return;
   }
-  if (sorted_OTUs.size() > 1) { // remove that test??
-    // sort it by decreasing abundance, spread and id name
-    std::ranges::stable_sort(sorted_OTUs, compare_two_OTUs);
-  }
+  // sort it by decreasing abundance, spread and id name
+  std::ranges::stable_sort(sorted_OTUs, compare_two_OTUs);
 
   // output 
   for (auto const& otu: sorted_OTUs) {
