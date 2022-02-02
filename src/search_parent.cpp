@@ -21,6 +21,7 @@
 // 34398 MONTPELLIER CEDEX 5
 // France
 
+#include <cassert>
 #include <fstream>
 #include <iostream>
 #include <limits>
@@ -28,6 +29,7 @@
 
 constexpr auto largest_double {std::numeric_limits<double>::max()};
 constexpr auto tolerance {std::numeric_limits<double>::epsilon()};
+constexpr auto largest_int_without_precision_loss {1UL << std::numeric_limits<double>::digits};
 constexpr auto accept_as_parent {"accepted"};
 constexpr auto reject_as_parent {"rejected"};
 
@@ -124,6 +126,7 @@ auto per_sample_ratios (std::unordered_map<std::string, struct OTU> &OTUs,
     const auto& father_abundance = *current_father_sample++;
     if (son_abundance == 0) { continue; }  // skip this sample
     stats.son_overlap_abundance += son_abundance;
+    assert(father_abundance <= largest_int_without_precision_loss);
     double ratio { static_cast<double>(father_abundance) / static_cast<double>(son_abundance) };
     if (ratio < stats.smallest_ratio) { stats.smallest_ratio = ratio; }
     if (ratio > stats.largest_ratio) { stats.largest_ratio = ratio; }
