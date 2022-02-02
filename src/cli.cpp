@@ -66,39 +66,6 @@ static_assert(not long_options.empty(), "long_options must have at least one (em
 static_assert(long_options.back().val == 0, "last option must be empty");
 
 
-[[nodiscard]]
-constexpr auto build_short_option_array(const std::array<struct option, n_options>& long_options_array)
-  -> std::array<char, optstring_max_length> {
-  // when available, refactor with constexpr std::vector
-  auto index {0U};
-  std::array<char, optstring_max_length> short_options {'\0'};
-
-  for (const auto& option : long_options_array) {
-    assert(option.val >= 0);  // val must fit in a signed char
-    assert(option.val <= std::numeric_limits<signed char>::max());
-
-    if (option.val == 0) {  // skip empty options
-      continue;
-    }
-    short_options[index] = static_cast<char>(option.val);
-    ++index;
-
-    if (option.has_arg == required_argument) {
-      short_options[index] = ':';
-      ++index;
-    }
-    if (option.has_arg == optional_argument) {
-      short_options[index] = ':';
-      ++index;
-      short_options[index] = ':';
-      ++index;
-    }
-  }
-
-  return short_options;
-}
-
-
 auto help () -> void {
   std::cout
     << "Usage: mumu " << n_version << '\n'
@@ -131,8 +98,8 @@ auto version () -> void {
 
 
 auto parse_args (int argc, char ** argv, Parameters &parameters) -> void {
-  constexpr auto short_options {build_short_option_array(long_options)};
-  static_assert(short_options.size() >= n_options, "some short options were not parsed");
+  // C++23 refactor: generate from long_options at compile-time
+  const std::string short_options {"ht:vo:m:a:b:c:d:n:l:"};
   auto option_character {0};
   auto option_index {0};
 
@@ -166,7 +133,7 @@ auto parse_args (int argc, char ** argv, Parameters &parameters) -> void {
 
     case 'h':  // help message
       help();
-      std::exit(EXIT_SUCCESS);
+      exit_successfully();
 
     case 'l':  // log file (output)
       parameters.log = optarg;
@@ -194,7 +161,7 @@ auto parse_args (int argc, char ** argv, Parameters &parameters) -> void {
 
     case 'v':  // version number
       version();
-      std::exit(EXIT_SUCCESS);
+      exit_successfully();
 
     default:
       std::cerr << "Warning: unknown option\n";
