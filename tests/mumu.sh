@@ -195,8 +195,8 @@ chmod -r "${MATCH_LIST}"
 chmod +r "${MATCH_LIST}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
-## mumu stopts with an error if output files can't be overwritten
-DESCRIPTION="mumu stopts with an error if output files can\'t be overwritten (1)"
+## mumu stops with an error if output files can't be overwritten
+DESCRIPTION="mumu stops with an error if output files can\'t be overwritten (1)"
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
 NEW_OTU_TABLE=$(mktemp)
