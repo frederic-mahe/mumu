@@ -25,6 +25,7 @@
 #include <fstream>
 #include <iostream>
 #include <limits>
+#include <ranges>
 #include "mumu.h"
 
 constexpr auto largest_double {std::numeric_limits<double>::max()};
@@ -207,8 +208,7 @@ auto search_parent (std::unordered_map<std::string, struct OTU> &OTUs,
 
     // sort matches (best candidate OTUs first)
     if (OTUs[OTU_id].matches.size() > 1) {
-      std::stable_sort(OTUs[OTU_id].matches.begin(),
-                       OTUs[OTU_id].matches.end(),
+      std::ranges::stable_sort(OTUs[OTU_id].matches,
                        compare_two_matches);
     }
 
