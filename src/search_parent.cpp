@@ -81,37 +81,6 @@ auto operator<< (std::ostream& output_stream, const Stats& stats) -> std::ostrea
 }
 
 
-// refactor: operator overload
-[[nodiscard]]
-auto compare_two_matches (const Match& matchA, const Match& matchB) -> bool {
-  // by decreasing similarity
-  if (matchA.similarity > matchB.similarity) {
-    return true;
-  }
-  if (matchA.similarity < matchB.similarity) {
-    return false;
-  }
-
-  // if equal, then by decreasing abundance
-  if (matchA.hit_sum_reads > matchB.hit_sum_reads) {
-    return true;
-  }
-  if (matchA.hit_sum_reads < matchB.hit_sum_reads) {
-    return false;
-  }
-
-  // if equal, then by decreasing spread
-  if (matchA.hit_spread > matchB.hit_spread) {
-    return true;
-  }
-  if (matchA.hit_spread < matchB.hit_spread) {
-    return false;
-  }
-  // if equal, then by ASCIIbetical order (A, B, ..., a, b, c, ...)
-  return  (matchA.hit_id < matchB.hit_id);
-}
-
-
 auto per_sample_ratios (std::unordered_map<std::string, struct OTU> &OTUs,
                         Stats &stats) -> void {
   // 'zip' two OTUs (https://www.cplusplus.com/forum/general/228918/)
@@ -204,13 +173,6 @@ auto search_parent (std::unordered_map<std::string, struct OTU> &OTUs,
 
     // ignore OTUs without any match
     if (OTUs[OTU_id].matches.empty()) { continue; }
-
-    // sort matches (best candidate OTUs first)
-    if (OTUs[OTU_id].matches.size() > 1) {
-      std::stable_sort(OTUs[OTU_id].matches.begin(),
-                       OTUs[OTU_id].matches.end(),
-                       compare_two_matches);
-    }
 
     // test potential parents (thread safe: one OTU per thread, thread
     // only modifies the OTU it is working on, other OTUs are

@@ -21,6 +21,7 @@
 // 34398 MONTPELLIER CEDEX 5
 // France
 
+#include <algorithm>
 #include <fstream>
 #include <ios>
 #include <iostream>

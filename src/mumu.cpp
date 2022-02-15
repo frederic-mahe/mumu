@@ -28,6 +28,7 @@
 #include "validate_args.h"
 #include "load_data.h"
 #include "search_parent.h"
+#include "sort_matches.h"
 #include "merge_OTUs.h"
 #include "write_table.h"
 
@@ -46,6 +47,7 @@ auto main (int argc, char** argv) -> int {
   std::unordered_map<std::string, struct OTU> OTUs;
   read_otu_table(OTUs, parameters);
   read_match_list(OTUs, parameters);
+  sort_matches(OTUs);
 
   // find potential parents (could be multithreaded)
   search_parent(OTUs, parameters);
@@ -65,7 +67,6 @@ auto main (int argc, char** argv) -> int {
 // - use async() to test potential parents? not cluster-friendly, no
 //   control on CPU/thread usage
 // - benchmark 'const auto& sample' or 'const auto sample' to print out OTUs,
-// - catch exception throw when reading input tables?
 // - more user-defined types: replace "std::string" with "sequence_id" (semantic code)
 
 // Assumptions

@@ -43,7 +43,7 @@ $(PROG): $(objects)
 
 all: $(PROG)
 
-debug: SPECIFIC = -Og -DDEBUG -fsanitize=address -fno-omit-frame-pointer
+debug: SPECIFIC = -Og -DDEBUG -fsanitize=undefined,address -fno-omit-frame-pointer
 debug: all
 
 coverage: SPECIFIC = -O0 --coverage -fprofile-arcs -ftest-coverage -lgcov
