@@ -28,10 +28,15 @@ mumu \(em post-clustering curation of metabarcoding data
 .PP
 .\" ============================================================================
 .SH DESCRIPTION
-\fBmumu\fR reads from two input files: an OTU table and a list of OTU
-matches; and writes to two output files: a log file and a file that
-will receive the new reduced OTU table (see the \fIMandatory\fR
-section below for more details).
+\fBmumu\fR is a robust and fast C++ implementation of \fBlulu\fR, a R
+package for post-clustering curation of metabarcoding data, available
+at
+.UR https://github.com/tobiasgf/lulu
+.UE .
+Like its forebearer, \fBmumu\fR reads from two input files: an OTU
+table and a list of OTU matches; and writes to two output files: a log
+file and a file that will receive the new reduced OTU table. See the
+\fIMandatory\fR section below for more details.
 .SS Mandatory
 .TP 9
 .B \-h\fP,\fB\ \-\-help
@@ -75,7 +80,7 @@ For example, a match list corresponding to the OTU table above could
 be:
 .TS H
 center, tab (@);
-c c c.
+cb cb cb.
 A@B@95.6
 .TE
 .PP
@@ -107,13 +112,13 @@ vsearch \\
 .TP
 .BI \-l\fP,\fB\ \-\-log\~ "filename"
 Output file for OTU merging statistics (18 columns separated by
-tabulations). OTUs are not processed according to a specific
-order. For a given query OTU with potential parents, mumu will order
-potential parents by decreasing similarity with the query OTU, then by
-decreasing abundance, then by decreasing incidence (or spread), and
-finally by names. Each potential parent is tested, and the search
-stops if parenthood criteria are matched or if the list is
-exhausted. The different columns correspond to:
+tabulations). OTUs are processed in no specific order. For a given
+query OTU with potential parents, mumu will order potential parents by
+decreasing similarity with the query OTU, then by decreasing
+abundance, then by decreasing incidence (or spread), and finally by
+names (increasing ASCIIbetical order). Each potential parent is
+tested, and the search stops if parenthood criteria are matched or if
+the list is exhausted. The different columns correspond to:
 .RS
 .RS
 .nr step 1 1
@@ -142,8 +147,9 @@ present, \fIpositive integer\fR).
 incidence of the potential parent OTU (number of samples where the
 potential parent OTU is present, \fIpositive integer\fR).
 .IP \n+[step].
-overlap incidence of the potential parent OTU (number of samples where
-the potential parent OTU and the query OTU are both present, \fIfloat\fR).
+incidence of the potential parent OTU (number of samples where both
+the potential parent OTU and the query OTU are present, \fIpositive
+integer\fR).
 .IP \n+[step].
 smallest abundance ratio (for each sample, compute the abundance of
 the potential parent OTU divided by the abundance of the query OTU,
@@ -170,15 +176,22 @@ number of samples where the query OTU is present, \fIfloat\fR).
 status: 'accepted' or 'rejected'. The potential parent OTU is either
 accepted as a parent, or rejected.
 .RE
+.PP
+Note that abundance and incidence values in the log file correspond to
+the values in the original input table. Abundance and incidence values
+can be updated only when the whole dataset has been processed and all
+potential parents are known.
 .RE
 .TP
 .BI \-n\fP,\fB\ \-\-new_otu_table\~ "filename"
 Output file for the newly computed contingency table. Same format as
 the input OTU table (see \-\-otu_table). Sample order is unchanged,
-but OTUs are reordered by decreasing abundance, incidence value (or
-spread), and OTU name. An OTU found to derive from a 'parent' OTU does
-not appear in the new OTU table, and its abundance values are added to
-the abundance values of its parent OTU.
+but OTUs are reordered by decreasing abundance, then by decreasing
+incidence value (or spread), and finally by OTU name (increasing
+ASCIIbetical order). Note that abundance and incidence values are
+recomputed: an OTU found to derive from a 'parent' OTU does not appear
+in the new OTU table, and its abundance values are added to the
+abundance values of its parent OTU (same thing for the incidence).
 .PP
 .\" .B \-\-
 .\" delimit the option list. Later arguments, if any, are treated as
@@ -199,6 +212,13 @@ potential parent OTU is strictly smaller than the 'minimum_match'
 value, then the potential parent OTU is rejected. Accepted values
 range from 50 to 100, and the default value is 84.0.
 .TP
+.BI \-b\fP,\fB\ \-\-minimum_ratio_type\~ "min|avg"
+method used to decide if a potential parent OTU must be rejected based
+on abundance ratios (threshold is controlled by the option
+\-\-minimum_ratio). Decision can be based on the \fIminimum\fR
+observed ratio ('min') or the \fIaverage\fR of observed ratios
+('avg'). Default method is 'min'.
+.TP
 .BI \-c\fP,\fB\ \-\-minimum_ratio\~ "positive float"
 minimum or average abundance ratio observed between a potential parent
 OTU and a query OTU (method is controlled by the option
@@ -209,13 +229,6 @@ OTU. If the minimum or average observed value is smaller or equal to
 the 'minimum_ratio' value, then the potential parent OTU is
 rejected. Any positive value greater than zero is accepted, and the
 default value is 1.0.
-.TP
-.BI \-b\fP,\fB\ \-\-minimum_ratio_type\~ "min|avg"
-method used to decide if a potential parent OTU must be rejected based
-on abundance ratios (threshold is controlled by the option
-\-\-minimum_ratio). Decision can be based on the \fIminimum\fR
-observed ratio ('min') or the \fIaverage\fR of observed ratios
-('avg'). Default method is 'min'.
 .TP
 .BI \-d\fP,\fB\ \-\-minimum_relative_cooccurence\~ "positive float"
 minimum incidence ratio observed between a potential parent OTU and a
@@ -255,17 +268,18 @@ biodiversity estimates. \fINature Communications\fR, 8(1), 1188
 .\" ============================================================================
 .SH KNOWN DIFFERENCES WITH LULU
 mumu fixes what I think to be a bug in lulu: parent OTUs with a
-cooccurence ratio below 1.0 are all eliminated, even if the default
-threshold is 0.95
+cooccurence ratio below 1.0 (i.e. missing from some samples) are all
+eliminated, even if the default threshold is 0.95, which should allow
+the parent OTU to be missing from 5% of the samples
 .UR https://github.com/tobiasgf/lulu/issues/8
 .UE .
 .PP
 Contrary to lulu, mumu allows chained merges. When an OTU B is merged
 with an OTU A, lulu removes B from the pool of potential parents. With
 mumu, B remains available as potential parent for a less abundant OTU
-C, allowing the formation of chains of merging (C -> B -> A). In
-practice, chains are rare and represent less than 0.1% of merges in
-tested datasets.
+C, allowing the formation of a chain (C -> B -> A). In practice,
+chains are rare and represent less than 0.1% of merges in tested
+datasets.
 .\" ============================================================================
 .SH REPORTING BUGS
 Submit suggestions and bug-reports at
@@ -308,7 +322,8 @@ License along with this program.  If not, see
 data, available at
 .UR https://github.com/tobiasgf/lulu
 .UE ;
-\fBswarm\fR, a fast clustering method, available at
+\fBswarm\fR, a robust and extremely fast clustering method, available
+at
 .UR https://github.com/torognes/swarm
 .UE ; and
 \fBvsearch\fR, a versatile open-source tool for metagenomics, available at
