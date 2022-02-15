@@ -1,5 +1,5 @@
 .\" ============================================================================
-.TH mumu 1 "February 2, 2022" "version 0.0.2" "USER COMMANDS"
+.TH mumu 1 "February 15, 2022" "version 0.0.3" "USER COMMANDS"
 .\" ============================================================================
 .SH NAME
 mumu \(em post-clustering curation of metabarcoding data
@@ -37,21 +37,16 @@ section below for more details).
 .B \-h\fP,\fB\ \-\-help
 display a short help message and exit successfully.
 .TP
-.BI \-t\fP,\fB\ \-\-threads\~ "positive integer"
-number of computation threads to use. Values between 1 and 256 are
-accepted, but we recommend to use a number of threads lesser or equal
-to the number of available CPU cores. Default number of threads is 1.
-.TP
 .B \-v\fP,\fB\ \-\-version
 output version information and exit successfully.
 .TP
 .BI \-o\fP,\fB\ \-\-otu_table\~ "filename"
 Input file containing the contingency table. One OTU per line, one
 sample per column, columns are separated by tabulations. The first
-line contains sample names (names are irrelevant), and the first
-column contains OTU names. All OTU names must be unique. Abundance
-values are positive integers. Here is a simple example with three
-samples and two OTUs:
+line contains sample names (column names are irrelevant), and the
+first column contains OTU names. Each OTU name must be
+unique. Abundance values are positive integers ranging from zero to
+2^64 - 1. Here is a simple example with three samples and two OTUs:
 .TS H
 center, tab (@);
 cb | cb cb cb.
@@ -72,8 +67,8 @@ name of query OTU.
 .IP \n+[step].
 name of hit OTU.
 .IP \n+[step].
-percentage of similarity (\fIfloating point\fR value, ranging from
-50.0 to 100.0 included).
+percentage of similarity (\fIinteger\fR or \fIfloating point\fR value,
+ranging from 50.0 to 100.0 included).
 .RE
 .PP
 For example, a match list corresponding to the OTU table above could
@@ -84,13 +79,14 @@ c c c.
 A@B@95.6
 .TE
 .PP
-OTU names in the match list must correspond to OTU names in the OTU
-table. Given a fasta file, a match list file can be produced with
-vsearch
+OTU names in the match list should correspond to OTU names in the OTU
+table. Matches with OTU names not present in the OTU table are
+ignored. Given a fasta file, a match list file can be produced with
+\fBvsearch\fR
 .UR https://github.com/torognes/vsearch
 .UE
-for all pairs of OTU with at least 84% similarity ('\-\-id 0.84', see
-option \-\-minimum_match for more details):
+for all OTU pairs with at least 84% similarity ('\-\-id 0.84', see the
+mumu option \-\-minimum_match for more details):
 .PP
 .EX
 .RS
@@ -234,6 +230,9 @@ one are accepted, and the default value is 0.95.
 .BI \-t\fP,\fB\ \-\-threads\~ "positive integer"
 multithreading is not activated. This option has no effect, mumu
 always uses one thread.
+\" Number of computation threads to use. Values between 1 and 256 are
+\" accepted, but we recommend to use a number of threads lesser or equal
+\" to the number of available CPU cores. Default number of threads is 1.
 .LP
 .\" ============================================================================
 .\" .SH EXAMPLES
@@ -243,7 +242,8 @@ always uses one thread.
 .\" List known limitations or bugs.
 .\" ============================================================================
 .SH AUTHORS
-Concept by Tobias Guldberg Frøslev, implementation by Frédéric Mahé.
+Concept and R implementation by Tobias Guldberg Frøslev, C++
+implementation by Frédéric Mahé.
 .\" ============================================================================
 .SH CITATION
 Frøslev, T. G., Kjøller, R., Bruun, H. H., Ejrnæs, R., Brunbjerg,
@@ -253,12 +253,26 @@ biodiversity estimates. \fINature Communications\fR, 8(1), 1188
 .UR https://www.nature.com/articles/s41467-017-01312-x
 .UE .
 .\" ============================================================================
+.SH KNOWN DIFFERENCES WITH LULU
+mumu fixes what I think to be a bug in lulu: parent OTUs with a
+cooccurence ratio below 1.0 are all eliminated, even if the default
+threshold is 0.95
+.UR https://github.com/tobiasgf/lulu/issues/8
+.UE .
+.PP
+Contrary to lulu, mumu allows chained merges. When an OTU B is merged
+with an OTU A, lulu removes B from the pool of potential parents. With
+mumu, B remains available as potential parent for a less abundant OTU
+C, allowing the formation of chains of merging (C -> B -> A). In
+practice, chains are rare and represent less than 0.1% of merges in
+tested datasets.
+.\" ============================================================================
 .SH REPORTING BUGS
 Submit suggestions and bug-reports at
 .UR https://github.com/frederic-mahe/mumu/issues
 .UE ,
 send a pull request at
-.UR https://github.com/frederic-mahe/mumu
+.UR https://github.com/frederic-mahe/mumu/pulls
 .UE ,
 or compose a friendly or curmudgeonly e-mail to
 .MT frederic.mahe@cirad.fr
@@ -304,10 +318,10 @@ data, available at
 .\" ============================================================================
 .SH VERSION HISTORY
 New features and important modifications of \fBmumu\fR (short lived
-or minor bug releases are not mentioned):
+or minor bug releases may not be mentioned):
 .RS
 .TP
-.BR v1.0\~ "released February 2nd, 2022"
+.BR v1.0\~ "released March 1st, 2022"
 First public release.
 .LP
 .\" ============================================================================
