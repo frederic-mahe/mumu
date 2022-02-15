@@ -26,6 +26,7 @@
 #include <iostream>
 #include <limits>
 #include <ranges>
+#include <tuple>
 #include "mumu.h"
 
 constexpr auto largest_double {std::numeric_limits<double>::max()};
@@ -82,35 +83,16 @@ auto operator<< (std::ostream& output_stream, const Stats& stats) -> std::ostrea
 }
 
 
-// refactor: operator overload
-[[nodiscard]]
-auto compare_two_matches (const Match& matchA, const Match& matchB) -> bool {
-  // by decreasing similarity
-  if (matchA.similarity > matchB.similarity) {
-    return true;
-  }
-  if (matchA.similarity < matchB.similarity) {
-    return false;
-  }
+auto compare_two_matches = [](const Match& lhs, const Match& rhs) {
+  // sort by decreasing similarity,
+  // if equal, sort by decreasing abundance,
+  // if equal, sort by decreasing spread,
+  // if equal, sort by ASCIIbetical order (A, B, ..., a, b, c, ...)
+  return
+    std::tie(rhs.similarity, rhs.hit_sum_reads, rhs.hit_spread, lhs.hit_id) <
+    std::tie(lhs.similarity, lhs.hit_sum_reads, lhs.hit_spread, rhs.hit_id);
 
-  // if equal, then by decreasing abundance
-  if (matchA.hit_sum_reads > matchB.hit_sum_reads) {
-    return true;
-  }
-  if (matchA.hit_sum_reads < matchB.hit_sum_reads) {
-    return false;
-  }
-
-  // if equal, then by decreasing spread
-  if (matchA.hit_spread > matchB.hit_spread) {
-    return true;
-  }
-  if (matchA.hit_spread < matchB.hit_spread) {
-    return false;
-  }
-  // if equal, then by ASCIIbetical order (A, B, ..., a, b, c, ...)
-  return  (matchA.hit_id < matchB.hit_id);
-}
+ };
 
 
 auto per_sample_ratios (std::unordered_map<std::string, struct OTU> &OTUs,
@@ -208,8 +190,7 @@ auto search_parent (std::unordered_map<std::string, struct OTU> &OTUs,
 
     // sort matches (best candidate OTUs first)
     if (OTUs[OTU_id].matches.size() > 1) {
-      std::ranges::stable_sort(OTUs[OTU_id].matches,
-                       compare_two_matches);
+      std::ranges::sort(OTUs[OTU_id].matches, compare_two_matches);
     }
 
     // test potential parents (thread safe: one OTU per thread, thread
