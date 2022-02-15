@@ -177,10 +177,15 @@ status: 'accepted' or 'rejected'. The potential parent OTU is either
 accepted as a parent, or rejected.
 .RE
 .PP
-Note that abundance and incidence values in the log file correspond to
-the values in the original input table. Abundance and incidence values
-can be updated only when the whole dataset has been processed and all
+Abundance and incidence values in the log file correspond to the
+values in the original input table. Abundance and incidence values can
+be updated only when the whole dataset has been processed and all
 potential parents are known.
+.PP
+Also, to avoid circular linking among OTUs with the same abundance
+values, merging is only possible with parent OTUs that are strictly
+more abundant than the query OTU. For instance, OTUs of size one can
+only be merged with OTUs of size > 1.
 .RE
 .TP
 .BI \-n\fP,\fB\ \-\-new_otu_table\~ "filename"
