@@ -76,18 +76,21 @@ percentage of similarity (\fIinteger\fR or \fIfloating point\fR value,
 ranging from 50.0 to 100.0 included).
 .RE
 .PP
-For example, a match list corresponding to the OTU table above could
-be:
+OTU names in the match list should correspond to OTU names in the OTU
+table. Matches with OTU names not present in the OTU table are
+ignored. Matches with a similarity value strictly smaller than the
+value set with \-\-minimum_match are ignored. Matches between OTUs
+with the same abundance value are ignored. Finally, match orientation
+matters: matches with queries more abundant than hits are ignored. So,
+for the OTU table above, a correct match list could be:
 .TS H
 center, tab (@);
 cb cb cb.
-A@B@95.6
+B@A@95.6
 .TE
 .PP
-OTU names in the match list should correspond to OTU names in the OTU
-table. Matches with OTU names not present in the OTU table are
-ignored. Given a fasta file, a match list file can be produced with
-\fBvsearch\fR
+Given a fasta file 'file.fasta', a correct match list file can be
+produced with \fBvsearch\fR
 .UR https://github.com/torognes/vsearch
 .UE
 for all OTU pairs with at least 84% similarity ('\-\-id 0.84', see the
