@@ -177,12 +177,12 @@ auto read_match_list (std::unordered_map<std::string, struct OTU> &OTUs,
         fatal("illegal similarity value in line: " + line);
       }
 
-      auto similarity {std::stod(buf)};
+      const auto similarity {std::stod(buf)};
 
-      // skip matches below our similarity threshold
+      // ignore matches below our similarity threshold
       if (similarity < parameters.minimum_match) { continue; }
 
-      // skip match entries that are not in the OTU table
+      // ignore match entries that are not in the OTU table
       if ((not OTUs.contains(hit)) or (not OTUs.contains(query))) {
         std::cout << "\nwarning: one of these is not in the OTU table: " << line << '\n';
         continue;
@@ -192,6 +192,7 @@ auto read_match_list (std::unordered_map<std::string, struct OTU> &OTUs,
       if (OTUs[query].sum_reads >= OTUs[hit].sum_reads) {
         continue;
       }
+
       OTUs[query].matches.push_back(Match {
           .similarity = similarity,
           .hit_sum_reads = OTUs[hit].sum_reads,
