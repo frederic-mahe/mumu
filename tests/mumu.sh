@@ -1884,6 +1884,5 @@ rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 exit 0
 
 ## TODO:
-# - match orientation matters! (A -> B or B -> A)
 # - list all the reasons to reject a potential parent! Make a test for each.
 # - try two OTUs without overlap, do I get infinite values? make a list of values that are set to null, report that in the manual.
