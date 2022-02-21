@@ -100,7 +100,7 @@ auto parse_each_otu (std::unordered_map<std::string, struct OTU> &OTUs,
     try {
       static_cast<void>(std::stoul(buf));
     } catch (std::invalid_argument const& ex) {
-      fatal("illegal similarity value in line: " + line);
+      fatal("illegal abundance value in line: " + line);
     }
 
     auto abundance {std::stoul(buf)};  // test if abundance > unsigned int!!!!!
