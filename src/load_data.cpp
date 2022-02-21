@@ -192,12 +192,12 @@ auto read_match_list (std::unordered_map<std::string, struct OTU> &OTUs,
       if (OTUs[query].sum_reads >= OTUs[hit].sum_reads) {
         continue;
       }
-      Match match;  // use direct value initialization here!!!
-      match.similarity = similarity;
-      match.hit_sum_reads = OTUs[hit].sum_reads;
-      match.hit_spread = OTUs[hit].spread;
-      match.hit_id = hit;
-      OTUs[query].matches.push_back(match);  // no need to reserve(10)?
+      OTUs[query].matches.push_back(Match {
+          .similarity = similarity,
+          .hit_sum_reads = OTUs[hit].sum_reads,
+          .hit_spread = OTUs[hit].spread,
+          .hit_id = hit}
+        );  // no need to reserve(10)?
     }
   match_list.close();
   std::cout << "done" << std::endl;
