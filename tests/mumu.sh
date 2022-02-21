@@ -970,6 +970,26 @@ awk 'END {exit NR == 2 ? 0 : 1}' "${NEW_OTU_TABLE}" && \
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
+## mumu match orientation matters (good orientation, merge)
+DESCRIPTION="mumu match orientation matters (A > B, good orientation)"
+"${MUMU}" \
+    --otu_table <(printf "OTUs\ts1\nA\t2\nB\t1\n") \
+    --match_list <(printf "B\tA\t99.0\n") \
+    --new_otu_table >(awk 'END {exit NR == 2 ? 0 : 1}' && \
+                          success "${DESCRIPTION}" || \
+                              failure "${DESCRIPTION}") \
+    --log /dev/null > /dev/null
+
+## mumu match orientation matters (wrong orientation, no merge)
+DESCRIPTION="mumu match orientation matters (A > B, wrong orientation)"
+"${MUMU}" \
+    --otu_table <(printf "OTUs\ts1\nA\t2\nB\t1\n") \
+    --match_list <(printf "A\tB\t99.0\n") \
+    --new_otu_table >(awk 'END {exit NR == 3 ? 0 : 1}' && \
+                          success "${DESCRIPTION}" || \
+                              failure "${DESCRIPTION}") \
+    --log /dev/null > /dev/null
+
 DESCRIPTION="mumu merges OTUs A and B as expected with default parameters (log is 1 line)"
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
