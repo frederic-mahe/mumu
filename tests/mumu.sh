@@ -741,6 +741,21 @@ DESCRIPTION="mumu can write to a substitution process"
                               failure "${DESCRIPTION}") \
     > /dev/null
 
+# read from named pipes: not possible because mumu opens input files twice
+# DESCRIPTION="mumu can read from named pipes"
+# rm fifo_OTU_TABLE
+# mkfifo fifo_OTU_TABLE
+
+# "${MUMU}" \
+#     --otu_table fifo_OTU_TABLE \
+#     --match_list /dev/null \
+#     --log /dev/null \
+#     --new_otu_table /dev/stdout &
+
+# printf "OTUs\ts1\nA\t2\nB\t1\n" > fifo_OTU_TABLE
+# rm fifo_OTU_TABLE
+
+
 # match can be a subset of table, but not the other way around.
 DESCRIPTION="mumu skips match entries that are not in the OTU table"
 OTU_TABLE=$(mktemp)
@@ -1836,7 +1851,6 @@ rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 exit 0
 
 ## TODO:
-# - read from named pipes
 # - match orientation matters! (A -> B or B -> A)
 # - list all the reasons to reject a potential parent! Make a test for each.
 # - try two OTUs without overlap, do I get infinite values? make a list of values that are set to null, report that in the manual.
