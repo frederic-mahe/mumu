@@ -1881,6 +1881,22 @@ awk '{exit ($1 == "A" && $2 == "B") ? 0 : 1}' "${LOG}" && \
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
+## mumu allows parent to be missing in some samples (lulu bug)
+
+# Here 'A' is missing from the first sample. The relative cooccurence
+# is then 20/21, which is greater than 0.95, the default value. 'A' is
+# then accepted as the parent of 'B'. In lulu, there is no merging (to
+# be confirmed with a test on the latest version).
+
+DESCRIPTION="mumu allows parent to be missing in some samples (lulu bug)"
+"${MUMU}" \
+    --otu_table <(printf "OTUs\ts01\ts02\ts03\ts04\ts05\ts06\ts07\ts08\ts09\ts10\ts11\ts12\ts13\ts14\ts15\ts16\ts17\ts18\ts19\ts20\ts21\nA\t0\t9\t9\t9\t9\t9\t9\t9\t9\t9\t9\t9\t9\t9\t9\t9\t9\t9\t9\t9\t9\nB\t1\t1\t1\t1\t1\t1\t1\t1\t1\t1\t1\t1\t1\t1\t1\t1\t1\t1\t1\t1\t1\n") \
+    --match_list <(printf "B\tA\t99.0\n") \
+    --log /dev/null \
+    --new_otu_table >(awk 'END {exit NR == 2 ? 0 : 1}' && \
+                          success "${DESCRIPTION}" || \
+                              failure "${DESCRIPTION}") > /dev/null
+
 exit 0
 
 ## TODO:
