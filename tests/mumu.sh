@@ -1816,12 +1816,6 @@ awk '{exit $18 == "rejected" ? 0 : 1}' "${LOG}" && \
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
-
-# try two OTUs without overlap, do I get infinite values? make a list
-# of values that are set to null, report that in the manual.
-
-# list all the reasons to reject a potential parent! Make a test for each.
-
 DESCRIPTION="mumu orders input OTUs by abundance (B > A)"
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
@@ -1843,4 +1837,6 @@ exit 0
 
 ## TODO:
 # - read from named pipes
+# - match orientation matters! (A -> B or B -> A)
 # - list all the reasons to reject a potential parent! Make a test for each.
+# - try two OTUs without overlap, do I get infinite values? make a list of values that are set to null, report that in the manual.
