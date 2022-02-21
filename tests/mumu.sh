@@ -720,6 +720,27 @@ printf "A\tB\tNA\n" > "${MATCH_LIST}"
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}"
 
+DESCRIPTION="mumu can read from a substitution process"
+MATCH_LIST=$(mktemp)
+"${MUMU}" \
+    --otu_table <(printf "OTUs\ts1\nA\t2\nB\t1\n") \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table /dev/null \
+    --log /dev/null 2>&1 > /dev/null && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${MATCH_LIST}"
+
+DESCRIPTION="mumu can write to a substitution process"
+"${MUMU}" \
+    --otu_table <(printf "OTUs\ts1\nA\t2\nB\t1\n") \
+    --match_list /dev/null \
+    --log /dev/null \
+    --new_otu_table >(grep -q "." && \
+                          success "${DESCRIPTION}" || \
+                              failure "${DESCRIPTION}") \
+    > /dev/null
+
 # match can be a subset of table, but not the other way around.
 DESCRIPTION="mumu skips match entries that are not in the OTU table"
 OTU_TABLE=$(mktemp)
@@ -1821,6 +1842,5 @@ rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 exit 0
 
 ## TODO:
-# - read from substitution processes,
 # - read from named pipes
 # - list all the reasons to reject a potential parent! Make a test for each.
