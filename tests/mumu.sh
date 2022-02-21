@@ -144,6 +144,22 @@ LOG=$(mktemp)
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
+## mumu rejects a file with a name starting with a dash (POSIX
+## requires to accept them!)
+DESCRIPTION="mumu rejects a file with a name starting with a dash"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG="-mylog.log"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log -- "${LOG}" > /dev/null 2>&1 && \
+    failure "${DESCRIPTION}" || \
+        success "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" -- "${LOG}"
+
 ## mumu accepts empty input files (no error)
 DESCRIPTION="mumu accepts empty input files (no error)"
 OTU_TABLE=$(mktemp)
@@ -1808,4 +1824,3 @@ exit 0
 # - read from substitution processes,
 # - read from named pipes
 # - list all the reasons to reject a potential parent! Make a test for each.
-# - test -- -weird_file_name (POSIX requirement)
