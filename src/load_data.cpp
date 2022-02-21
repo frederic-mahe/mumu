@@ -77,10 +77,8 @@ auto parse_and_output_first_line (const std::string &line,
 auto parse_each_otu (std::unordered_map<std::string, struct OTU> &OTUs,
                      std::string &line,
                      unsigned int header_columns) -> void {
-  auto n_values {0U};  // rename to n_columns?
   std::stringstream otu_raw_data(line);
   std::string OTU_id;
-  std::string buf;
   OTU otu;
 
   // get OTU id (first item of the line)
@@ -95,19 +93,12 @@ auto parse_each_otu (std::unordered_map<std::string, struct OTU> &OTUs,
   otu.samples.reserve(header_columns - 1);
 
   // get abundance values (rest of the line)
-  while (getline(otu_raw_data, buf, sepchar)) {
-    try {
-      static_cast<void>(std::stoul(buf));
-    } catch (std::invalid_argument const& ex) {
-      fatal("illegal abundance value in line: " + line);
-    }
-
-    otu.samples.push_back(std::stoul(buf));  // test if abundance > unsigned int!!!!!
-    ++n_values;
+  for (const auto abundance : std::ranges::istream_view<unsigned long int>(otu_raw_data)) {
+        otu.samples.push_back(abundance);
   }
 
   // sanity check
-  if ((n_values + 1) != header_columns) {
+  if ((otu.samples.size() + 1) != header_columns) {
     fatal("variable number of columns in OTU table");
   }
 
