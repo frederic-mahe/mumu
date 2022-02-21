@@ -127,12 +127,11 @@ auto read_otu_table (std::unordered_map<std::string, struct OTU> &OTUs,
   std::cout << "parse OTU table... ";
   // input and output files, buffer
   std::ifstream otu_table {parameters.otu_table};
-  std::ofstream new_otu_table {parameters.new_otu_table};
   std::string line;
 
   // first line: get number of columns, write headers to new OTU table
   std::getline(otu_table, line);
-  auto header_columns {parse_and_output_first_line(line, parameters)};
+  const auto header_columns {parse_and_output_first_line(line, parameters)};
 
   // parse other lines, and map the values
   while (std::getline(otu_table, line))
