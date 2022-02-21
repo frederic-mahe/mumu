@@ -62,15 +62,11 @@ auto main (int argc, char** argv) -> int {
 
 // TODO:
 
+// - don't close input files when testing (allow mumu to use named pipes)
+// - add a quiet option?
 // - get rid of is_mergeable?
 // - use 'sort(par_unseq' to get parallel and/or vectorized sort,
 // - use async() to test potential parents? not cluster-friendly, no
 //   control on CPU/thread usage
 // - benchmark 'const auto& sample' or 'const auto sample' to print out OTUs,
 // - more user-defined types: replace "std::string" with "sequence_id" (semantic code)
-
-// Assumptions
-
-// - a son cannot be as abundant as its father (to avoid circular
-//   linking among OTUs of the same abundance),
-// - OTUs of size one can only be linked to OTUs of size > 1.

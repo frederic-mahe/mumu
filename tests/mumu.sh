@@ -144,6 +144,22 @@ LOG=$(mktemp)
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
+## mumu rejects a file with a name starting with a dash (POSIX
+## requires to accept them!)
+DESCRIPTION="mumu rejects a file with a name starting with a dash"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG="-mylog.log"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log -- "${LOG}" > /dev/null 2>&1 && \
+    failure "${DESCRIPTION}" || \
+        success "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" -- "${LOG}"
+
 ## mumu accepts empty input files (no error)
 DESCRIPTION="mumu accepts empty input files (no error)"
 OTU_TABLE=$(mktemp)
@@ -704,6 +720,42 @@ printf "A\tB\tNA\n" > "${MATCH_LIST}"
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}"
 
+DESCRIPTION="mumu can read from a substitution process"
+MATCH_LIST=$(mktemp)
+"${MUMU}" \
+    --otu_table <(printf "OTUs\ts1\nA\t2\nB\t1\n") \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table /dev/null \
+    --log /dev/null 2>&1 > /dev/null && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${MATCH_LIST}"
+
+DESCRIPTION="mumu can write to a substitution process"
+"${MUMU}" \
+    --otu_table <(printf "OTUs\ts1\nA\t2\nB\t1\n") \
+    --match_list /dev/null \
+    --log /dev/null \
+    --new_otu_table >(grep -q "." && \
+                          success "${DESCRIPTION}" || \
+                              failure "${DESCRIPTION}") \
+    > /dev/null
+
+# read from named pipes: not possible because mumu opens input files twice
+# DESCRIPTION="mumu can read from named pipes"
+# rm fifo_OTU_TABLE
+# mkfifo fifo_OTU_TABLE
+
+# "${MUMU}" \
+#     --otu_table fifo_OTU_TABLE \
+#     --match_list /dev/null \
+#     --log /dev/null \
+#     --new_otu_table /dev/stdout &
+
+# printf "OTUs\ts1\nA\t2\nB\t1\n" > fifo_OTU_TABLE
+# rm fifo_OTU_TABLE
+
+
 # match can be a subset of table, but not the other way around.
 DESCRIPTION="mumu skips match entries that are not in the OTU table"
 OTU_TABLE=$(mktemp)
@@ -918,6 +970,26 @@ awk 'END {exit NR == 2 ? 0 : 1}' "${NEW_OTU_TABLE}" && \
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
+## mumu match orientation matters (good orientation, merge)
+DESCRIPTION="mumu match orientation matters (A > B, good orientation)"
+"${MUMU}" \
+    --otu_table <(printf "OTUs\ts1\nA\t2\nB\t1\n") \
+    --match_list <(printf "B\tA\t99.0\n") \
+    --new_otu_table >(awk 'END {exit NR == 2 ? 0 : 1}' && \
+                          success "${DESCRIPTION}" || \
+                              failure "${DESCRIPTION}") \
+    --log /dev/null > /dev/null
+
+## mumu match orientation matters (wrong orientation, no merge)
+DESCRIPTION="mumu match orientation matters (A > B, wrong orientation)"
+"${MUMU}" \
+    --otu_table <(printf "OTUs\ts1\nA\t2\nB\t1\n") \
+    --match_list <(printf "A\tB\t99.0\n") \
+    --new_otu_table >(awk 'END {exit NR == 3 ? 0 : 1}' && \
+                          success "${DESCRIPTION}" || \
+                              failure "${DESCRIPTION}") \
+    --log /dev/null > /dev/null
+
 DESCRIPTION="mumu merges OTUs A and B as expected with default parameters (log is 1 line)"
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
@@ -952,6 +1024,19 @@ awk '{if (NR > 1) {exit ($1 == "A" && $2 == 8) ? 0 : 1}}' "${NEW_OTU_TABLE}" && 
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
+## OTUs with the same abundance are not merged
+# A son cannot be as abundant as its father (to avoid circular linking
+# among OTUs of the same abundance).
+# expect OTU table with three lines
+DESCRIPTION="mumu OTUs with the same abundance are not merged"
+"${MUMU}" \
+    --otu_table <(printf "OTUs\ts1\nA\t1\nB\t1\n") \
+    --match_list <(printf "A\tB\t99.0\nB\tA\t99.0\n") \
+    --new_otu_table >(awk ' END {exit NR == 3 ? 0 : 1}' && \
+                          success "${DESCRIPTION}" || \
+                              failure "${DESCRIPTION}") \
+    --log /dev/null > /dev/null
 
 # merged OTUs are sorted by decreasing abundance (B 5 reads, then A with 4 reads)
 ## input
@@ -1779,12 +1864,6 @@ awk '{exit $18 == "rejected" ? 0 : 1}' "${LOG}" && \
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
-
-# try two OTUs without overlap, do I get infinite values? make a list
-# of values that are set to null, report that in the manual.
-
-# list all the reasons to reject a potential parent! Make a test for each.
-
 DESCRIPTION="mumu orders input OTUs by abundance (B > A)"
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
@@ -1805,7 +1884,6 @@ rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 exit 0
 
 ## TODO:
-# - read from substitution processes,
-# - read from named pipes
+# - match orientation matters! (A -> B or B -> A)
 # - list all the reasons to reject a potential parent! Make a test for each.
-# - test -- -weird_file_name (POSIX requirement)
+# - try two OTUs without overlap, do I get infinite values? make a list of values that are set to null, report that in the manual.

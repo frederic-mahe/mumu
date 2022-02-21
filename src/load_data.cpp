@@ -23,6 +23,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <numeric>
 #include <sstream>
 #include <stdexcept>
 #include "mumu.h"
@@ -76,12 +77,8 @@ auto parse_and_output_first_line (const std::string &line,
 auto parse_each_otu (std::unordered_map<std::string, struct OTU> &OTUs,
                      std::string &line,
                      unsigned int header_columns) -> void {
-  auto sum_reads {0UL};
-  auto spread {0U};
-  auto n_values {0U};  // rename to n_columns?
   std::stringstream otu_raw_data(line);
   std::string OTU_id;
-  std::string buf;
   OTU otu;
 
   // get OTU id (first item of the line)
@@ -96,28 +93,19 @@ auto parse_each_otu (std::unordered_map<std::string, struct OTU> &OTUs,
   otu.samples.reserve(header_columns - 1);
 
   // get abundance values (rest of the line)
-  while (getline(otu_raw_data, buf, sepchar)) {
-    try {
-      static_cast<void>(std::stoul(buf));
-    } catch (std::invalid_argument const& ex) {
-      fatal("illegal similarity value in line: " + line);
-    }
-
-    auto abundance {std::stoul(buf)};  // test if abundance > unsigned int!!!!!
-    if (abundance > 0) { spread += 1; }
-    sum_reads += abundance;
-    otu.samples.push_back(abundance);  // push to map
-    ++n_values;
+  for (const auto abundance : std::ranges::istream_view<unsigned long int>(otu_raw_data)) {
+        otu.samples.push_back(abundance);
   }
 
   // sanity check
-  if ((n_values + 1) != header_columns) {
+  if ((otu.samples.size() + 1) != header_columns) {
     fatal("variable number of columns in OTU table");
   }
 
   // add more results to the map
-  otu.spread = spread;
-  otu.sum_reads = sum_reads;
+  const auto has_reads = [](const auto n_reads) { return n_reads > 0; };
+  otu.spread = static_cast<unsigned int>(std::ranges::count_if(otu.samples, has_reads));
+  otu.sum_reads = std::accumulate(otu.samples.begin(), otu.samples.end(), 0UL);
   OTUs[OTU_id] = otu;
 }
 
@@ -127,12 +115,11 @@ auto read_otu_table (std::unordered_map<std::string, struct OTU> &OTUs,
   std::cout << "parse OTU table... ";
   // input and output files, buffer
   std::ifstream otu_table {parameters.otu_table};
-  std::ofstream new_otu_table {parameters.new_otu_table};
   std::string line;
 
   // first line: get number of columns, write headers to new OTU table
   std::getline(otu_table, line);
-  auto header_columns {parse_and_output_first_line(line, parameters)};
+  const auto header_columns {parse_and_output_first_line(line, parameters)};
 
   // parse other lines, and map the values
   while (std::getline(otu_table, line))
@@ -177,29 +164,28 @@ auto read_match_list (std::unordered_map<std::string, struct OTU> &OTUs,
         fatal("illegal similarity value in line: " + line);
       }
 
-      auto similarity {std::stod(buf)};
+      const auto similarity {std::stod(buf)};
 
-      // skip matches below our similarity threshold
+      // ignore matches below our similarity threshold
       if (similarity < parameters.minimum_match) { continue; }
 
-      // skip match entries that are not in the OTU table
+      // ignore match entries that are not in the OTU table
       if ((not OTUs.contains(hit)) or (not OTUs.contains(query))) {
         std::cout << "\nwarning: one of these is not in the OTU table: " << line << '\n';
         continue;
       }
 
-      // update map only if query is less abundant than hit (should I
-      // swap query and hit to make sure the match is taken into
-      // account if the comparison matrix is not complete?)
-      auto hit_sum_reads {OTUs[hit].sum_reads};
-      if (OTUs[query].sum_reads < hit_sum_reads) {
-        Match match;  // use direct value initialization here!!!
-        match.similarity = similarity;
-        match.hit_sum_reads = hit_sum_reads;
-        match.hit_spread = OTUs[hit].spread;
-        match.hit_id = hit;
-        OTUs[query].matches.push_back(match);  // no need to reserve(10)?
+      // ignore matches to lesser abundant OTUs
+      if (OTUs[query].sum_reads >= OTUs[hit].sum_reads) {
+        continue;
       }
+
+      OTUs[query].matches.emplace_back(Match {
+          .similarity = similarity,
+          .hit_sum_reads = OTUs[hit].sum_reads,
+          .hit_spread = OTUs[hit].spread,
+          .hit_id = hit}
+        );  // no need to reserve(10)?
     }
   match_list.close();
   std::cout << "done" << std::endl;

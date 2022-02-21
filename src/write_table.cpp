@@ -25,7 +25,7 @@
 #include <fstream>
 #include <ios>
 #include <iostream>
-#include <ranges>
+#include <tuple>
 #include "mumu.h"
 
 
@@ -57,26 +57,15 @@ auto extract_OTU_stats (std::unordered_map<std::string, struct OTU> &OTUs)
   return sorted_OTUs;
 }
 
-// refactor: should be an operator overload for OTU_stats
-[[nodiscard]]
-auto compare_two_OTUs (const OTU_stats& OTUa, const OTU_stats& OTUb) -> bool {
-  // by decreasing abundance
-  if (OTUa.abundance > OTUb.abundance) {
-    return true;
-  }
-  if (OTUa.abundance < OTUb.abundance) {
-    return false;
-  }
-  // if equal, then by decreasing spread
-  if (OTUa.spread > OTUb.spread) {
-    return true;
-  }
-  if (OTUa.spread < OTUb.spread) {
-    return false;
-  }
-  // if equal, then by ASCIIbetical order (A, B, ..., a, b, c, ...)
-  return (OTUa.OTU_id < OTUb.OTU_id);
-}
+
+auto compare_two_OTUs = [](const OTU_stats& lhs, const OTU_stats& rhs) {
+  // sort by decreasing abundance,
+  // if equal, sort by decreasing spread,
+  // if equal, sort by ASCIIbetical order (A, B, ..., a, b, c, ...)
+  return
+    std::tie(rhs.abundance, rhs.spread, lhs.OTU_id) <
+    std::tie(lhs.abundance, lhs.spread, rhs.OTU_id);
+ };
 
 
 auto write_table (std::unordered_map<std::string, struct OTU> &OTUs,
@@ -92,7 +81,7 @@ auto write_table (std::unordered_map<std::string, struct OTU> &OTUs,
     return;
   }
   // sort it by decreasing abundance, spread and id name
-  std::ranges::stable_sort(sorted_OTUs, compare_two_OTUs);
+  std::ranges::sort(sorted_OTUs, compare_two_OTUs);
 
   // output 
   for (auto const& otu: sorted_OTUs) {
