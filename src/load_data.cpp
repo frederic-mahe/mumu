@@ -23,6 +23,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <numeric>
 #include <sstream>
 #include <stdexcept>
 #include "mumu.h"
@@ -76,8 +77,6 @@ auto parse_and_output_first_line (const std::string &line,
 auto parse_each_otu (std::unordered_map<std::string, struct OTU> &OTUs,
                      std::string &line,
                      unsigned int header_columns) -> void {
-  auto sum_reads {0UL};
-  auto spread {0U};
   auto n_values {0U};  // rename to n_columns?
   std::stringstream otu_raw_data(line);
   std::string OTU_id;
@@ -103,10 +102,7 @@ auto parse_each_otu (std::unordered_map<std::string, struct OTU> &OTUs,
       fatal("illegal abundance value in line: " + line);
     }
 
-    auto abundance {std::stoul(buf)};  // test if abundance > unsigned int!!!!!
-    if (abundance > 0) { spread += 1; }
-    sum_reads += abundance;
-    otu.samples.push_back(abundance);  // push to map
+    otu.samples.push_back(std::stoul(buf));  // test if abundance > unsigned int!!!!!
     ++n_values;
   }
 
@@ -116,8 +112,9 @@ auto parse_each_otu (std::unordered_map<std::string, struct OTU> &OTUs,
   }
 
   // add more results to the map
-  otu.spread = spread;
-  otu.sum_reads = sum_reads;
+  const auto has_reads = [](const auto n_reads) { return n_reads > 0; };
+  otu.spread = static_cast<unsigned int>(std::ranges::count_if(otu.samples, has_reads));
+  otu.sum_reads = std::accumulate(otu.samples.begin(), otu.samples.end(), 0UL);
   OTUs[OTU_id] = otu;
 }
 
