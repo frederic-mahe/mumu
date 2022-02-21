@@ -188,18 +188,16 @@ auto read_match_list (std::unordered_map<std::string, struct OTU> &OTUs,
         continue;
       }
 
-      // update map only if query is less abundant than hit (should I
-      // swap query and hit to make sure the match is taken into
-      // account if the comparison matrix is not complete?)
-      auto hit_sum_reads {OTUs[hit].sum_reads};
-      if (OTUs[query].sum_reads < hit_sum_reads) {
-        Match match;  // use direct value initialization here!!!
-        match.similarity = similarity;
-        match.hit_sum_reads = hit_sum_reads;
-        match.hit_spread = OTUs[hit].spread;
-        match.hit_id = hit;
-        OTUs[query].matches.push_back(match);  // no need to reserve(10)?
+      // ignore matches to lesser abundant OTUs
+      if (OTUs[query].sum_reads >= OTUs[hit].sum_reads) {
+        continue;
       }
+      Match match;  // use direct value initialization here!!!
+      match.similarity = similarity;
+      match.hit_sum_reads = OTUs[hit].sum_reads;
+      match.hit_spread = OTUs[hit].spread;
+      match.hit_id = hit;
+      OTUs[query].matches.push_back(match);  // no need to reserve(10)?
     }
   match_list.close();
   std::cout << "done" << std::endl;
