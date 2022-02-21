@@ -192,7 +192,7 @@ auto read_match_list (std::unordered_map<std::string, struct OTU> &OTUs,
         continue;
       }
 
-      OTUs[query].matches.push_back(Match {
+      OTUs[query].matches.emplace_back(Match {
           .similarity = similarity,
           .hit_sum_reads = OTUs[hit].sum_reads,
           .hit_spread = OTUs[hit].spread,
