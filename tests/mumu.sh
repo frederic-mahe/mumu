@@ -1005,6 +1005,19 @@ awk '{if (NR > 1) {exit ($1 == "A" && $2 == 8) ? 0 : 1}}' "${NEW_OTU_TABLE}" && 
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
+## OTUs with the same abundance are not merged
+# A son cannot be as abundant as its father (to avoid circular linking
+# among OTUs of the same abundance).
+# expect OTU table with three lines
+DESCRIPTION="mumu OTUs with the same abundance are not merged"
+"${MUMU}" \
+    --otu_table <(printf "OTUs\ts1\nA\t1\nB\t1\n") \
+    --match_list <(printf "A\tB\t99.0\nB\tA\t99.0\n") \
+    --new_otu_table >(awk ' END {exit NR == 3 ? 0 : 1}' && \
+                          success "${DESCRIPTION}" || \
+                              failure "${DESCRIPTION}") \
+    --log /dev/null > /dev/null
+
 # merged OTUs are sorted by decreasing abundance (B 5 reads, then A with 4 reads)
 ## input
 # OTUs	s1
