@@ -50,16 +50,9 @@
 
 
 [[nodiscard]]
-auto count_columns (const std::string &line) -> unsigned int {
-  auto columns {0U};
-
-  std::string buf;
-  std::stringstream otu_raw_data(line);
-  while (getline(otu_raw_data, buf, sepchar)) {
-    ++columns;
-  }
-
-  return columns;
+auto count_samples (const std::string &line) -> unsigned int {
+  // count column separators, which is equal to the number of samples
+  return static_cast<unsigned int>(std::ranges::count(line, sepchar));
 }
 
 
@@ -70,13 +63,13 @@ auto parse_and_output_first_line (const std::string &line,
   std::ofstream new_otu_table {parameters.new_otu_table};
   new_otu_table << line << '\n';
   new_otu_table.close();
-  return count_columns(line);
+  return count_samples(line);
 }
 
 
 auto parse_each_otu (std::unordered_map<std::string, struct OTU> &OTUs,
                      std::string &line,
-                     unsigned int header_columns) -> void {
+                     unsigned int n_samples) -> void {
   std::stringstream otu_raw_data(line);
   std::string OTU_id;
   OTU otu;
@@ -89,8 +82,8 @@ auto parse_each_otu (std::unordered_map<std::string, struct OTU> &OTUs,
     fatal("duplicated OTU name: " + OTU_id);
   }
 
-  // we know there are (columns - 1) samples
-  otu.samples.reserve(header_columns - 1);
+  // we know there are n samples
+  otu.samples.reserve(n_samples);
 
   // get abundance values (rest of the line)
   for (const auto abundance : std::ranges::istream_view<unsigned long int>(otu_raw_data)) {
@@ -98,7 +91,7 @@ auto parse_each_otu (std::unordered_map<std::string, struct OTU> &OTUs,
   }
 
   // sanity check
-  if ((otu.samples.size() + 1) != header_columns) {
+  if (otu.samples.size() != n_samples) {
     fatal("variable number of columns in OTU table");
   }
 
@@ -119,12 +112,12 @@ auto read_otu_table (std::unordered_map<std::string, struct OTU> &OTUs,
 
   // first line: get number of columns, write headers to new OTU table
   std::getline(otu_table, line);
-  const auto header_columns {parse_and_output_first_line(line, parameters)};
+  const auto n_samples {parse_and_output_first_line(line, parameters)};
 
   // parse other lines, and map the values
   while (std::getline(otu_table, line))
     {
-      parse_each_otu(OTUs, line, header_columns);
+      parse_each_otu(OTUs, line, n_samples);
     }
   otu_table.close();
   std::cout << "done, " << OTUs.size() << " entries" << std::endl;
