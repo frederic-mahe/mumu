@@ -70,23 +70,20 @@ auto parse_and_output_first_line (const std::string &line,
 auto parse_each_otu (std::unordered_map<std::string, struct OTU> &OTUs,
                      std::string &line,
                      unsigned int n_samples) -> void {
-  OTU otu;
-
   // get OTU id
-  const auto first_sep{line.find_first_of(sepchar)};
+  const auto first_sep {line.find_first_of(sepchar)};
   const std::string OTU_id {line.substr(0, first_sep)};
-  std::stringstream otu_raw_data(line.substr(first_sep + 1));
 
   // check for duplicates
   if (OTUs.contains(OTU_id)) {
     fatal("duplicated OTU name: " + OTU_id);
   }
 
-  // we know there are n samples
+  // get abundance values (rest of the line, we know there are n samples)
+  OTU otu;
   otu.samples.reserve(n_samples);
-
-  // get abundance values (rest of the line)
-  for (const auto abundance : std::ranges::istream_view<unsigned long int>(otu_raw_data)) {
+  std::stringstream abundances {line.substr(first_sep + 1)};
+  for (const auto abundance : std::ranges::istream_view<unsigned long int>(abundances)) {
         otu.samples.push_back(abundance);
   }
 
@@ -99,7 +96,7 @@ auto parse_each_otu (std::unordered_map<std::string, struct OTU> &OTUs,
   const auto has_reads = [](const auto n_reads) { return n_reads > 0; };
   otu.spread = static_cast<unsigned int>(std::ranges::count_if(otu.samples, has_reads));
   otu.sum_reads = std::accumulate(otu.samples.begin(), otu.samples.end(), 0UL);
-  OTUs[OTU_id] = otu;
+  OTUs[OTU_id] = std::move(otu);
 }
 
 
