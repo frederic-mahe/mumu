@@ -70,12 +70,12 @@ auto parse_and_output_first_line (const std::string &line,
 auto parse_each_otu (std::unordered_map<std::string, struct OTU> &OTUs,
                      std::string &line,
                      unsigned int n_samples) -> void {
-  std::stringstream otu_raw_data(line);
-  std::string OTU_id;
   OTU otu;
 
-  // get OTU id (first item of the line)
-  getline(otu_raw_data, OTU_id, sepchar);
+  // get OTU id
+  const auto first_sep{line.find_first_of(sepchar)};
+  const std::string OTU_id {line.substr(0, first_sep)};
+  std::stringstream otu_raw_data(line.substr(first_sep + 1));
 
   // check for duplicates
   if (OTUs.contains(OTU_id)) {
