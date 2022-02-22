@@ -838,7 +838,7 @@ rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 DESCRIPTION="mumu accepts empty input files and creates empty output files (OTU table)"
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
-NEW_OTU_TABLE="tmp.table"
+NEW_OTU_TABLE=$(mktemp)
 LOG=$(mktemp)
 "${MUMU}" \
     --otu_table "${OTU_TABLE}" \
@@ -854,7 +854,7 @@ DESCRIPTION="mumu accepts empty input files and creates empty output files (log 
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
 NEW_OTU_TABLE=$(mktemp)
-LOG="tmp.log"
+LOG=$(mktemp)
 "${MUMU}" \
     --otu_table "${OTU_TABLE}" \
     --match_list "${MATCH_LIST}" \
