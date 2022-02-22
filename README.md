@@ -3,25 +3,40 @@
 ![C/C++ CI](https://github.com/frederic-mahe/mumu/workflows/C/C++%20CI/badge.svg)
 ![coverage](https://github.com/frederic-mahe/mumu/workflows/code%20coverage/badge.svg)
 
-stand-alone C++ implementation and enhancement of
+fast and robust C++ implementation of
 [lulu](https://github.com/tobiasgf/lulu), a R package for
 post-clustering curation of metabarcoding data
 
-(not fully tested yet, use **very** carefully)
+**mumu** is fully tested, with 116 carefully crafted individual
+black-box tests, covering 100% of the application-specific C++
+code. Tests are written using common Unix/Linux shell utilities. Some
+C++ internal tests are also used (_assertions_), but these are only
+active at compile-time or at runtime when compiling with the _debug_
+flag.
 
-The first goal is to produce a thoroughly tested and fast alternative
-for lulu (more than 10 times faster, lesser memory footprint). Testing
-is done using a black-box approach: feed mumu with carefully designed
-input values and observe the results. All these tests are written
-using common Unix/Linux shell utilities. Some C++ internal tests are
-also used (_assertions_), but these are only active when compiling in
-_debug_ mode.
+**mumu** uses C++20 features to make the code simpler, easier to
+maintain and to port to other systems. The downside is that using mumu
+requires a recent compiler and C++ libraries (GCC 10 or more recent,
+clang YY or more recent). If your system only provides an older
+compiler, a singularity/docker image is available.
 
-The second goal is to test and implement the latest C++ features
-(c++17 and soon c++20) to make the code simpler, easier to maintain
-and to port to other systems. The negative effect is that using mumu
-requires a recent compiler and C++ library (GCC 8.3 or more recent,
-clang 4 or more recent). With =make=, these are the only dependencies.
+## Getting Started
+
+
+- clone (`git clone https://github.com/frederic-mahe/mumu.git`)
+- dependencies (make and a recent compiler, GNU tools for testing)
+- compile
+- test
+- run
+- singularity recipe and image
+
+Native compilation on Windows machine, as well as BSD systems is a
+work in progress.
+
+**mumu** is currently feature-complete (nothing is missing), but
+refactoring will continue and new versions will be released as soon as
+more C++ features (C++20 modules, C++23 ranges, etc.) are standardized
+and supported by compilers.
 
 About the name of the project, *m* is simply the next letter
 after *l*, hence *mumu*.
