@@ -32,7 +32,7 @@ CXXFLAGS := -std=c++2a -Wall -Wextra -g -Wshadow -Wnon-virtual-dtor \
 	-Wnull-dereference -Wuseless-cast -Wdouble-promotion -Wformat=2
 SPECIFIC := -O3 -DNDEBUG -flto
 
-srcfiles := $(shell find ./src/ -name "*.cpp")
+srcfiles := $(shell find ./src/ -name "*.cpp" -type f)
 objects  := $(patsubst %.cpp, %.o, $(srcfiles))
 
 %.o: %.cpp
