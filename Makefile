@@ -60,7 +60,7 @@ clean:
 	rm -rf ./src/out
 
 dist-clean: clean
-	rm -f *~ ./src/*~ ./test/*~ ./man/*~
+	rm -f *~ ./src/*~ ./tests/*~ ./man/*~
 
 install: $(PROG) $(MAN)
 	/usr/bin/install -c $(PROG) '/usr/local/bin'
