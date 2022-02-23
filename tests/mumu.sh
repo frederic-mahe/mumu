@@ -1897,6 +1897,8 @@ DESCRIPTION="mumu allows parent to be missing in some samples (lulu bug)"
                           success "${DESCRIPTION}" || \
                               failure "${DESCRIPTION}") > /dev/null
 
+wait
+
 exit 0
 
 ## TODO:
