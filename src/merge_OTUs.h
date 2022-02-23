@@ -21,6 +21,7 @@
 // 34398 MONTPELLIER CEDEX 5
 // France
 
+#include <string>
 #include <unordered_map>
 
 auto merge_OTUs (std::unordered_map<std::string, struct OTU> &OTUs) -> void;
