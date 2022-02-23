@@ -32,19 +32,17 @@
 
 [[nodiscard]]
 auto count_samples (const std::string &line) -> unsigned int {
-  // count column separators, which is equal to the number of samples
+  // number of column separators is equal to the number of samples
   return static_cast<unsigned int>(std::ranges::count(line, sepchar));
 }
 
 
-[[nodiscard]]
-auto parse_and_output_first_line (const std::string &line,
-                                  struct Parameters const &parameters) -> unsigned int {
-  // first line: get number of columns, write headers to new OTU table
+auto output_first_line (const std::string &line,
+                        struct Parameters const &parameters) -> void {
+  // write header line to new OTU table
   std::ofstream new_otu_table {parameters.new_otu_table};
   new_otu_table << line << '\n';
   new_otu_table.close();
-  return count_samples(line);
 }
 
 
@@ -88,9 +86,10 @@ auto read_otu_table (std::unordered_map<std::string, struct OTU> &OTUs,
   std::ifstream otu_table {parameters.otu_table};
   std::string line;
 
-  // first line: get number of columns, write headers to new OTU table
+  // first line
   std::getline(otu_table, line);
-  const auto n_samples {parse_and_output_first_line(line, parameters)};
+  output_first_line(line, parameters);
+  const auto n_samples {count_samples(line)};
 
   // parse other lines, and map the values
   while (std::getline(otu_table, line))
