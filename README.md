@@ -24,7 +24,7 @@ compiler, a singularity/docker image is available.
 
 
 - clone (`git clone https://github.com/frederic-mahe/mumu.git`)
-- dependencies (make and a recent compiler, GNU tools for testing)
+- dependencies (`make` and a recent compiler, GNU tools for testing)
 - compile
 - test
 - run
