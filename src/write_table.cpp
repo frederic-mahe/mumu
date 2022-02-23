@@ -36,6 +36,16 @@ struct OTU_stats {
 };
 
 
+auto compare_two_OTUs = [](const OTU_stats& lhs, const OTU_stats& rhs) {
+  // sort by decreasing abundance,
+  // if equal, sort by decreasing spread,
+  // if equal, sort by ASCIIbetical order (A, B, ..., a, b, c, ...)
+  return
+    std::tie(rhs.abundance, rhs.spread, lhs.OTU_id) <
+    std::tie(lhs.abundance, lhs.spread, rhs.OTU_id);
+ };
+
+
 [[nodiscard]]
 auto extract_OTU_stats (std::unordered_map<std::string, struct OTU> &OTUs)
   -> std::vector<struct OTU_stats> {
@@ -52,21 +62,13 @@ auto extract_OTU_stats (std::unordered_map<std::string, struct OTU> &OTUs)
                              {.OTU_id = OTU_id,
                               .spread = std::ranges::count_if(OTUs[OTU_id].samples, has_reads),
                               .abundance = OTUs[OTU_id].sum_reads
-                             }
-                             );
+                             });
   }
+  // sort it by decreasing abundance, spread and id name
+  std::ranges::sort(sorted_OTUs, compare_two_OTUs);
+
   return sorted_OTUs;
 }
-
-
-auto compare_two_OTUs = [](const OTU_stats& lhs, const OTU_stats& rhs) {
-  // sort by decreasing abundance,
-  // if equal, sort by decreasing spread,
-  // if equal, sort by ASCIIbetical order (A, B, ..., a, b, c, ...)
-  return
-    std::tie(rhs.abundance, rhs.spread, lhs.OTU_id) <
-    std::tie(lhs.abundance, lhs.spread, rhs.OTU_id);
- };
 
 
 auto write_table (std::unordered_map<std::string, struct OTU> &OTUs,
@@ -81,8 +83,6 @@ auto write_table (std::unordered_map<std::string, struct OTU> &OTUs,
     new_otu_table.close();
     return;
   }
-  // sort it by decreasing abundance, spread and id name
-  std::ranges::sort(sorted_OTUs, compare_two_OTUs);
 
   // output 
   for (auto const& otu: sorted_OTUs) {
