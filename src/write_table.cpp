@@ -66,6 +66,7 @@ auto extract_OTU_stats (std::unordered_map<std::string, struct OTU> &OTUs)
   }
   // sort it by decreasing abundance, spread and id name
   std::ranges::sort(sorted_OTUs, compare_two_OTUs);
+  sorted_OTUs.shrink_to_fit();  // reduces memory usage
 
   return sorted_OTUs;
 }
@@ -76,7 +77,7 @@ auto write_table (std::unordered_map<std::string, struct OTU> &OTUs,
   std::cout << "write new OTU table... ";
   // re-open output file
   std::ofstream new_otu_table {new_otu_table_name, std::ios_base::app};
-  // get a list of OTUs (move to an independent function: extract_and_sort_OTUs
+  // get a list of OTUs
   const auto sorted_OTUs {extract_OTU_stats(OTUs)};
   if (sorted_OTUs.empty()) {
     std::cout << "done, empty table\n";
