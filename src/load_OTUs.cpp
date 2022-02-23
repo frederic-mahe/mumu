@@ -29,25 +29,6 @@
 #include "mumu.h"
 #include "utils.h"
 
-// // work in progress: use operator overload to parse match list file
-// struct Match_line {
-//   std::string query;
-//   std::string hit;
-//   float similarity {0.0};
-// };
-
-// std::istream& operator>>(std::istream& is, Match_line& line) {
-//   Match_line new_line;
-//   if(is >> std::ws
-//      && std::getline(is, new_line.query, sepchar)
-//      && std::getline(is, new_line.hit, sepchar)
-//      && std::getline(is, new_line.similarity, sepchar))  // similarity = std::stof(buf); !!
-//     {
-//       line = new_line; // could do more validation here
-//     }
-//   return is;
-// }
-
 
 [[nodiscard]]
 auto count_samples (const std::string &line) -> unsigned int {
@@ -118,65 +99,4 @@ auto read_otu_table (std::unordered_map<std::string, struct OTU> &OTUs,
     }
   otu_table.close();
   std::cout << "done, " << OTUs.size() << " entries" << std::endl;
-}
-
-
-auto read_match_list (std::unordered_map<std::string, struct OTU> &OTUs,
-                      struct Parameters const &parameters) -> void {
-  std::cout << "parse match list... ";
-  // open input file
-  std::ifstream match_list {parameters.match_list};
-
-  // expect three columns
-  std::string line;
-  while (std::getline(match_list, line))
-    {
-      std::string buf;
-      std::string query;
-      std::string hit;
-      std::stringstream match_raw_data(line);
-      getline(match_raw_data, query, sepchar);
-      getline(match_raw_data, hit, sepchar);
-      getline(match_raw_data, buf, sepchar);
-
-      // sanity check
-      if (getline(match_raw_data, buf, sepchar)) {
-        fatal("match list entry has more than three columns");
-      }
-
-      if (buf.empty()) {
-        fatal("empty similarity value in line: " + line);
-      }
-
-      try {
-        static_cast<void>(std::stod(buf));
-      } catch (std::invalid_argument const& ex) {
-        fatal("illegal similarity value in line: " + line);
-      }
-
-      const auto similarity {std::stod(buf)};
-
-      // ignore matches below our similarity threshold
-      if (similarity < parameters.minimum_match) { continue; }
-
-      // ignore match entries that are not in the OTU table
-      if ((not OTUs.contains(hit)) or (not OTUs.contains(query))) {
-        std::cout << "\nwarning: one of these is not in the OTU table: " << line << '\n';
-        continue;
-      }
-
-      // ignore matches to lesser abundant OTUs
-      if (OTUs[query].sum_reads >= OTUs[hit].sum_reads) {
-        continue;
-      }
-
-      OTUs[query].matches.emplace_back(Match {
-          .similarity = similarity,
-          .hit_sum_reads = OTUs[hit].sum_reads,
-          .hit_spread = OTUs[hit].spread,
-          .hit_id = hit}
-        );  // no need to reserve(10)?
-    }
-  match_list.close();
-  std::cout << "done" << std::endl;
 }
