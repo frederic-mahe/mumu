@@ -36,28 +36,6 @@ struct OTU_stats {
 };
 
 
-[[nodiscard]]
-auto extract_OTU_stats (std::unordered_map<std::string, struct OTU> &OTUs)
-  -> std::vector<struct OTU_stats> {
-  // goal is to get a sortable list of OTUs
-  std::vector<struct OTU_stats> sorted_OTUs;
-  sorted_OTUs.reserve(OTUs.size());  // probably 25-50% too much
-  for (auto const& otu: OTUs) {  // replace with copy_if()?
-    const std::string& OTU_id {otu.first};
-    if (OTUs[OTU_id].is_merged) { continue; }  // skip merged OTUs
-    OTU_stats otu_stats;
-    otu_stats.OTU_id = OTU_id;
-    otu_stats.abundance = OTUs[OTU_id].sum_reads;
-    
-    // spread must be re-computed :-(
-    const auto has_reads = [](const auto n_reads) { return n_reads > 0; };
-    otu_stats.spread = std::ranges::count_if(OTUs[OTU_id].samples, has_reads);
-    sorted_OTUs.push_back(otu_stats);
-  }
-  return sorted_OTUs;
-}
-
-
 auto compare_two_OTUs = [](const OTU_stats& lhs, const OTU_stats& rhs) {
   // sort by decreasing abundance,
   // if equal, sort by decreasing spread,
@@ -68,20 +46,39 @@ auto compare_two_OTUs = [](const OTU_stats& lhs, const OTU_stats& rhs) {
  };
 
 
+[[nodiscard]]
+auto extract_OTU_stats (std::unordered_map<std::string, struct OTU> &OTUs)
+  -> std::vector<struct OTU_stats> {
+  // goal is to get a sortable list of OTUs
+  std::vector<struct OTU_stats> sorted_OTUs;
+  sorted_OTUs.reserve(OTUs.size());  // probably 25-50% too much
+  for (auto const& otu: OTUs) {  // replace with copy_if()?
+    const std::string& OTU_id {otu.first};
+    if (OTUs[OTU_id].is_merged) { continue; }  // skip merged OTUs
+    
+    // spread must be re-computed :-(
+    const auto has_reads = [](const auto n_reads) { return n_reads > 0; };
+    sorted_OTUs.emplace_back(OTU_stats
+                             {.OTU_id = OTU_id,
+                              .spread = std::ranges::count_if(OTUs[OTU_id].samples, has_reads),
+                              .abundance = OTUs[OTU_id].sum_reads
+                             });
+  }
+  // sort it by decreasing abundance, spread and id name
+  std::ranges::sort(sorted_OTUs, compare_two_OTUs);
+  sorted_OTUs.shrink_to_fit();  // reduces memory usage
+
+  return sorted_OTUs;
+}
+
+
 auto write_table (std::unordered_map<std::string, struct OTU> &OTUs,
                   const std::string &new_otu_table_name) -> void {
   std::cout << "write new OTU table... ";
   // re-open output file
   std::ofstream new_otu_table {new_otu_table_name, std::ios_base::app};
-  // get a list of OTUs (move to an independent function: extract_and_sort_OTUs
-  auto sorted_OTUs = extract_OTU_stats(OTUs);
-  if (sorted_OTUs.empty()) {
-    std::cout << "done, empty table\n";
-    new_otu_table.close();
-    return;
-  }
-  // sort it by decreasing abundance, spread and id name
-  std::ranges::sort(sorted_OTUs, compare_two_OTUs);
+  // list and sort remaining OTUs
+  const auto sorted_OTUs {extract_OTU_stats(OTUs)};
 
   // output 
   for (auto const& otu: sorted_OTUs) {

@@ -32,7 +32,7 @@ CXXFLAGS := -std=c++2a -Wall -Wextra -g -Wshadow -Wnon-virtual-dtor \
 	-Wnull-dereference -Wuseless-cast -Wdouble-promotion -Wformat=2
 SPECIFIC := -O3 -DNDEBUG -flto
 
-srcfiles := $(shell find ./src/ -name "*.cpp")
+srcfiles := $(shell find ./src/ -name "*.cpp" -type f)
 objects  := $(patsubst %.cpp, %.o, $(srcfiles))
 
 %.o: %.cpp
@@ -56,11 +56,12 @@ profile: all
 
 clean:
 	rm -f $(objects) $(PROG) compile_commands.json ./src/*.gcov \
-	./src/*.gcda ./src/*.gcno ./*.gcov ./src/main_coverage.info
+	./src/*.gcda ./src/*.gcno ./src/.gdb_history ./*.gcov \
+	./src/main_coverage.info ./tests/gmon.out
 	rm -rf ./src/out
 
 dist-clean: clean
-	rm -f *~ ./src/*~ ./test/*~ ./man/*~
+	rm -f *~ ./src/*~ ./tests/*~ ./man/*~
 
 install: $(PROG) $(MAN)
 	/usr/bin/install -c $(PROG) '/usr/local/bin'

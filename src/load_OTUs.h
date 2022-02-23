@@ -24,4 +24,5 @@
 #include <string>
 #include <unordered_map>
 
-auto merge_OTUs (std::unordered_map<std::string, struct OTU> &OTUs) -> void;
+auto read_otu_table (std::unordered_map<std::string, struct OTU> &OTUs,
+                     struct Parameters const &parameters) -> void;
