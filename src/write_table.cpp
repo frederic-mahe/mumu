@@ -45,14 +45,15 @@ auto extract_OTU_stats (std::unordered_map<std::string, struct OTU> &OTUs)
   for (auto const& otu: OTUs) {  // replace with copy_if()?
     const std::string& OTU_id {otu.first};
     if (OTUs[OTU_id].is_merged) { continue; }  // skip merged OTUs
-    OTU_stats otu_stats;
-    otu_stats.OTU_id = OTU_id;
-    otu_stats.abundance = OTUs[OTU_id].sum_reads;
     
     // spread must be re-computed :-(
     const auto has_reads = [](const auto n_reads) { return n_reads > 0; };
-    otu_stats.spread = std::ranges::count_if(OTUs[OTU_id].samples, has_reads);
-    sorted_OTUs.push_back(otu_stats);
+    sorted_OTUs.emplace_back(OTU_stats
+                             {.OTU_id = OTU_id,
+                              .spread = std::ranges::count_if(OTUs[OTU_id].samples, has_reads),
+                              .abundance = OTUs[OTU_id].sum_reads
+                             }
+                             );
   }
   return sorted_OTUs;
 }
