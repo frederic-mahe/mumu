@@ -33,8 +33,6 @@
 #include <limits>
 
 constexpr auto n_options {12U};
-constexpr auto max_n_chars_per_option {3U};  // three at most: 'f::'
-constexpr auto optstring_max_length {n_options * max_n_chars_per_option};
 
 constexpr std::array<struct option, n_options> long_options {{
     // standard options
