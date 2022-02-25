@@ -49,7 +49,7 @@ struct Parameters {
   bool is_match_list {false};
   bool is_new_otu_table {false};
   bool is_log {false};
-  unsigned int padding {0};
+  unsigned int padding_P {0};
   std::string otu_table;
   std::string match_list;
   std::string new_otu_table;
@@ -93,5 +93,5 @@ struct OTU {
   bool is_mergeable {false};
   bool is_merged {false};
   bool is_root {false};
-  bool padding {false};
+  bool padding_O {false};
 };
