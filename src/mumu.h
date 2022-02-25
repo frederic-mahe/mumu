@@ -68,6 +68,18 @@ struct Match {
   unsigned long int hit_sum_reads {0};
   unsigned int hit_spread {0};
   std::string hit_id;
+
+  auto operator<=> (Match const& rhs) const {
+    // order by similarity,
+    // if equal, order by abundance,
+    // if equal, order by spread,
+    // if equal, lexicographic order (A, B, ..., a, b, c, ...)
+    return
+      std::tie(similarity, hit_sum_reads, hit_spread, rhs.hit_id) <=>
+      std::tie(rhs.similarity, rhs.hit_sum_reads, rhs.hit_spread, hit_id);
+  }
+
+  bool operator== (Match const& rhs) const = default;
 };
 
 
