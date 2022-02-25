@@ -23,8 +23,8 @@
 
 #include <fstream>
 #include <iostream>
-#include <iterator>
 #include <numeric>
+#include <ranges>
 #include <sstream>
 #include <stdexcept>
 #include "mumu.h"
