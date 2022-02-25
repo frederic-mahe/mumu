@@ -49,6 +49,7 @@ struct Parameters {
   bool is_match_list {false};
   bool is_new_otu_table {false};
   bool is_log {false};
+  unsigned int padding {0};
   std::string otu_table;
   std::string match_list;
   std::string new_otu_table;
@@ -66,7 +67,7 @@ struct Parameters {
 struct Match {
   double similarity {0.0};
   unsigned long int hit_sum_reads {0};
-  unsigned int hit_spread {0};
+  unsigned long int hit_spread {0};
   std::string hit_id;  // refactor: replace with string_view?
 
   auto operator<=> (Match const& rhs) const {
