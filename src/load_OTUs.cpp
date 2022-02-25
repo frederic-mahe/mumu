@@ -23,6 +23,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <iterator>
 #include <numeric>
 #include <sstream>
 #include <stdexcept>
