@@ -87,9 +87,10 @@ struct OTU {
   std::vector<struct Match> matches;
   std::vector<unsigned long int> samples;
   std::string father_id;  // std::string_view? no
-  unsigned int spread {0};
   unsigned long int sum_reads {0};
+  unsigned int spread {0};
   bool is_mergeable {false};
   bool is_merged {false};
   bool is_root {false};
+  bool padding {false};
 };
