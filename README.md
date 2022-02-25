@@ -20,6 +20,10 @@ requires a recent compiler and C++ libraries (GCC 10 or more recent,
 clang YY or more recent). If your system only provides an older
 compiler, a singularity/docker image is available.
 
+About the name of the project, *m* is simply the next letter after
+*l*, hence *mumu*.
+
+
 ## Getting Started
 
 - clone (`git clone https://github.com/frederic-mahe/mumu.git`)
@@ -52,6 +56,3 @@ and supported by compilers.
 - [ ] faster output with `std::format` (2023),
 - [ ] native compilation on Windows,
 - [ ] native compilation on BSD,
-
-About the name of the project, *m* is simply the next letter
-after *l*, hence *mumu*.
