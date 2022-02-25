@@ -53,8 +53,14 @@ mumu \
     --new_otu_table new_OTU.table
 ```
 
-- build a Apptainer (ex-singularity) image:
-  - WIP
+- alternatively, build an Apptainer (ex-singularity) image for systems with older compilers:
+```sh
+# build image with singularity 3.8.5 (Alpine edge with GCC 11.2 [2022-02-25])
+singularity build --fakeroot --force mumu-alpine.sif mumu-alpine.recipe
+
+# test (image is appr. 6 MB)
+singularity run mumu-alpine.sif --help
+```
 
 Native compilation on Windows machine, as well as BSD systems is a
 work in progress.
@@ -77,6 +83,7 @@ and supported by compilers.
 - [x] compile without warnings with GCC 11,
 - [ ] compile without warnings with GCC 12 (April 2022),
 - [ ] compile without warnings with clang (bug with =std::ranges=, still present in clang-14),
+- [ ] fix the five minor failed tests when running on Alpine,
 - [ ] allow named pipes (input/output),
 - [ ] test performances on ARM64 GNU/Linux (Raspberry),
 - [ ] faster output with `std::format` (in 2023),

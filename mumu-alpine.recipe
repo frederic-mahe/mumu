@@ -1,0 +1,28 @@
+BootStrap: docker
+From: alpine:edge
+
+%post
+    apk update
+    apk add --no-cache libstdc++ make g++ git bash
+    mkdir -p /usr/local/share/man/
+    cd /tmp/
+    rm -rf ./mumu/
+    git clone https://github.com/frederic-mahe/mumu.git
+    cd /tmp/mumu/
+    gcc --version
+    make
+    make install
+    bash ./tests/mumu.sh
+    cd /tmp/
+    rm -rf ./mumu/
+    apk del make g++ git bash
+
+%runscript
+    mumu $@
+
+%labels
+    Author Frédéric Mahé
+    Version v1.0.0
+
+%help
+    mumu requires C++ compilers and libraries with C++20 support. This container allows mumu to run on outdated systems.
