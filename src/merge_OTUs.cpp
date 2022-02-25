@@ -68,6 +68,7 @@ auto update_spread_values (std::unordered_map<std::string, struct OTU> &OTUs) ->
     const std::string& OTU_id {otu.first};
     // skip unmodified OTUs
     if (not OTUs[OTU_id].is_root) { continue; }
+
     auto has_reads = [](const auto n_reads) { return n_reads > 0; };
     OTUs[OTU_id].spread = static_cast<unsigned int>(std::ranges::count_if(OTUs[OTU_id].samples, has_reads));
   }
