@@ -22,6 +22,7 @@
 // France
 
 #include <algorithm>
+#include <compare>
 #include <fstream>
 #include <ios>
 #include <iostream>
@@ -33,17 +34,18 @@ struct OTU_stats {
   std::string OTU_id;
   long int spread {0};
   unsigned long int abundance {0};
+
+  auto operator<=> (OTU_stats const& rhs) const {
+    // order by abundance,
+    // if equal, order by spread,
+    // if equal, lexicographic ID order (A, B, ..., a, b, c, ...)
+    return
+      std::tie(abundance, spread, rhs.OTU_id) <=>
+      std::tie(rhs.abundance, rhs.spread, OTU_id);
+  }
+
+  bool operator== (OTU_stats const& rhs) const = default;
 };
-
-
-auto compare_two_OTUs = [](const OTU_stats& lhs, const OTU_stats& rhs) {
-  // sort by decreasing abundance,
-  // if equal, sort by decreasing spread,
-  // if equal, sort by ASCIIbetical order (A, B, ..., a, b, c, ...)
-  return
-    std::tie(rhs.abundance, rhs.spread, lhs.OTU_id) <
-    std::tie(lhs.abundance, lhs.spread, rhs.OTU_id);
- };
 
 
 [[nodiscard]]
@@ -64,8 +66,8 @@ auto extract_OTU_stats (std::unordered_map<std::string, struct OTU> &OTUs)
         .abundance = OTUs[OTU_id].sum_reads}
       );
   }
-  // sort it by decreasing abundance, spread and id name
-  std::ranges::sort(sorted_OTUs, compare_two_OTUs);
+  // sort by decreasing abundance, spread and id name
+  std::ranges::sort(sorted_OTUs, std::ranges::greater{});
   sorted_OTUs.shrink_to_fit();  // reduces memory usage
 
   return sorted_OTUs;
