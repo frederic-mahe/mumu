@@ -26,12 +26,35 @@ About the name of the project, *m* is simply the next letter after
 
 ## Getting Started
 
-- clone (`git clone https://github.com/frederic-mahe/mumu.git`)
-- dependencies (`make` and a recent compiler, GNU tools for testing)
-- compile
-- test
-- run
-- singularity recipe and image
+- [clone](https://github.com/frederic-mahe/mumu.git) or
+  [download](https://github.com/frederic-mahe/mumu/archive/refs/heads/main.zip)
+  a copy the repository:
+
+```sh
+git clone https://github.com/frederic-mahe/mumu.git
+cd ./mumu/
+make
+make check
+make install  # as root or sudo
+```
+
+- dependencies are minimal:
+  - a GNU/Linux 64-bit system,
+  - `make`
+  - a recent GCC compiler (GCC 10 or more recent),
+  - GNU tools for testing
+
+- run (see `mumu --help` and `man mumu` for details):
+```sh
+mumu \
+    --otu_table OTU.table \
+    --match_list matches.list \
+    --log /dev/null \
+    --new_otu_table new_OTU.table
+```
+
+- build a Apptainer (ex-singularity) image:
+  - WIP
 
 Native compilation on Windows machine, as well as BSD systems is a
 work in progress.
@@ -50,9 +73,16 @@ and supported by compilers.
 - [x] high software quality score (softwipe),
 - [x] allow empty input files,
 - [x] allow process substitutions (input/output),
+- [x] compile without warnings with GCC 10,
+- [x] compile without warnings with GCC 11,
+- [ ] compile without warnings with GCC 12 (April 2022),
+- [ ] compile without warnings with clang (bug with =std::ranges=, still present in clang-14),
 - [ ] allow named pipes (input/output),
-- [ ] test compilation on different versions of clang,
-- [ ] test performances on ARM64 (Raspberry),
-- [ ] faster output with `std::format` (2023),
-- [ ] native compilation on Windows,
-- [ ] native compilation on BSD,
+- [ ] test performances on ARM64 GNU/Linux (Raspberry),
+- [ ] faster output with `std::format` (in 2023),
+- [ ] native compilation on Windows (issue with =getopt.h=) ,
+- [ ] native compilation on BSD (issue with the Makefile),
+- [ ] native compilation on macOS,
+
+**mumu** releases will be following the
+[http://semver.org/spec/v2.0.0.html](Semantic Versioning 2.0.0) rules.
