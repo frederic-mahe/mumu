@@ -35,7 +35,7 @@ constexpr auto accept_as_parent {"accepted"};
 constexpr auto reject_as_parent {"rejected"};
 
 struct Stats {
-  std::string son_id;
+  std::string son_id;  //refactor: string_view
   std::string father_id;
   double similarity {0.0};
   unsigned long int son_total_abundance {1};
