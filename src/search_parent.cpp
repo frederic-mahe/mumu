@@ -45,6 +45,7 @@ struct Stats {
   unsigned int son_spread {0};
   unsigned int father_spread {0};
   unsigned int father_overlap_spread {0};
+  unsigned int padding {0};
   double smallest_ratio {largest_double};
   double sum_ratio {0.0};
   double avg_ratio {0.0};
