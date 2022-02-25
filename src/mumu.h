@@ -79,4 +79,5 @@ struct OTU {
   unsigned long int sum_reads {0};
   bool is_mergeable {false};
   bool is_merged {false};
+  bool is_root {false};
 };
