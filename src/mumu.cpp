@@ -55,6 +55,7 @@ auto main (int argc, char** argv) -> int {
 
   // merge, sort and output
   merge_OTUs(OTUs);
+  update_spread_values(OTUs);
   write_table(OTUs, parameters.new_otu_table);
 
   return 0;  // should be EXIT_SUCCESS??

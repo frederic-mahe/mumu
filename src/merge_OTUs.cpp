@@ -60,3 +60,16 @@ auto merge_OTUs (std::unordered_map<std::string, struct OTU> &OTUs) -> void {
   }
   std::cout << "done" << std::endl;
 }
+
+
+auto update_spread_values (std::unordered_map<std::string, struct OTU> &OTUs) -> void {
+  std::cout << "update spread values... ";
+  for (auto& otu : OTUs) {
+    const std::string& OTU_id {otu.first};
+    // skip unmodified OTUs
+    if (not OTUs[OTU_id].is_root) { continue; }
+    auto has_reads = [](const auto n_reads) { return n_reads > 0; };
+    OTUs[OTU_id].spread = static_cast<unsigned int>(std::ranges::count_if(OTUs[OTU_id].samples, has_reads));
+  }
+  std::cout << "done" << std::endl;
+}
