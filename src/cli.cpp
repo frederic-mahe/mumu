@@ -114,7 +114,7 @@ auto parse_args (int argc, char ** argv, Parameters &parameters) -> void {
       break;
 
     case 'a':  // minimum match (default is 84.0)
-      parameters.minimum_match = std::stof(optarg);
+      parameters.minimum_match = std::stod(optarg);
       break;
 
     case 'b':  // minimum ratio type (default is "min")
@@ -122,11 +122,11 @@ auto parse_args (int argc, char ** argv, Parameters &parameters) -> void {
       break;
 
     case 'c':  // minimum ratio (default is 1.0)
-      parameters.minimum_ratio = std::stof(optarg);
+      parameters.minimum_ratio = std::stod(optarg);
       break;
 
     case 'd':  // minimum relative cooccurence (default is 0.95)
-      parameters.minimum_relative_cooccurence = std::stof(optarg);
+      parameters.minimum_relative_cooccurence = std::stod(optarg);
       break;
 
     case 'h':  // help message
