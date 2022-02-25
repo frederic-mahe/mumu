@@ -28,17 +28,6 @@
 #include "mumu.h"
 
 
-auto compare_two_matches = [](const Match& lhs, const Match& rhs) {
-  // sort by decreasing similarity,
-  // if equal, sort by decreasing abundance,
-  // if equal, sort by decreasing spread,
-  // if equal, sort by ASCIIbetical order (A, B, ..., a, b, c, ...)
-  return
-    std::tie(rhs.similarity, rhs.hit_sum_reads, rhs.hit_spread, lhs.hit_id) <
-    std::tie(lhs.similarity, lhs.hit_sum_reads, lhs.hit_spread, rhs.hit_id);
- };
-
-
 auto sort_matches (std::unordered_map<std::string, struct OTU> &OTUs) -> void {
   std::cout << "sort lists of matches... ";
   // refactor as range view
@@ -48,7 +37,7 @@ auto sort_matches (std::unordered_map<std::string, struct OTU> &OTUs) -> void {
     // ignore OTUs with zero or one match
     if (OTUs[OTU_id].matches.size() < 2) { continue; }
     
-    std::ranges::sort(OTUs[OTU_id].matches, compare_two_matches);
+    std::ranges::sort(OTUs[OTU_id].matches, std::ranges::greater{});
   }
   std::cout << "done" << std::endl;
 }

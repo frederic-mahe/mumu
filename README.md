@@ -22,7 +22,6 @@ compiler, a singularity/docker image is available.
 
 ## Getting Started
 
-
 - clone (`git clone https://github.com/frederic-mahe/mumu.git`)
 - dependencies (`make` and a recent compiler, GNU tools for testing)
 - compile
@@ -33,10 +32,26 @@ compiler, a singularity/docker image is available.
 Native compilation on Windows machine, as well as BSD systems is a
 work in progress.
 
+
+## Roadmap
+
 **mumu** is currently feature-complete (nothing is missing), but
 refactoring will continue and new versions will be released as soon as
 more C++ features (C++20 modules, C++23 ranges, etc.) are standardized
 and supported by compilers.
+
+- [x] replicate lulu's results,
+- [x] fix lulu's bug,
+- [x] allow chained merges,
+- [x] high software quality score (softwipe),
+- [x] allow empty input files,
+- [x] allow process substitutions (input/output),
+- [ ] allow named pipes (input/output),
+- [ ] test compilation on different versions of clang,
+- [ ] test performances on ARM64 (Raspberry),
+- [ ] faster output with `std::format` (2023),
+- [ ] native compilation on Windows,
+- [ ] native compilation on BSD,
 
 About the name of the project, *m* is simply the next letter
 after *l*, hence *mumu*.

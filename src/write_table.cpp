@@ -22,6 +22,7 @@
 // France
 
 #include <algorithm>
+#include <compare>
 #include <fstream>
 #include <ios>
 #include <iostream>
@@ -33,17 +34,18 @@ struct OTU_stats {
   std::string OTU_id;
   long int spread {0};
   unsigned long int abundance {0};
+
+  auto operator<=> (OTU_stats const& rhs) const {
+    // order by abundance,
+    // if equal, order by spread,
+    // if equal, lexicographic ID order (A, B, ..., a, b, c, ...)
+    return
+      std::tie(abundance, spread, rhs.OTU_id) <=>
+      std::tie(rhs.abundance, rhs.spread, OTU_id);
+  }
+
+  bool operator== (OTU_stats const& rhs) const = default;
 };
-
-
-auto compare_two_OTUs = [](const OTU_stats& lhs, const OTU_stats& rhs) {
-  // sort by decreasing abundance,
-  // if equal, sort by decreasing spread,
-  // if equal, sort by ASCIIbetical order (A, B, ..., a, b, c, ...)
-  return
-    std::tie(rhs.abundance, rhs.spread, lhs.OTU_id) <
-    std::tie(lhs.abundance, lhs.spread, rhs.OTU_id);
- };
 
 
 [[nodiscard]]
@@ -55,17 +57,15 @@ auto extract_OTU_stats (std::unordered_map<std::string, struct OTU> &OTUs)
   for (auto const& otu: OTUs) {  // replace with copy_if()?
     const std::string& OTU_id {otu.first};
     if (OTUs[OTU_id].is_merged) { continue; }  // skip merged OTUs
-    
-    // spread must be re-computed :-(
-    const auto has_reads = [](const auto n_reads) { return n_reads > 0; };
-    sorted_OTUs.emplace_back(OTU_stats
-                             {.OTU_id = OTU_id,
-                              .spread = std::ranges::count_if(OTUs[OTU_id].samples, has_reads),
-                              .abundance = OTUs[OTU_id].sum_reads
-                             });
+
+    sorted_OTUs.push_back(OTU_stats {
+        .OTU_id = OTU_id,
+        .spread = OTUs[OTU_id].spread,
+        .abundance = OTUs[OTU_id].sum_reads}
+      );
   }
-  // sort it by decreasing abundance, spread and id name
-  std::ranges::sort(sorted_OTUs, compare_two_OTUs);
+  // sort by decreasing abundance, spread and id name
+  std::ranges::sort(sorted_OTUs, std::ranges::greater{});
   sorted_OTUs.shrink_to_fit();  // reduces memory usage
 
   return sorted_OTUs;

@@ -25,3 +25,5 @@
 #include <unordered_map>
 
 auto merge_OTUs (std::unordered_map<std::string, struct OTU> &OTUs) -> void;
+
+auto update_spread_values (std::unordered_map<std::string, struct OTU> &OTUs) -> void;
