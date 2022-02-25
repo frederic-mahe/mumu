@@ -16,9 +16,9 @@ flag.
 
 **mumu** uses C++20 features to make the code simpler, easier to
 maintain and to port to other systems. The downside is that using mumu
-requires a recent compiler and C++ libraries (GCC 10 or more recent,
-clang YY or more recent). If your system only provides an older
-compiler, a singularity/docker image is available.
+requires a recent compiler and C++ libraries (GCC 10 or more
+recent). If your system only provides an older compiler, a
+singularity/docker image is available.
 
 About the name of the project, *m* is simply the next letter after
 *l*, hence *mumu*.
@@ -53,7 +53,7 @@ mumu \
     --new_otu_table new_OTU.table
 ```
 
-- alternatively, build an Apptainer (ex-singularity) image for systems with older compilers:
+- alternatively, build an [Apptainer](http://apptainer.org/) (ex-singularity) image for systems with older compilers:
 ```sh
 # build image with singularity 3.8.5
 # (Alpine edge with GCC 11.2 [2022-02-25])
@@ -87,7 +87,7 @@ and supported by compilers.
 - [x] compile without warnings with GCC 10,
 - [x] compile without warnings with GCC 11,
 - [ ] compile without warnings with GCC 12 (April 2022),
-- [ ] compile without warnings with clang (`std::ranges` not yet supported in clang-14),
+- [ ] compile with clang (`std::ranges` not yet supported in clang-14),
 - [ ] fix the five minor failed tests when running on Alpine,
 - [ ] allow named pipes (input/output),
 - [ ] test performances on ARM64 GNU/Linux (Raspberry),
