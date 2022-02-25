@@ -32,7 +32,7 @@
 
 struct OTU_stats {
   std::string OTU_id;
-  long int spread {0};
+  long int spread {0};  // refactor; type is not correct
   unsigned long int abundance {0};
 
   auto operator<=> (OTU_stats const& rhs) const {

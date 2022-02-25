@@ -33,7 +33,7 @@ static_assert(UINT_MAX > UINT16_MAX, "unsigned integers are too small");
 static_assert(UINT_MAX >= UINT32_MAX, "unsigned integers are too small");
 
 constexpr auto sepchar {'\t'};
-constexpr std::string_view n_version {"0.0.1"};
+constexpr std::string_view n_version {"1.0.0"};
 constexpr std::string_view copyright_years {"2020-2022"};
 constexpr auto threads_default {1U};
 constexpr auto minimum_match_default {84.0};
@@ -49,6 +49,7 @@ struct Parameters {
   bool is_match_list {false};
   bool is_new_otu_table {false};
   bool is_log {false};
+  unsigned int padding {0};
   std::string otu_table;
   std::string match_list;
   std::string new_otu_table;
@@ -66,8 +67,8 @@ struct Parameters {
 struct Match {
   double similarity {0.0};
   unsigned long int hit_sum_reads {0};
-  unsigned int hit_spread {0};
-  std::string hit_id;
+  unsigned long int hit_spread {0};
+  std::string hit_id;  // refactor: replace with string_view?
 
   auto operator<=> (Match const& rhs) const {
     // order by similarity,
@@ -87,9 +88,10 @@ struct OTU {
   std::vector<struct Match> matches;
   std::vector<unsigned long int> samples;
   std::string father_id;  // std::string_view? no
-  unsigned int spread {0};
   unsigned long int sum_reads {0};
+  unsigned int spread {0};
   bool is_mergeable {false};
   bool is_merged {false};
   bool is_root {false};
+  bool padding {false};
 };

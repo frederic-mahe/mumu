@@ -33,8 +33,6 @@
 #include <limits>
 
 constexpr auto n_options {12U};
-constexpr auto max_n_chars_per_option {3U};  // three at most: 'f::'
-constexpr auto optstring_max_length {n_options * max_n_chars_per_option};
 
 constexpr std::array<struct option, n_options> long_options {{
     // standard options
@@ -85,7 +83,8 @@ auto help () -> void {
     << " --minimum_match FLOAT                minimum similarity threshold (84.0)\n"
     << " --minimum_ratio FLOAT                minimum abundance ratio (1.0)\n"
     << " --minimum_ratio_type STRING          \"min\" or \"avg\" abundance ratio (\"min\")\n"
-    << " --minimum_relative_cooccurence FLOAT relative father-son spread (0.95)\n\n";
+    << " --minimum_relative_cooccurence FLOAT relative father-son spread (0.95)\n\n"
+    << "See 'man mumu' for more details.\n";
 }
 
 
@@ -116,7 +115,7 @@ auto parse_args (int argc, char ** argv, Parameters &parameters) -> void {
       break;
 
     case 'a':  // minimum match (default is 84.0)
-      parameters.minimum_match = std::stof(optarg);
+      parameters.minimum_match = std::stod(optarg);
       break;
 
     case 'b':  // minimum ratio type (default is "min")
@@ -124,11 +123,11 @@ auto parse_args (int argc, char ** argv, Parameters &parameters) -> void {
       break;
 
     case 'c':  // minimum ratio (default is 1.0)
-      parameters.minimum_ratio = std::stof(optarg);
+      parameters.minimum_ratio = std::stod(optarg);
       break;
 
     case 'd':  // minimum relative cooccurence (default is 0.95)
-      parameters.minimum_relative_cooccurence = std::stof(optarg);
+      parameters.minimum_relative_cooccurence = std::stod(optarg);
       break;
 
     case 'h':  // help message

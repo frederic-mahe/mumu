@@ -35,7 +35,7 @@ constexpr auto accept_as_parent {"accepted"};
 constexpr auto reject_as_parent {"rejected"};
 
 struct Stats {
-  std::string son_id;
+  std::string son_id;  //refactor: string_view
   std::string father_id;
   double similarity {0.0};
   unsigned long int son_total_abundance {1};
@@ -45,6 +45,7 @@ struct Stats {
   unsigned int son_spread {0};
   unsigned int father_spread {0};
   unsigned int father_overlap_spread {0};
+  unsigned int padding {0};
   double smallest_ratio {largest_double};
   double sum_ratio {0.0};
   double avg_ratio {0.0};

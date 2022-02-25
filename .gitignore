@@ -1,5 +1,6 @@
 *~
 *.o
+*.pdf
 mumu
 .depend
 .gdb_history
@@ -10,3 +11,6 @@ gmon.out
 *.gcov
 tmp*
 mumu.org
+dev_checks.sh
+mumu-alpine.sif
+test_dataset.tar.xz
