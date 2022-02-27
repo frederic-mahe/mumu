@@ -3,7 +3,7 @@
 ![C/C++ CI](https://github.com/frederic-mahe/mumu/workflows/C/C++%20CI/badge.svg)
 ![coverage](https://github.com/frederic-mahe/mumu/workflows/code%20coverage/badge.svg)
 
-(GitHub CI only provides an older version of GCC, hence the failed builds and test coverages)
+(GitHub CI only provides an older version of GCC, hence the failed builds, tests and code coverage)
 
 fast and robust C++ implementation of
 [lulu](https://github.com/tobiasgf/lulu), a R package for
