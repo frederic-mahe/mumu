@@ -88,7 +88,7 @@ and supported by compilers.
 - [x] allow process substitutions (input/output),
 - [x] compile without warnings with GCC 10,
 - [x] compile without warnings with GCC 11,
-- [ ] compile without warnings with GCC 12 (April 2022),
+- [x] compile without warnings with GCC 12,
 - [ ] compile with clang (`std::ranges` not yet supported in clang-14),
 - [ ] fix the five minor failed tests when running on Alpine,
 - [ ] allow named pipes (input/output),
@@ -96,7 +96,7 @@ and supported by compilers.
 - [ ] faster output with `std::format` (in 2023),
 - [ ] native compilation on Windows (issue with `getopt.h`) ,
 - [ ] native compilation on BSD (issue with the Makefile),
-- [ ] native compilation on macOS,
+- [ ] native compilation on macOS
 
 **mumu** releases will be following the [Semantic Versioning
 2.0.0](http://semver.org/spec/v2.0.0.html) rules.
