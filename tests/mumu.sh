@@ -1519,7 +1519,8 @@ printf "A\tB\t96.5\nB\tA\t96.5\n" > "${MATCH_LIST}"
     --match_list "${MATCH_LIST}" \
     --new_otu_table "${NEW_OTU_TABLE}" \
     --log "${LOG}" > /dev/null 2>&1
-awk '{exit $3 == 96.5 ? 0 : 1}' "${LOG}" && \
+
+awk '{exit $3 == "96.50" ? 0 : 1}' "${LOG}" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
@@ -1655,7 +1656,7 @@ printf "A\tB\t96.5\nB\tA\t96.5\n" > "${MATCH_LIST}"
     --match_list "${MATCH_LIST}" \
     --new_otu_table "${NEW_OTU_TABLE}" \
     --log "${LOG}" > /dev/null 2>&1
-awk '{exit $11 == 10 ? 0 : 1}' "${LOG}" && \
+awk '{exit $11 == "10.00" ? 0 : 1}' "${LOG}" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
@@ -1672,7 +1673,7 @@ printf "A\tB\t96.5\nB\tA\t96.5\n" > "${MATCH_LIST}"
     --match_list "${MATCH_LIST}" \
     --new_otu_table "${NEW_OTU_TABLE}" \
     --log "${LOG}" > /dev/null 2>&1
-awk '{exit $11 == 0 ? 0 : 1}' "${LOG}" && \
+awk '{exit $11 == "0.00" ? 0 : 1}' "${LOG}" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
@@ -1689,7 +1690,7 @@ printf "A\tB\t96.5\nB\tA\t96.5\n" > "${MATCH_LIST}"
     --match_list "${MATCH_LIST}" \
     --new_otu_table "${NEW_OTU_TABLE}" \
     --log "${LOG}" > /dev/null 2>&1
-awk '{exit $12 == 1 ? 0 : 1}' "${LOG}" && \
+awk '{exit $12 == "1.00" ? 0 : 1}' "${LOG}" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
@@ -1723,7 +1724,7 @@ printf "A\tB\t96.5\nB\tA\t96.5\n" > "${MATCH_LIST}"
     --match_list "${MATCH_LIST}" \
     --new_otu_table "${NEW_OTU_TABLE}" \
     --log "${LOG}" > /dev/null 2>&1
-awk '{exit $13 == 1.5 ? 0 : 1}' "${LOG}" && \
+awk '{exit $13 == "1.50" ? 0 : 1}' "${LOG}" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
@@ -1740,7 +1741,7 @@ printf "A\tB\t96.5\nB\tA\t96.5\n" > "${MATCH_LIST}"
     --match_list "${MATCH_LIST}" \
     --new_otu_table "${NEW_OTU_TABLE}" \
     --log "${LOG}" > /dev/null 2>&1
-awk '{exit $13 == 0.5 ? 0 : 1}' "${LOG}" && \
+awk '{exit $13 == "0.50" ? 0 : 1}' "${LOG}" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
@@ -1757,7 +1758,7 @@ printf "A\tB\t96.5\nB\tA\t96.5\n" > "${MATCH_LIST}"
     --match_list "${MATCH_LIST}" \
     --new_otu_table "${NEW_OTU_TABLE}" \
     --log "${LOG}" > /dev/null 2>&1
-awk '{exit $13 == 0.0 ? 0 : 1}' "${LOG}" && \
+awk '{exit $13 == "0.00" ? 0 : 1}' "${LOG}" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
@@ -1774,7 +1775,7 @@ printf "A\tB\t96.5\nB\tA\t96.5\n" > "${MATCH_LIST}"
     --match_list "${MATCH_LIST}" \
     --new_otu_table "${NEW_OTU_TABLE}" \
     --log "${LOG}" > /dev/null 2>&1
-awk '{exit $14 == 1 ? 0 : 1}' "${LOG}" && \
+awk '{exit $14 == "1.00" ? 0 : 1}' "${LOG}" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
@@ -1791,7 +1792,7 @@ printf "A\tB\t96.5\nB\tA\t96.5\n" > "${MATCH_LIST}"
     --match_list "${MATCH_LIST}" \
     --new_otu_table "${NEW_OTU_TABLE}" \
     --log "${LOG}" > /dev/null 2>&1
-awk '{exit $15 == 1 ? 0 : 1}' "${LOG}" && \
+awk '{exit $15 == "1.00" ? 0 : 1}' "${LOG}" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
@@ -1808,7 +1809,7 @@ printf "A\tB\t96.5\nB\tA\t96.5\n" > "${MATCH_LIST}"
     --match_list "${MATCH_LIST}" \
     --new_otu_table "${NEW_OTU_TABLE}" \
     --log "${LOG}" > /dev/null 2>&1
-awk '{exit $16 == 2 ? 0 : 1}' "${LOG}" && \
+awk '{exit $16 == "2.00" ? 0 : 1}' "${LOG}" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
@@ -1825,7 +1826,7 @@ printf "A\tB\t96.5\nB\tA\t96.5\n" > "${MATCH_LIST}"
     --match_list "${MATCH_LIST}" \
     --new_otu_table "${NEW_OTU_TABLE}" \
     --log "${LOG}" > /dev/null 2>&1
-awk '{exit $17 == 1.0 ? 0 : 1}' "${LOG}" && \
+awk '{exit $17 == "1.00" ? 0 : 1}' "${LOG}" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
