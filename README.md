@@ -20,7 +20,7 @@ flag.
 maintain and to port to other systems. The downside is that using mumu
 requires a recent compiler and C++ libraries (GCC 10 or more
 recent). If your system only provides an older compiler, a
-singularity/docker image is available.
+recipe for a singularity/docker image is available.
 
 About the name of the project, *m* is simply the next letter after
 *l*, hence *mumu*.
