@@ -362,7 +362,7 @@ LOG=$(mktemp)
     --new_otu_table "${NEW_OTU_TABLE}" \
     --log "${LOG}" \
     -z 2>&1 | \
-    grep -q "invalid" &&
+    grep -qE "invalid|unrecognized" &&
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
