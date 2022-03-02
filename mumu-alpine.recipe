@@ -12,8 +12,7 @@ From: alpine:edge
     make
     make install
     bash ./tests/mumu.sh
-    cd /tmp/
-    rm -rf ./mumu/
+    rm -rf /tmp/mumu/
     apk del make g++ git bash
 
 %runscript
