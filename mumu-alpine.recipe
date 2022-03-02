@@ -2,7 +2,6 @@ BootStrap: docker
 From: alpine:edge
 
 %post
-    apk update
     apk add --no-cache libstdc++ make g++ git bash
     mkdir -p /usr/local/share/man/
     cd /tmp/
