@@ -65,7 +65,7 @@ singularity \
     --force mumu-alpine.sif \
     mumu-alpine.recipe
 
-# test (image is appr. 6 MB)
+# test (image is appr. 4 MB)
 singularity run mumu-alpine.sif --help
 ```
 

@@ -2,7 +2,6 @@ BootStrap: docker
 From: alpine:edge
 
 %post
-    apk update
     apk add --no-cache libstdc++ make g++ git bash
     mkdir -p /usr/local/share/man/
     cd /tmp/
@@ -12,9 +11,8 @@ From: alpine:edge
     gcc --version
     make
     make install
-    bash ./tests/mumu.sh
-    cd /tmp/
-    rm -rf ./mumu/
+    make check
+    rm -rf /tmp/mumu/
     apk del make g++ git bash
 
 %runscript
@@ -25,4 +23,4 @@ From: alpine:edge
     Version v1.0.0
 
 %help
-    mumu requires C++ compilers and libraries with C++20 support. This container allows mumu to run on outdated systems.
+    mumu requires C++ compilers and libraries with C++20 support. This container allows mumu to run on outdated systems. Note that four tests fail when running them as root; this is normal.
