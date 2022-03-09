@@ -73,7 +73,7 @@ auto parse_each_otu (std::unordered_map<std::string, struct OTU> &OTUs,
   }
 
   // add more results to the map
-  const auto has_reads = [](const auto n_reads) { return n_reads > 0; };
+  auto has_reads = [](const auto n_reads) { return n_reads > 0; };
   otu.spread = static_cast<unsigned int>(std::ranges::count_if(otu.samples, has_reads));
   otu.sum_reads = std::accumulate(otu.samples.begin(), otu.samples.end(), 0UL);
   OTUs[OTU_id] = std::move(otu);

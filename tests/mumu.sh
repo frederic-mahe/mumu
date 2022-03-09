@@ -175,77 +175,82 @@ LOG=$(mktemp)
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
-## mumu stops with an error if input files can't be read
-DESCRIPTION="mumu stops with an error if input files can\'t be read (1)"
-OTU_TABLE=$(mktemp)
-MATCH_LIST=$(mktemp)
-NEW_OTU_TABLE=$(mktemp)
-LOG=$(mktemp)
-chmod -r "${OTU_TABLE}"
-"${MUMU}" \
-    --otu_table "${OTU_TABLE}" \
-    --match_list "${MATCH_LIST}" \
-    --new_otu_table "${NEW_OTU_TABLE}" \
-    --log "${LOG}" 2>&1 | \
-    grep -q "^Error:" && \
-    success "${DESCRIPTION}" || \
-        failure "${DESCRIPTION}"
-chmod +r "${OTU_TABLE}"
-rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+## some user (root, sudo) can bypass all permission settings, making
+## these tests pointless
+if grep --quiet --invert-match "sudo" <(groups $(whoami)) ; then
 
-## mumu stops with an error if input files can't be read
-DESCRIPTION="mumu stops with an error if input files can\'t be read (2)"
-OTU_TABLE=$(mktemp)
-MATCH_LIST=$(mktemp)
-NEW_OTU_TABLE=$(mktemp)
-LOG=$(mktemp)
-chmod -r "${MATCH_LIST}"
-"${MUMU}" \
-    --otu_table "${OTU_TABLE}" \
-    --match_list "${MATCH_LIST}" \
-    --new_otu_table "${NEW_OTU_TABLE}" \
-    --log "${LOG}" 2>&1 | \
-    grep -q "^Error:" && \
-    success "${DESCRIPTION}" || \
-        failure "${DESCRIPTION}"
-chmod +r "${MATCH_LIST}"
-rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+    ## mumu stops with an error if input files can't be read
+    DESCRIPTION="mumu stops with an error if input files can\'t be read (1)"
+    OTU_TABLE=$(mktemp)
+    MATCH_LIST=$(mktemp)
+    NEW_OTU_TABLE=$(mktemp)
+    LOG=$(mktemp)
+    chmod -r "${OTU_TABLE}"
+    "${MUMU}" \
+        --otu_table "${OTU_TABLE}" \
+        --match_list "${MATCH_LIST}" \
+        --new_otu_table "${NEW_OTU_TABLE}" \
+        --log "${LOG}" 2>&1 | \
+        grep -q "^Error:" && \
+        success "${DESCRIPTION}" || \
+            failure "${DESCRIPTION}"
+    chmod +r "${OTU_TABLE}"
+    rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
-## mumu stops with an error if output files can't be overwritten
-DESCRIPTION="mumu stops with an error if output files can\'t be overwritten (1)"
-OTU_TABLE=$(mktemp)
-MATCH_LIST=$(mktemp)
-NEW_OTU_TABLE=$(mktemp)
-LOG=$(mktemp)
-chmod -w "${NEW_OTU_TABLE}"
-"${MUMU}" \
-    --otu_table "${OTU_TABLE}" \
-    --match_list "${MATCH_LIST}" \
-    --new_otu_table "${NEW_OTU_TABLE}" \
-    --log "${LOG}" 2>&1 | \
-    grep -q "^Error:" && \
-    success "${DESCRIPTION}" || \
-        failure "${DESCRIPTION}"
-chmod +w "${NEW_OTU_TABLE}"
-rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+    ## mumu stops with an error if input files can't be read
+    DESCRIPTION="mumu stops with an error if input files can\'t be read (2)"
+    OTU_TABLE=$(mktemp)
+    MATCH_LIST=$(mktemp)
+    NEW_OTU_TABLE=$(mktemp)
+    LOG=$(mktemp)
+    chmod -r "${MATCH_LIST}"
+    "${MUMU}" \
+        --otu_table "${OTU_TABLE}" \
+        --match_list "${MATCH_LIST}" \
+        --new_otu_table "${NEW_OTU_TABLE}" \
+        --log "${LOG}" 2>&1 | \
+        grep -q "^Error:" && \
+        success "${DESCRIPTION}" || \
+            failure "${DESCRIPTION}"
+    chmod +r "${MATCH_LIST}"
+    rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
-## mumu outputs a warning if output files can't be overwritten
-DESCRIPTION="mumu outputs a warning if output files can\'t be overwritten (2)"
-OTU_TABLE=$(mktemp)
-MATCH_LIST=$(mktemp)
-NEW_OTU_TABLE=$(mktemp)
-LOG=$(mktemp)
-chmod -w "${LOG}"
-"${MUMU}" \
-    --otu_table "${OTU_TABLE}" \
-    --match_list "${MATCH_LIST}" \
-    --new_otu_table "${NEW_OTU_TABLE}" \
-    --log "${LOG}" 2>&1 | \
-    grep -q "^Error:" && \
-    success "${DESCRIPTION}" || \
-        failure "${DESCRIPTION}"
-chmod +w "${LOG}"
-rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+    ## mumu stops with an error if output files can't be overwritten
+    DESCRIPTION="mumu stops with an error if output files can\'t be overwritten (1)"
+    OTU_TABLE=$(mktemp)
+    MATCH_LIST=$(mktemp)
+    NEW_OTU_TABLE=$(mktemp)
+    LOG=$(mktemp)
+    chmod -w "${NEW_OTU_TABLE}"
+    "${MUMU}" \
+        --otu_table "${OTU_TABLE}" \
+        --match_list "${MATCH_LIST}" \
+        --new_otu_table "${NEW_OTU_TABLE}" \
+        --log "${LOG}" 2>&1 | \
+        grep -q "^Error:" && \
+        success "${DESCRIPTION}" || \
+            failure "${DESCRIPTION}"
+    chmod +w "${NEW_OTU_TABLE}"
+    rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
+    ## mumu outputs a warning if output files can't be overwritten
+    DESCRIPTION="mumu outputs a warning if output files can\'t be overwritten (2)"
+    OTU_TABLE=$(mktemp)
+    MATCH_LIST=$(mktemp)
+    NEW_OTU_TABLE=$(mktemp)
+    LOG=$(mktemp)
+    chmod -w "${LOG}"
+    "${MUMU}" \
+        --otu_table "${OTU_TABLE}" \
+        --match_list "${MATCH_LIST}" \
+        --new_otu_table "${NEW_OTU_TABLE}" \
+        --log "${LOG}" 2>&1 | \
+        grep -q "^Error:" && \
+        success "${DESCRIPTION}" || \
+            failure "${DESCRIPTION}"
+    chmod +w "${LOG}"
+    rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+fi
 
 ## mumu can write to the null device
 DESCRIPTION="mumu can write to the null device"
