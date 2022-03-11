@@ -177,7 +177,7 @@ rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
 ## some user (root, sudo) can bypass all permission settings, making
 ## these tests pointless
-if grep -q -v "sudo" <(groups $(whoami)) ; then
+if [[ "$(whoami)" != "root" ]] && grep -q -v "sudo" <(groups $(whoami)) ; then
 
     ## mumu stops with an error if input files can't be read
     DESCRIPTION="mumu stops with an error if input files can\'t be read (1)"
