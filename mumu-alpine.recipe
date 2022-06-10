@@ -12,7 +12,7 @@ From: alpine:edge
     make
     make install
     make check
-    rm -rf /tmp/mumu/
+    rm -rf /tmp/mumu/ /usr/local/share/man/
     apk del make g++ git bash
 
 %runscript
