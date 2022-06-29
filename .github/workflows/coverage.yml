@@ -18,5 +18,4 @@ jobs:
     - name: make coverage
       run: make coverage
     - name: print coverage
-      run: |
-        bash ./tests/coverage.sh"
+      run: bash ./tests/coverage.sh
