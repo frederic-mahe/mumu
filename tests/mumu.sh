@@ -655,6 +655,108 @@ printf "OTUs\ts1\nA\t5\nB\t\n" > "${OTU_TABLE}"
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}"
 
+DESCRIPTION="mumu accepts positive integer abundance values in the OTU table"
+"${MUMU}" \
+    --otu_table <(printf "OTUs\ts1\nA\t5\n") \
+    --match_list <(printf "") \
+    --new_otu_table /dev/null \
+    --log /dev/null > /dev/null 2>&1 && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
+DESCRIPTION="mumu silently parses negative integer abundance values in the OTU table"
+"${MUMU}" \
+    --otu_table <(printf "OTUs\ts1\nA\t-1\n") \
+    --match_list <(printf "") \
+    --new_otu_table /dev/null \
+    --log /dev/null > /dev/null 2>&1 && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
+DESCRIPTION="mumu incorrectly parses negative integer abundance values in the OTU table"
+# 18446744073709551615 = (2^64 - 1)
+"${MUMU}" \
+    --otu_table <(printf "OTUs\ts1\nA\t-1\n") \
+    --match_list <(printf "") \
+    --new_otu_table /dev/stdout \
+    --log /dev/null 2> /dev/null | \
+    grep -qw "18446744073709551615$" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
+DESCRIPTION="mumu silently parses decimal abundance values in the OTU table"
+"${MUMU}" \
+    --otu_table <(printf "OTUs\ts1\nA\t5.1\n") \
+    --match_list <(printf "") \
+    --new_otu_table /dev/null \
+    --log /dev/null > /dev/null 2>&1 && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
+DESCRIPTION="mumu trims decimal abundance values in the OTU table (5.1 -> 5)"
+"${MUMU}" \
+    --otu_table <(printf "OTUs\ts1\nA\t5.1\n") \
+    --match_list <(printf "") \
+    --new_otu_table /dev/stdout \
+    --log /dev/null 2> /dev/null | \
+    grep -qw "5$" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
+DESCRIPTION="mumu trims decimal abundance values in the OTU table (0.1 -> 0)"
+"${MUMU}" \
+    --otu_table <(printf "OTUs\ts1\nA\t0.1\n") \
+    --match_list <(printf "") \
+    --new_otu_table /dev/stdout \
+    --log /dev/null 2> /dev/null | \
+    grep -qw "0$" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
+DESCRIPTION="mumu trims decimal abundance values in the OTU table (0.0 -> 0)"
+"${MUMU}" \
+    --otu_table <(printf "OTUs\ts1\nA\t0.0\n") \
+    --match_list <(printf "") \
+    --new_otu_table /dev/stdout \
+    --log /dev/null 2> /dev/null | \
+    grep -qw "0$" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
+DESCRIPTION="mumu accepts decimal abundance values with an integral part in the OTU table (0.1 -> 0)"
+("${MUMU}" \
+     --otu_table <(printf "OTUs\ts1\nA\t0.1\n") \
+     --match_list <(printf "") \
+     --new_otu_table /dev/stdout \
+     --log /dev/null 2> /dev/null | \
+     grep -qw "0$")  # use a subshell to mask the exception message
+
+(( $? == 0 )) && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
+DESCRIPTION="mumu rejects decimal abundance values without an integral part in the OTU table (.1 -> 0)"
+("${MUMU}" \
+     --otu_table <(printf "OTUs\ts1\nA\t.1\n") \
+     --match_list <(printf "") \
+     --new_otu_table /dev/stdout \
+     --log /dev/null 2> /dev/null | \
+     grep -qw "0$")  # use a subshell to mask the exception message
+
+(( $? == 1 )) && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
+DESCRIPTION="mumu floors decimal abundance values in the OTU table (5.9 -> 5)"
+"${MUMU}" \
+    --otu_table <(printf "OTUs\ts1\nA\t5.9\n") \
+    --match_list <(printf "") \
+    --new_otu_table /dev/stdout \
+    --log /dev/null 2> /dev/null | \
+    grep -qw "5$" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
 DESCRIPTION="mumu stops with an error if the OTU table has a non-numerical value (NA)"
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
@@ -752,10 +854,10 @@ DESCRIPTION="mumu can write to a substitution process"
 # mkfifo fifo_OTU_TABLE
 
 # "${MUMU}" \
-#     --otu_table fifo_OTU_TABLE \
-#     --match_list /dev/null \
-#     --log /dev/null \
-#     --new_otu_table /dev/stdout &
+    #     --otu_table fifo_OTU_TABLE \
+    #     --match_list /dev/null \
+    #     --log /dev/null \
+    #     --new_otu_table /dev/stdout &
 
 # printf "OTUs\ts1\nA\t2\nB\t1\n" > fifo_OTU_TABLE
 # rm fifo_OTU_TABLE
@@ -932,6 +1034,26 @@ printf "OTUs\ts1\ts1\ts1\nA\t1\t5\t10\n" > "${OTU_TABLE}"
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
+## sample names are not relevant (can be empty, or identical)
+DESCRIPTION="mumu accepts empty sample names in the OTU table"
+"${MUMU}" \
+    --otu_table <(printf "OTU\t\t\nA\t1\t1\n") \
+    --match_list <(printf "") \
+    --new_otu_table /dev/null \
+    --log /dev/null > /dev/null 2>&1 && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
+## first column name is not relevant (can be empty)
+DESCRIPTION="mumu accepts a empty first cell in the OTU table"
+"${MUMU}" \
+    --otu_table <(printf "\ts1\nA\t1\n") \
+    --match_list <(printf "") \
+    --new_otu_table /dev/null \
+    --log /dev/null > /dev/null 2>&1 && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
 
 DESCRIPTION="mumu stops with an error if an OTU name appears more than once"
 OTU_TABLE=$(mktemp)
