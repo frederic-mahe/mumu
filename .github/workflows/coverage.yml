@@ -19,4 +19,4 @@ jobs:
       run: make coverage
     - name: print coverage
       run: |
-        echo "coverage: $( bash ./tests/coverage.sh )%"
+        bash ./tests/coverage.sh"
