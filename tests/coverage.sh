@@ -17,6 +17,6 @@ coverage=$(
 rm -f ./*.gcov
 
 echo "coverage: ${coverage}%"
-(( ${coverage} != 100 )) && exit 1
+(( ${coverage} <= 95 )) && exit 1
 
 exit 0
