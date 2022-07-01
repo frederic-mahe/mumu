@@ -31,7 +31,7 @@
 
 
 struct OTU_stats {
-  std::string OTU_id;
+  std::string OTU_id;  // should be a string_view
   long int spread {0};  // refactor; type is not correct
   unsigned long int abundance {0};
 
