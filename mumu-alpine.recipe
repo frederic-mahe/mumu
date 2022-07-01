@@ -23,4 +23,4 @@ From: alpine:edge
     Version v1.0.0
 
 %help
-    mumu requires C++ compilers and libraries with C++20 support. This container allows mumu to run on outdated systems. Note that four tests fail when running them as root; this is normal.
+    mumu requires C++ compilers and libraries with C++20 support. This container allows mumu to run on older systems.
