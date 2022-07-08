@@ -2118,6 +2118,32 @@ awk '{exit $7 == 0 ? 0 : 1}' "${LOG}" && \
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
 
+# mumu: initial = final + accepted
+DESCRIPTION="mumu: initial = final + accepted"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\nA\t5\nB\t2\nC\t1\n" > "${OTU_TABLE}"
+printf "A\tB\t96.5\nB\tA\t96.5\nB\tC\t96.5\nC\tB\t96.5\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log "${LOG}" 2>&1 > /dev/null
+
+accepted=$(grep -c "accepted$" "${LOG}")
+final=$(tail -n +2 "${NEW_OTU_TABLE}" | wc -l)
+initial=$(tail -n +2 "${OTU_TABLE}" | wc -l)
+
+(( $initial == $accepted + $final )) && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+unset initial accepted final
+
+
 ## mumu allows parent to be missing in some samples (lulu bug)
 
 # Here 'A' is missing from the first sample. The relative cooccurence
