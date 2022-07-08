@@ -1,5 +1,5 @@
 .\" ============================================================================
-.TH mumu 1 "June 29, 2022" "version 1.0.0" "USER COMMANDS"
+.TH mumu 1 "July 8, 2022" "version 1.0.1" "USER COMMANDS"
 .\" ============================================================================
 .SH NAME
 mumu \(em post-clustering curation of metabarcoding data
@@ -343,6 +343,11 @@ at
 New features and important modifications of \fBmumu\fR (short lived
 or minor bug releases may not be mentioned):
 .RS
+.TP
+.BR v1.0.1\~ "released July 8th, 2022"
+fix a minor bug in the log output: 'query abundance overlap' was equal
+to 'query abundance', which is incorrect when there is only a partial
+overlap with the parent.
 .TP
 .BR v1.0\~ "released March 1st, 2022"
 First public release.
