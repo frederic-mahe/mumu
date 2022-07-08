@@ -2028,6 +2028,96 @@ awk '{exit ($1 == "A" && $2 == "B") ? 0 : 1}' "${LOG}" && \
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
+
+## when two OTUs do not overlap, do I get infinite ratios?
+
+# OTUs	s1	s2	s3	s4
+# A	9	9	0	0
+# B	0	0	5	5
+
+# A	B	96.5
+# B	A	96.5
+
+## mumu when the is no overlap, smallest non-null abundance ratio can be null
+DESCRIPTION="mumu no overlap: smallest non-null abundance ratio can be null"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\ts2\ts3\ts4\nA\t9\t9\t0\t0\nB\t0\t0\t5\t5\n" > "${OTU_TABLE}"
+printf "A\tB\t96.5\nB\tA\t96.5\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log "${LOG}" > /dev/null 2>&1
+awk '{exit $14 == 0.00 ? 0 : 1}' "${LOG}" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
+
+## mumu when the is no overlap, average value of non-null abundance ratios can be null
+DESCRIPTION="mumu no overlap: average value of non-null abundance ratios can be null"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\ts2\ts3\ts4\nA\t9\t9\t0\t0\nB\t0\t0\t5\t5\n" > "${OTU_TABLE}"
+printf "A\tB\t96.5\nB\tA\t96.5\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log "${LOG}" > /dev/null 2>&1
+awk '{exit $15 == 0.00 ? 0 : 1}' "${LOG}" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
+
+## mumu when the is no overlap, overlap abundance of the query OTU is null
+DESCRIPTION="mumu no overlap: query overlap abundance is null"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\ts2\ts3\ts4\nA\t9\t9\t0\t0\nB\t0\t0\t5\t5\n" > "${OTU_TABLE}"
+printf "A\tB\t96.5\nB\tA\t96.5\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log "${LOG}" > /dev/null 2>&1
+awk '{exit $6 == 0 ? 0 : 1}' "${LOG}" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
+
+## mumu when the is no overlap, overlap abundance of the parent OTU is null
+DESCRIPTION="mumu no overlap: parent overlap abundance is null"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\ts2\ts3\ts4\nA\t9\t9\t0\t0\nB\t0\t0\t5\t5\n" > "${OTU_TABLE}"
+printf "A\tB\t96.5\nB\tA\t96.5\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log "${LOG}" > /dev/null 2>&1
+awk '{exit $7 == 0 ? 0 : 1}' "${LOG}" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
+
 ## mumu allows parent to be missing in some samples (lulu bug)
 
 # Here 'A' is missing from the first sample. The relative cooccurence
@@ -2047,7 +2137,3 @@ DESCRIPTION="mumu allows parent to be missing in some samples (lulu bug)"
 wait
 
 exit 0
-
-## TODO:
-# - list all the reasons to reject a potential parent! Make a test for each.
-# - try two OTUs without overlap, do I get infinite values? make a list of values that are set to null, report that in the manual.

@@ -96,8 +96,10 @@ auto per_sample_ratios (std::unordered_map<std::string, struct OTU> &OTUs,
     auto son_abundance = *current_son_sample++;
     const auto& father_abundance = *current_father_sample++;
     if (son_abundance == 0) { continue; }  // skip this sample
-    stats.son_overlap_abundance += son_abundance;
     assert(father_abundance <= largest_int_without_precision_loss);
+    if (father_abundance != 0) {
+      stats.son_overlap_abundance += son_abundance;
+    }
     const double ratio { static_cast<double>(father_abundance) / static_cast<double>(son_abundance) };
     if (ratio < stats.smallest_ratio) { stats.smallest_ratio = ratio; }
     if (ratio > stats.largest_ratio) { stats.largest_ratio = ratio; }
