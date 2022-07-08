@@ -40,7 +40,7 @@ make install  # as root or sudo
 
 - dependencies are minimal:
   - a GNU/Linux 64-bit system,
-  - `make`
+  - `make` (version 4 or more recent),
   - a recent GCC compiler (GCC 10 or more recent),
   - GNU tools for testing
 
