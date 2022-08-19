@@ -87,7 +87,7 @@ and supported by compilers.
 - [x] compile without warnings with GCC 10,
 - [x] compile without warnings with GCC 11,
 - [x] compile without warnings with GCC 12,
-- [ ] compile with clang (`std::ranges` not yet supported in clang-15),
+- [ ] compile with clang (`std::ranges` not yet supported in clang-16),
 - [x] investigate the five minor failed tests when running on Alpine (as root),
 - [ ] add a column header to the log file?
 - [ ] allow named pipes (input/output),
