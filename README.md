@@ -17,7 +17,7 @@ flag.
 **mumu** uses C++20 features to make the code simpler, easier to
 maintain and to port to other systems. The downside is that using mumu
 requires a recent compiler and C++ libraries (GCC 10 or more
-recent). If your system only provides an older compiler, a
+recent, clang 17). If your system only provides an older compiler, a
 recipe for a singularity/docker image is available.
 
 About the name of the project, *m* is simply the next letter after
@@ -41,10 +41,11 @@ make install  # as root or sudo
 - dependencies are minimal:
   - a GNU/Linux 64-bit system,
   - `make` (version 4 or more recent),
-  - a recent GCC compiler (GCC 10 or more recent),
+  - a recent GCC compiler (GCC 10 or more recent, clang 17 or more recent),
   - GNU tools for testing
 
 - run (see `mumu --help` and `man mumu` for details):
+
 ```sh
 mumu \
     --otu_table OTU.table \
@@ -53,7 +54,9 @@ mumu \
     --new_otu_table new_OTU.table
 ```
 
-- alternatively, build an [Apptainer](http://apptainer.org/) (ex-singularity) image for systems with older compilers:
+- alternatively, build an [Apptainer](http://apptainer.org/)
+  (ex-singularity) image for systems with older compilers:
+
 ```sh
 # build image with singularity 3.8.5
 # (Alpine edge with GCC 11.2 [2022-02-25])
@@ -87,7 +90,7 @@ and supported by compilers.
 - [x] compile without warnings with GCC 10,
 - [x] compile without warnings with GCC 11,
 - [x] compile without warnings with GCC 12,
-- [ ] compile with clang (`std::ranges` not yet supported in clang-16),
+- [x] compile with clang-17 (`std::ranges` not yet supported in clang-16),
 - [x] investigate the five minor failed tests when running on Alpine (as root),
 - [ ] add a column header to the log file? (see issue https://github.com/frederic-mahe/mumu/issues/4)
 - [ ] allow named pipes (input/output),
