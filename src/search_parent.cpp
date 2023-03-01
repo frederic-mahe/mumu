@@ -30,10 +30,11 @@
 constexpr auto largest_double {std::numeric_limits<double>::max()};
 constexpr auto tolerance {std::numeric_limits<double>::epsilon()};
 // C++23 refactor: std::pow(2, std::numeric_limits<double>::digits)
-constexpr auto largest_int_without_precision_loss {9'007'199'254'740'992};
-constexpr auto accept_as_parent {"accepted"};
-constexpr auto reject_as_parent {"rejected"};
+constexpr auto largest_int_without_precision_loss {9'007'199'254'740'992};  // reduce scope
+constexpr auto accept_as_parent {"accepted"};  // reduce scope
+constexpr auto reject_as_parent {"rejected"};  // reduce scope
 
+// move to a separate header file stats.h
 struct Stats {
   std::string son_id;  //refactor: string_view
   std::string father_id;
@@ -84,8 +85,8 @@ auto operator<< (std::ostream& output_stream, const Stats& stats) -> std::ostrea
 
 auto per_sample_ratios (std::unordered_map<std::string, struct OTU> &OTUs,
                         Stats &stats) -> void {
-  // 'zip' two OTUs (https://www.cplusplus.com/forum/general/228918/)
-  // for (auto [x,y] : std::ranges::zip( xs, ys ))  // available in c++23? http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2021/p2321r2.html
+  // 'zip' two OTUs
+  // for (std::pair<const &int, const &int> pair: std::views::zip(father, son)) // available in c++23
 
   // assert(v1.length() == v2.length())
   auto& son = OTUs[stats.son_id].samples;
