@@ -64,6 +64,7 @@ auto main (int argc, char** argv) -> int {
 
 // TODO:
 
+// - const parameters = parse_args(argc, argv) -> Parameters
 // - don't close input files when testing (allow mumu to use named pipes)
 // - add a quiet option?
 // - get rid of is_mergeable?
