@@ -43,7 +43,6 @@ auto output_first_line (const std::string &line,
   // write header line to new OTU table
   std::ofstream new_otu_table {parameters.new_otu_table};
   new_otu_table << line << '\n';
-  new_otu_table.close();
 }
 
 
@@ -97,6 +96,5 @@ auto read_otu_table (std::unordered_map<std::string, struct OTU> &OTUs,
     {
       parse_each_otu(OTUs, line, n_samples);
     }
-  otu_table.close();
   std::cout << "done, " << OTUs.size() << " entries" << std::endl;
 }

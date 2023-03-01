@@ -48,7 +48,6 @@ auto input_files_are_reachable(Parameters const &parameters) -> void {
     if (not input_file) {
       fatal("can't open input file " + file_name);
     }
-    input_file.close();
   }
 }
 
@@ -59,7 +58,6 @@ auto output_files_are_writable(Parameters const &parameters) -> void {
     if (not output_file) {
       fatal("can't open input file " + file_name);
     }
-    output_file.close();
   }
 }
 

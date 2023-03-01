@@ -88,6 +88,5 @@ auto write_table (std::unordered_map<std::string, struct OTU> &OTUs,
     }
     new_otu_table << '\n';
   }
-  new_otu_table.close();
   std::cout << "done, " << sorted_OTUs.size() << " entries\n";
 }
