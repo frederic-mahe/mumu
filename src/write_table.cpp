@@ -83,7 +83,7 @@ auto write_table (std::unordered_map<std::string, struct OTU> &OTUs,
   // output 
   for (auto const& otu: sorted_OTUs) {
     new_otu_table << otu.OTU_id;
-    for (auto const& sample: OTUs[otu.OTU_id].samples) {
+    for (auto const& sample: OTUs[otu.OTU_id].samples) {   // C++23 refactoring: std::views::join_with('\t');
       new_otu_table << sepchar << sample;
     }
     new_otu_table << '\n';
