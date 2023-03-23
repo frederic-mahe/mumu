@@ -283,6 +283,11 @@ eliminated, even if the default threshold is 0.95, which should allow
 the parent OTU to be missing from 5% of the samples
 .UR https://github.com/tobiasgf/lulu/issues/8
 .UE .
+.PP
+lulu orders OTUs by decreasing spread (incidence), then by decreasing
+total abundance, whereas mumu orders potential parents by decreasing
+similarity, decreasing total abundance, decreasing spread, and names
+(ASCIIbetical). Merging results can differ between the two methods.
 \" .PP
 \" Contrary to lulu, mumu allows chained merges. When an OTU B is merged
 \" with an OTU A, lulu removes B from the pool of potential parents. With
