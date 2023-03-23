@@ -2243,4 +2243,64 @@ printf "A\tB\t99\nB\tA\t99\n" > "${MATCH_LIST}"
 
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${LOG}"
 
+
+## mumu accepts an empty OTU (hit, but no reads)
+## log file should not have extreme values
+DESCRIPTION="mumu accepts empty OTUs (hit, but no reads, smallest abundance ratio is correct)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\nA\t9\nB\t0\n" > "${OTU_TABLE}"
+printf "A\tB\t99\nB\tA\t99\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --log "${LOG}" \
+    --new_otu_table /dev/null > /dev/null 2>&1
+awk '{exit $11 == 0.0 ? 0 : 1}' "${LOG}" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${LOG}"
+
+
+## mumu accepts an empty OTU (hit, but no reads)
+## log file should not have extreme values
+DESCRIPTION="mumu accepts empty OTUs (hit, but no reads, relative co-occurence value is correct)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\nA\t9\nB\t0\n" > "${OTU_TABLE}"
+printf "A\tB\t99\nB\tA\t99\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --log "${LOG}" \
+    --new_otu_table /dev/null > /dev/null 2>&1
+awk '{exit $17 == 0.0 ? 0 : 1}' "${LOG}" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${LOG}"
+
+
+## mumu accepts an empty OTU (hit, but no reads)
+## log file should not have extreme values
+DESCRIPTION="mumu accepts empty OTUs (hit, but no reads, average value of abundance ratios is correct)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\nA\t9\nB\t0\n" > "${OTU_TABLE}"
+printf "A\tB\t99\nB\tA\t99\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --log "${LOG}" \
+    --new_otu_table /dev/null > /dev/null 2>&1
+awk '{exit $13 == 0.0 ? 0 : 1}' "${LOG}" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${LOG}"
+
 exit 0
