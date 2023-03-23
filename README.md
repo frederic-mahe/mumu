@@ -21,7 +21,8 @@ recent, clang 17). If your system only provides an older compiler, a
 recipe for a singularity/docker image is available.
 
 About the name of the project, *m* is simply the next letter after
-*l*, hence *mumu*.
+*l*, hence *mumu*. Any similarity to actual words is purely
+coincidental.
 
 
 ## Getting Started
