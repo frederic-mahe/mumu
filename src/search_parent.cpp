@@ -147,7 +147,9 @@ auto test_parents (std::unordered_map<std::string, struct OTU> &OTUs,
     }
 
     // not a parent if...
-    stats.relative_cooccurence = 1.0 * stats.father_overlap_spread / stats.son_spread;
+    if (stats.son_spread > 0) {  // avoid dividing by zero
+      stats.relative_cooccurence = 1.0 * stats.father_overlap_spread / stats.son_spread;
+    }
     if (stats.relative_cooccurence < parameters.minimum_relative_cooccurence) {
       log_file << stats;
       continue;
