@@ -2146,19 +2146,64 @@ unset initial accepted final
 
 ## mumu allows parent to be missing in some samples (lulu bug)
 
-# Here 'A' is missing from the first sample. The relative cooccurence
-# is then 20/21, which is greater than 0.95, the default value. 'A' is
-# then accepted as the parent of 'B'. In lulu, there is no merging (to
-# be confirmed with a test on the latest version).
+# lulu's README states:
+# If the number of samples where the 'potential parent' has a positive
+# presence is below the minimum_relative_cooccurence (default 95%,
+# meaning that 1 in 20 samples are allowed to have no parent presence),
+# the 'potential parent' is rejected.
+
+# In reality, lulu rejects any match where one or more samples have no
+# parent presence. A parent missing in one sample means that the
+# 'minimum_ratio' value will be zero, which will lead to rejection
+# (unless the user sets the 'minimum_ratio' value to zero!?) and makes
+# the 'minimum_relative_cooccurence' option ineffective (unless using
+# 'minimum_ratio_type = avg').
+
+# To solve that, the minimum_ratio should be searched among the
+# non-null ratio values, not all ratio values.
+
+# Here 'A' is missing from the first sample (and present in one more
+# sample so 'A' and 'B' have the same spread). The relative
+# cooccurence is then 20/21 = 0.95238, which is greater than 0.95, the
+# default value. With mumu, 'A' is then accepted as the parent of
+# 'B'. With lulu, there is no merging (confirmed with a toy-example:
+# https://github.com/tobiasgf/lulu/issues/8).
 
 DESCRIPTION="mumu allows parent to be missing in some samples (lulu bug)"
 "${MUMU}" \
-    --otu_table <(printf "OTUs\ts01\ts02\ts03\ts04\ts05\ts06\ts07\ts08\ts09\ts10\ts11\ts12\ts13\ts14\ts15\ts16\ts17\ts18\ts19\ts20\ts21\nA\t0\t9\t9\t9\t9\t9\t9\t9\t9\t9\t9\t9\t9\t9\t9\t9\t9\t9\t9\t9\t9\nB\t1\t1\t1\t1\t1\t1\t1\t1\t1\t1\t1\t1\t1\t1\t1\t1\t1\t1\t1\t1\t1\n") \
+    --otu_table <(printf "OTUs" ; printf "\t%s" s{01..22} ; printf "\n"
+                  printf "A\t0" ; printf "\t9%.0s" {1..21} ; printf "\n"
+                  printf "B" ; printf "\t1%.0s" {1..21} ; printf "\t0\n") \
     --match_list <(printf "B\tA\t99.0\n") \
     --log /dev/null \
     --new_otu_table >(awk 'END {exit NR == 2 ? 0 : 1}' && \
                           success "${DESCRIPTION}" || \
                               failure "${DESCRIPTION}") > /dev/null
+
+DESCRIPTION="mumu allows parent to be missing in some samples (average ratio, works with lulu)"
+"${MUMU}" \
+    --otu_table <(printf "OTUs" ; printf "\t%s" s{01..22} ; printf "\n"
+                  printf "A\t0" ; printf "\t9%.0s" {1..21} ; printf "\n"
+                  printf "B" ; printf "\t1%.0s" {1..21} ; printf "\t0\n") \
+    --match_list <(printf "B\tA\t99.0\n") \
+    --minimum_ratio_type "avg" \
+    --log /dev/null \
+    --new_otu_table >(awk 'END {exit NR == 2 ? 0 : 1}' && \
+                          success "${DESCRIPTION}" || \
+                              failure "${DESCRIPTION}") > /dev/null
+
+DESCRIPTION="mumu allows parent to be missing in some samples (spread B > A, rejected by lulu)"
+"${MUMU}" \
+    --otu_table <(printf "OTUs" ; printf "\t%s" s{01..21} ; printf "\n"
+                  printf "A\t0" ; printf "\t9%.0s" {1..20} ; printf "\n"
+                  printf "B" ; printf "\t1%.0s" {1..21} ; printf "\n") \
+    --match_list <(printf "B\tA\t99.0\n") \
+    --log /dev/null \
+    --new_otu_table >(awk 'END {exit NR == 2 ? 0 : 1}' && \
+                          success "${DESCRIPTION}" || \
+                              failure "${DESCRIPTION}") > /dev/null
+
+## mumu, no filtering on spread, only on overlap ratio?
 
 wait
 
