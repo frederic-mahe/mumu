@@ -7,7 +7,7 @@ fast and robust C++ implementation of
 [lulu](https://github.com/tobiasgf/lulu), a R package for
 post-clustering curation of metabarcoding data
 
-**mumu** is fully tested, with 135 carefully crafted individual
+**mumu** is fully tested, with 137 carefully crafted individual
 black-box tests, covering 100% of the application-specific C++
 code. Tests are written using common Unix/Linux shell utilities. Some
 C++ internal tests are also used (_assertions_), but these are only
