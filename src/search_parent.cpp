@@ -134,7 +134,9 @@ auto test_parents (std::unordered_map<std::string, struct OTU> &OTUs,
     per_sample_ratios(OTUs, stats);
 
     // compute average ratios and prep for stats output
-    stats.avg_ratio = stats.sum_ratio / stats.son_spread;
+    if (stats.son_spread > 0) {  // avoid dividing by zero
+      stats.avg_ratio = stats.sum_ratio / stats.son_spread;
+    }
     if (stats.father_overlap_spread > 0) {  // avoid dividing by zero
       stats.avg_non_null_ratio = stats.sum_ratio / stats.father_overlap_spread;
     }
