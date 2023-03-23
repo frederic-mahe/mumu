@@ -2203,8 +2203,44 @@ DESCRIPTION="mumu allows parent to be missing in some samples (spread B > A, rej
                           success "${DESCRIPTION}" || \
                               failure "${DESCRIPTION}") > /dev/null
 
-## mumu, no filtering on spread, only on overlap ratio?
-
 wait
+
+
+## inspired by https://github.com/tobiasgf/lulu/issues/7
+## mumu accepts an empty OTU (no reads)
+DESCRIPTION="mumu accepts empty OTUs (no reads)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\nA\t0\n" > "${OTU_TABLE}"
+printf "" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --log /dev/null \
+    --new_otu_table /dev/null > /dev/null 2>&1 && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
+## mumu accepts an empty OTU (hit, but no reads)
+## except no merging, so the output table should have three lines
+DESCRIPTION="mumu accepts empty OTUs (hit, but no reads)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\nA\t9\nB\t0\n" > "${OTU_TABLE}"
+printf "A\tB\t99\nB\tA\t99\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --log "${LOG}" \
+    --new_otu_table >(awk 'END {exit NR == 3 ? 0 : 1}' && \
+                          success "${DESCRIPTION}" || \
+                              failure "${DESCRIPTION}") > /dev/null
+
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${LOG}"
 
 exit 0
