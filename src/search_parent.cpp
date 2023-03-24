@@ -186,9 +186,6 @@ auto search_parent (std::unordered_map<std::string, struct OTU> &OTUs,
     // ignore empty OTUs (no spread, no reads)
     if (OTUs[OTU_id].spread == 0) { continue; }
 
-    // ignore OTUs without any match
-    if (OTUs[OTU_id].matches.empty()) { continue; }  // refactoring: useless?
-
     // test potential parents (thread safe: one OTU per thread, thread
     // only modifies the OTU it is working on, other OTUs are
     // read-only)
