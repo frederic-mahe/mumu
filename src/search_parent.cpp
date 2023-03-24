@@ -34,9 +34,9 @@ constexpr auto largest_int_without_precision_loss {9'007'199'254'740'992};  // r
 constexpr auto accept_as_parent {"accepted"};  // reduce scope
 constexpr auto reject_as_parent {"rejected"};  // reduce scope
 
-// move to a separate header file stats.h
+// refactoring: move to a separate header file stats.h
 struct Stats {
-  std::string son_id;  //refactor: string_view
+  std::string son_id;  //refactoring: string_view
   std::string father_id;
   double similarity {0.0};
   unsigned long int son_total_abundance {1};
@@ -128,9 +128,9 @@ auto test_parents (std::unordered_map<std::string, struct OTU> &OTUs,
       .son_total_abundance = otu.sum_reads,
       .father_total_abundance = OTUs[match.hit_id].sum_reads,
       .son_spread = otu.spread,
-      .father_spread = OTUs[match.hit_id].spread};
+      .father_spread = OTUs[match.hit_id].spread};  // refactoring: son's stats should be initialized outside of the loop, or separated into another struct
 
-    assert(stats.son_spread != 0);
+    assert(stats.son_spread != 0);  // empty son should be skipped
 
     // compute father/son ratios for all samples
     per_sample_ratios(OTUs, stats);
@@ -180,13 +180,13 @@ auto search_parent (std::unordered_map<std::string, struct OTU> &OTUs,
   std::ofstream log_file {parameters.log};
 
   for (auto& otu : OTUs) {
-    const std::string& OTU_id {otu.first};  // replace with an iterator?
+    const std::string& OTU_id {otu.first};  // refactoring: replace with an iterator?
 
     // ignore empty OTUs (no spread, no reads)
     if (OTUs[OTU_id].spread == 0) { continue; }
 
     // ignore OTUs without any match
-    if (OTUs[OTU_id].matches.empty()) { continue; }
+    if (OTUs[OTU_id].matches.empty()) { continue; }  // refactoring: useless?
 
     // test potential parents (thread safe: one OTU per thread, thread
     // only modifies the OTU it is working on, other OTUs are
