@@ -656,23 +656,25 @@ printf "OTUs\ts1\nA\t5\nB\t\n" > "${OTU_TABLE}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}"
 
 
-DESCRIPTION="mumu accepts OTU table in DOS format"
-"${MUMU}" \
-    --otu_table <(printf "OTUs\ts1\nA\t5\n" | unix2dos) \
-    --match_list <(printf "") \
-    --new_otu_table /dev/null \
-    --log /dev/null > /dev/null 2>&1 && \
-    success "${DESCRIPTION}" || \
-        failure "${DESCRIPTION}"
+if which unix2dos ; then
+    DESCRIPTION="mumu accepts OTU table in DOS format"
+    "${MUMU}" \
+        --otu_table <(printf "OTUs\ts1\nA\t5\n" | unix2dos) \
+        --match_list <(printf "") \
+        --new_otu_table /dev/null \
+        --log /dev/null > /dev/null 2>&1 && \
+        success "${DESCRIPTION}" || \
+            failure "${DESCRIPTION}"
 
-DESCRIPTION="mumu accepts OTU table in DOS format, output header line contains CR chars"
-"${MUMU}" \
-    --otu_table <(printf "OTUs\ts1\nA\t5\n" | unix2dos) \
-    --match_list <(printf "") \
-    --new_otu_table >(grep -q $'\r' && \
-                          success "${DESCRIPTION}" || \
-                              failure "${DESCRIPTION}") \
-    --log /dev/null > /dev/null 2>&1
+    DESCRIPTION="mumu accepts OTU table in DOS format, output header line contains CR chars"
+    "${MUMU}" \
+        --otu_table <(printf "OTUs\ts1\nA\t5\n" | unix2dos) \
+        --match_list <(printf "") \
+        --new_otu_table >(grep -q $'\r' && \
+                              success "${DESCRIPTION}" || \
+                                  failure "${DESCRIPTION}") \
+        --log /dev/null > /dev/null 2>&1
+fi
 
 DESCRIPTION="mumu accepts positive integer abundance values in the OTU table"
 "${MUMU}" \
