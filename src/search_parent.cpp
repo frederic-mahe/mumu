@@ -130,32 +130,37 @@ auto test_parents (std::unordered_map<std::string, struct OTU> &OTUs,
       .son_spread = otu.spread,
       .father_spread = OTUs[match.hit_id].spread};
 
+    // reject: empty son (no spread, no reads)
+    if (stats.son_spread == 0) {
+      stats.smallest_ratio = 0.0;
+      stats.smallest_non_null_ratio = 0.0;
+      log_file << stats;
+      continue;
+    }
+
     // compute father/son ratios for all samples
     per_sample_ratios(OTUs, stats);
 
-    // compute average ratios and prep for stats output
-    if (stats.son_spread != 0) {  // avoid dividing by zero
-      stats.avg_ratio = stats.sum_ratio / stats.son_spread;
-    }
-    if (stats.father_overlap_spread != 0) {  // avoid dividing by zero
-      stats.avg_non_null_ratio = stats.sum_ratio / stats.father_overlap_spread;
-    }
-    // avoid printing giant values
-    if (largest_double - stats.smallest_ratio <= tolerance) {
+    // reject: no overlap with the potential parent
+    if (stats.father_overlap_spread == 0) {
       stats.smallest_ratio = 0.0;
-    }
-    if (largest_double - stats.smallest_non_null_ratio <= tolerance) {
-        stats.smallest_non_null_ratio = 0.0;
+      stats.smallest_non_null_ratio = 0.0;
+      log_file << stats;
+      continue;
     }
 
-    // not a parent if...
-    if (stats.son_spread != 0) {  // avoid dividing by zero
-      stats.relative_cooccurence = 1.0 * stats.father_overlap_spread / stats.son_spread;
-    }
+    // populate overlap stats
+    stats.avg_ratio = stats.sum_ratio / stats.son_spread;
+    stats.avg_non_null_ratio = stats.sum_ratio / stats.father_overlap_spread;
+    stats.relative_cooccurence = 1.0 * stats.father_overlap_spread / stats.son_spread;
+
+    // reject: incidence ratio with the potential parent is too low
     if (stats.relative_cooccurence < parameters.minimum_relative_cooccurence) {
       log_file << stats;
       continue;
     }
+
+    // reject: abundance ratio with the potential parent is too low
     if ((parameters.minimum_ratio_type == use_minimum_value and
          stats.smallest_non_null_ratio <= parameters.minimum_ratio)
         or (parameters.minimum_ratio_type == use_average_value and
@@ -164,7 +169,7 @@ auto test_parents (std::unordered_map<std::string, struct OTU> &OTUs,
       continue;
     }
 
-    // update OTU and output stats
+    // accept: mark OTU and output stats
     stats.status = accept_as_parent;
     otu.is_mergeable = true;
     otu.father_id = match.hit_id;
