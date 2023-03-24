@@ -130,13 +130,7 @@ auto test_parents (std::unordered_map<std::string, struct OTU> &OTUs,
       .son_spread = otu.spread,
       .father_spread = OTUs[match.hit_id].spread};
 
-    // reject: empty son (no spread, no reads)
-    if (stats.son_spread == 0) {
-      stats.smallest_ratio = 0.0;
-      stats.smallest_non_null_ratio = 0.0;
-      log_file << stats;
-      continue;
-    }
+    assert(stats.son_spread != 0);
 
     // compute father/son ratios for all samples
     per_sample_ratios(OTUs, stats);
@@ -187,6 +181,9 @@ auto search_parent (std::unordered_map<std::string, struct OTU> &OTUs,
 
   for (auto& otu : OTUs) {
     const std::string& OTU_id {otu.first};  // replace with an iterator?
+
+    // ignore empty OTUs (no spread, no reads)
+    if (OTUs[OTU_id].spread == 0) { continue; }
 
     // ignore OTUs without any match
     if (OTUs[OTU_id].matches.empty()) { continue; }
