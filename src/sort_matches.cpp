@@ -35,7 +35,7 @@ auto sort_matches (std::unordered_map<std::string, struct OTU> &OTUs) -> void {
     const std::string& OTU_id {otu.first};
 
     // ignore OTUs with zero or one match
-    if (OTUs[OTU_id].matches.size() < 2) { continue; }
+    if (OTUs[OTU_id].matches.size() < 2) { continue; }  // refactoring: useless?
     
     std::ranges::sort(OTUs[OTU_id].matches, std::ranges::greater{});
   }
