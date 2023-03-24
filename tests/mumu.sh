@@ -2303,4 +2303,86 @@ awk '{exit $13 == 0.0 ? 0 : 1}' "${LOG}" && \
 
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${LOG}"
 
+
+## option minimum_match value is used to filter the list of potential parents
+DESCRIPTION="mumu minimum_match value is used to filter the list of potential parents (above threshold)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\nA\t9\nB\t1\n" > "${OTU_TABLE}"
+printf "B\tA\t99.0\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --log "${LOG}" \
+    --new_otu_table /dev/null > /dev/null 2>&1
+
+grep -q "accepted" "${LOG}" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${LOG}"
+
+
+## option minimum_match value is used to filter the list of potential parents
+DESCRIPTION="mumu minimum_match value is used to filter the list of potential parents (below threshold)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\nA\t9\nB\t1\n" > "${OTU_TABLE}"
+printf "B\tA\t50.0\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --log "${LOG}" \
+    --new_otu_table /dev/null > /dev/null 2>&1
+
+grep -q "accepted" "${LOG}" && \
+    failure "${DESCRIPTION}" || \
+        success "${DESCRIPTION}"
+
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${LOG}"
+
+
+## option minimum_match value is used to filter the list of potential parents
+DESCRIPTION="mumu minimum_match value is used to filter the list of potential parents (above changed threshold)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\nA\t9\nB\t1\n" > "${OTU_TABLE}"
+printf "B\tA\t96.0\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --minimum_match 95.0 \
+    --log "${LOG}" \
+    --new_otu_table /dev/null > /dev/null 2>&1
+
+grep -q "accepted" "${LOG}" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${LOG}"
+
+
+## option minimum_match value is used to filter the list of potential parents
+DESCRIPTION="mumu minimum_match value is used to filter the list of potential parents (below changed threshold)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\nA\t9\nB\t1\n" > "${OTU_TABLE}"
+printf "B\tA\t94.0\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --minimum_match 95.0 \
+    --log "${LOG}" \
+    --new_otu_table /dev/null > /dev/null 2>&1
+
+grep -q "accepted" "${LOG}" && \
+    failure "${DESCRIPTION}" || \
+        success "${DESCRIPTION}"
+
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${LOG}"
+
 exit 0
