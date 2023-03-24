@@ -186,7 +186,7 @@ auto search_parent (std::unordered_map<std::string, struct OTU> &OTUs,
   std::ofstream log_file {parameters.log};
 
   for (auto& otu : OTUs) {
-    const std::string& OTU_id {otu.first};
+    const std::string& OTU_id {otu.first};  // replace with an iterator?
 
     // ignore OTUs without any match
     if (OTUs[OTU_id].matches.empty()) { continue; }
