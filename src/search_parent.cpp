@@ -108,7 +108,7 @@ auto per_sample_ratios (std::unordered_map<std::string, struct OTU> &OTUs,
       stats.smallest_non_null_ratio = ratio;
     }
     stats.sum_ratio += ratio;
-    if (father_abundance > 0) {
+    if (father_abundance != 0) {
       ++stats.father_overlap_spread;
       stats.father_overlap_abundance += father_abundance;
     }
@@ -134,10 +134,10 @@ auto test_parents (std::unordered_map<std::string, struct OTU> &OTUs,
     per_sample_ratios(OTUs, stats);
 
     // compute average ratios and prep for stats output
-    if (stats.son_spread > 0) {  // avoid dividing by zero
+    if (stats.son_spread != 0) {  // avoid dividing by zero
       stats.avg_ratio = stats.sum_ratio / stats.son_spread;
     }
-    if (stats.father_overlap_spread > 0) {  // avoid dividing by zero
+    if (stats.father_overlap_spread != 0) {  // avoid dividing by zero
       stats.avg_non_null_ratio = stats.sum_ratio / stats.father_overlap_spread;
     }
     // avoid printing giant values
@@ -149,7 +149,7 @@ auto test_parents (std::unordered_map<std::string, struct OTU> &OTUs,
     }
 
     // not a parent if...
-    if (stats.son_spread > 0) {  // avoid dividing by zero
+    if (stats.son_spread != 0) {  // avoid dividing by zero
       stats.relative_cooccurence = 1.0 * stats.father_overlap_spread / stats.son_spread;
     }
     if (stats.relative_cooccurence < parameters.minimum_relative_cooccurence) {
