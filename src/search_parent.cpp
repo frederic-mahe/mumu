@@ -121,6 +121,9 @@ auto test_parents (std::unordered_map<std::string, struct OTU> &OTUs,
                    const std::string &OTU_id,
                    Parameters const &parameters,
                    std::ofstream &log_file) -> void {
+
+  assert(otu.spread != 0);  // empty son should be skipped
+
   for (auto& match : otu.matches) {
     Stats stats {.son_id = OTU_id,
       .father_id = match.hit_id,
@@ -129,8 +132,6 @@ auto test_parents (std::unordered_map<std::string, struct OTU> &OTUs,
       .father_total_abundance = OTUs[match.hit_id].sum_reads,
       .son_spread = otu.spread,
       .father_spread = OTUs[match.hit_id].spread};  // refactoring: son's stats should be initialized outside of the loop, or separated into another struct
-
-    assert(stats.son_spread != 0);  // empty son should be skipped
 
     // compute father/son ratios for all samples
     per_sample_ratios(OTUs, stats);
