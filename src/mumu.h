@@ -23,6 +23,7 @@
 
 #include <algorithm>
 #include <climits>
+#include <cstdint>
 #include <iostream>
 #include <string>
 #include <string_view>
