@@ -39,8 +39,8 @@ struct Stats {
   std::string son_id;  //refactoring: string_view
   std::string father_id;
   double similarity {0.0};
-  unsigned long int son_total_abundance {1};
-  unsigned long int father_total_abundance {0};
+  unsigned long int son_total_abundance {1};  // refactoring: can't be zero, but zero is clearer?
+  unsigned long int father_total_abundance {0};  // refactoring: same as above?
   unsigned long int son_overlap_abundance {0};
   unsigned long int father_overlap_abundance {0};
   unsigned int son_spread {0};
