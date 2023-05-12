@@ -184,7 +184,7 @@ auto search_parent (std::unordered_map<std::string, struct OTU> &OTUs,
     const std::string& OTU_id {otu.first};  // refactoring: replace with an iterator?
 
     // ignore empty OTUs (no spread, no reads)
-    if (OTUs[OTU_id].spread == 0) { continue; }
+    if (OTUs[OTU_id].spread == 0) { continue; }  // refactoring: move check to read_match_list()
 
     // test potential parents (thread safe: one OTU per thread, thread
     // only modifies the OTU it is working on, other OTUs are

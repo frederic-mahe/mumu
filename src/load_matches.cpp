@@ -98,6 +98,11 @@ auto read_match_list (std::unordered_map<std::string, struct OTU> &OTUs,
         continue;
       }
 
+      // // refactoring: ignore matches to or from empty OTUs
+      // if (OTUs[query].sum_reads == 0 or OTUs[hit].sum_reads == 0) {
+      //   continue;
+      // }
+
       OTUs[query].matches.push_back(Match {
           .similarity = similarity,
           .hit_sum_reads = OTUs[hit].sum_reads,
