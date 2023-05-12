@@ -98,7 +98,7 @@ auto version () -> void {
 
 auto parse_args (int argc, char ** argv, Parameters &parameters) -> void {
   // C++23 refactor: generate from long_options at compile-time
-  const std::string short_options {"ht:vo:m:a:b:c:d:n:l:"};
+  const std::string short_options {"ht:vo:m:a:b:c:d:n:l:"};  // refactoring; string_view?
   auto option_character {0};
   auto option_index {0};
 
