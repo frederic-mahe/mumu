@@ -2267,6 +2267,27 @@ printf "A\tB\t99\nB\tA\t99\n" > "${MATCH_LIST}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${LOG}"
 
 
+## mumu accepts empty OTUs (hit, but no reads)
+## log file should not be created
+DESCRIPTION="mumu accepts empty OTUs (hit but both empty, no log file)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\nA\t0\nB\t0\n" > "${OTU_TABLE}"
+printf "A\tB\t99\nB\tA\t99\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --log "${LOG}" \
+    --new_otu_table /dev/null > /dev/null
+
+[[ -s "${LOG}" ]] && \
+    failure "${DESCRIPTION}" || \
+        success "${DESCRIPTION}"
+
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${LOG}"
+
+
 ## option minimum_match value is used to filter the list of potential parents
 DESCRIPTION="mumu minimum_match value is used to filter the list of potential parents (above threshold)"
 OTU_TABLE=$(mktemp)
