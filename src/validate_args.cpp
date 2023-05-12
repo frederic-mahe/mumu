@@ -64,8 +64,8 @@ auto output_files_are_writable(Parameters const &parameters) -> void {
 
 auto check_numerical_parameters(Parameters const &parameters) -> void {
   // minimum match (50 <= x <= 100)
-  constexpr auto lowest_similarity {50.0};
-  constexpr auto highest_similarity {100.0};
+  constexpr static auto lowest_similarity {50.0};
+  constexpr static auto highest_similarity {100.0};
   if (parameters.minimum_match < lowest_similarity
       or parameters.minimum_match > highest_similarity) {
     fatal("--minimum_match value must be between " +
@@ -86,7 +86,7 @@ auto check_numerical_parameters(Parameters const &parameters) -> void {
   }
 
   // threads (1 <= x <= 255)
-  constexpr auto max_threads {255};
+  constexpr static auto max_threads {255};
   if (parameters.threads != 1) {
     std::cout << "warning: mumu is not yet multithreaded.\n";
   }
