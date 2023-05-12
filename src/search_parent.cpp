@@ -181,7 +181,7 @@ auto search_parent (std::unordered_map<std::string, struct OTU> &OTUs,
   std::ofstream log_file {parameters.log};
 
   for (auto& otu : OTUs) {
-    const std::string& OTU_id {otu.first};  // refactoring: replace with an iterator?
+    const std::string& OTU_id {otu.first};  // refactoring: replace with [first, second]?
 
     // ignore empty OTUs (no spread, no reads)
     if (OTUs[OTU_id].spread == 0) { continue; }  // refactoring: move check to read_match_list()
