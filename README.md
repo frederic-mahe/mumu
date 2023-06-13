@@ -7,11 +7,16 @@ fast and robust C++ implementation of
 [lulu](https://github.com/tobiasgf/lulu), a R package for
 post-clustering curation of metabarcoding data
 
+**mumu** is not a strict lulu clone. There is a [bug in
+lulu](https://github.com/tobiasgf/lulu/issues/8) that prevents some
+merging. Additionaly, mumu can chain merges, not lulu. This results in
+slightly more merging with mumu (by a few percent).
+
 **mumu** is fully tested, with 145 carefully crafted individual
 black-box tests, covering 100% of the application-specific C++
 code. Tests are written using common Unix/Linux shell utilities. Some
 C++ internal tests are also used (_assertions_), but these are only
-active at compile-time or at runtime when compiling with the _debug_
+active at compile-time or at runtime when compiling with the `debug`
 flag.
 
 **mumu** uses C++20 features to make the code simpler, easier to
