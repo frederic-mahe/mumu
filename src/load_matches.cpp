@@ -78,7 +78,7 @@ auto read_match_list (std::unordered_map<std::string, struct OTU> &OTUs,
 
       try {
         static_cast<void>(std::stod(buf));
-      } catch (std::invalid_argument const& ex) {
+      } catch ([[maybe_unused]] std::invalid_argument const& ex) {
         fatal("illegal similarity value in line: " + line);
       }
 
