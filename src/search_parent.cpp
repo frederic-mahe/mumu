@@ -29,8 +29,6 @@
 
 constexpr auto largest_double {std::numeric_limits<double>::max()};
 constexpr auto tolerance {std::numeric_limits<double>::epsilon()};
-// C++23 refactor: std::pow(2, std::numeric_limits<double>::digits)
-constexpr auto largest_int_without_precision_loss {9'007'199'254'740'992};  // reduce scope
 constexpr auto accept_as_parent {"accepted"};  // reduce scope
 constexpr auto reject_as_parent {"rejected"};  // reduce scope
 
@@ -85,6 +83,9 @@ auto operator<< (std::ostream& output_stream, const Stats& stats) -> std::ostrea
 
 auto per_sample_ratios (std::unordered_map<std::string, struct OTU> &OTUs,
                         Stats &stats) -> void {
+  // C++23 refactor: std::pow(2, std::numeric_limits<double>::digits)
+  [[maybe_unused]] static constexpr auto largest_int_without_precision_loss {9'007'199'254'740'992};
+
   // 'zip' two OTUs
   // for (std::pair<const &int, const &int> pair: std::views::zip(father, son)) // available in c++23
 
