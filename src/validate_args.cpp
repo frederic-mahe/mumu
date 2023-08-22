@@ -44,7 +44,7 @@ auto check_mandatory_arguments(Parameters const &parameters) -> void {
 
 auto input_files_are_reachable(Parameters const &parameters) -> void {
   for (const auto& file_name : {parameters.otu_table, parameters.match_list} ) {
-    std::ifstream input_file {file_name};
+    const std::ifstream input_file {file_name};
     if (not input_file) {
       fatal("can't open input file " + file_name);
     }
@@ -54,7 +54,7 @@ auto input_files_are_reachable(Parameters const &parameters) -> void {
 
 auto output_files_are_writable(Parameters const &parameters) -> void {
   for (const auto& file_name : {parameters.new_otu_table, parameters.log} ) {
-    std::ofstream output_file {file_name};
+    const std::ofstream output_file {file_name};
     if (not output_file) {
       fatal("can't open input file " + file_name);
     }
