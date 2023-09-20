@@ -51,7 +51,7 @@ coverage: all
 	bash ./tests/mumu.sh $(PROG)
 	bash ./tests/coverage.sh
 
-profile: SPECIFIC = -O3 -pg
+profile: SPECIFIC = -O1 -pg
 profile: all
 
 clean:
