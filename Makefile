@@ -27,7 +27,7 @@ MAN := man/$(PROG).1
 CXX := g++
 CXXFLAGS := -std=c++2a -Wall -Wextra -g -Wshadow -Wnon-virtual-dtor \
 	-Wold-style-cast -Wcast-align -Wunused -Woverloaded-virtual \
-	-Wpedantic -Wconversion -Wsign-conversion -Wmisleading-indentation \
+	-Wpedantic -Wconversion -Wsign-conversion -Wfloat-equal \
 	-Wduplicated-cond -Wduplicated-branches -Wlogical-op \
 	-Wnull-dereference -Wuseless-cast -Wdouble-promotion -Wformat=2
 SPECIFIC := -O3 -DNDEBUG -flto
