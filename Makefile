@@ -45,10 +45,12 @@ all: $(PROG)
 # GCC 12: nothing not already activated by default or covered by -Wall -Wextra
 # GCC 13: nothing not already activated by default or covered by -Wall -Wextra
 debug: SPECIFIC = -Og -ggdb -DDEBUG -fsanitize=undefined,address -fno-omit-frame-pointer \
-                 -Wcast-align -Wconversion -Wdouble-promotion -Wduplicated-branches \
-                 -Wduplicated-cond -Wfloat-equal -Wformat=2 -Wlogical-op -Wnon-virtual-dtor \
-                 -Wnull-dereference -Wold-style-cast -Woverloaded-virtual -Wshadow \
-                 -Wsign-conversion -Wunused -Wuseless-cast
+                 -Wcast-align -Wcast-qual -Wconversion -Wdate-time -Wdouble-promotion \
+                 -Wduplicated-branches -Wduplicated-cond -Wfloat-equal -Wformat=2 \
+                 -Wformat-overflow -Wlogical-op -Wnon-virtual-dtor -Wnull-dereference \
+                 -Wold-style-cast -Woverloaded-virtual -Wshadow -Wsign-conversion \
+                 -Wuninitialized -Wunsafe-loop-optimizations -Wunused -Wunused-macros \
+                 -Wuseless-cast -Wvla
 debug: all
 
 coverage: SPECIFIC = -O0 --coverage -fprofile-arcs -ftest-coverage -lgcov
