@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Contact: Frederic Mahe <frederic.mahe@cirad.fr>,
-# UMR BGPI, CIRAD - TA A-54/K
+# UMR PHIM, CIRAD - TA A-120/K
 # Campus International de Baillarguet
 # 34398 MONTPELLIER CEDEX 5
 # France
