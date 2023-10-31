@@ -25,11 +25,11 @@ PROG := mumu
 MAN := man/$(PROG).1
 
 CXX := g++
-CXXFLAGS := -std=c++2a -Wall -Wextra -g -Wshadow -Wnon-virtual-dtor \
-	-Wold-style-cast -Wcast-align -Wunused -Woverloaded-virtual \
-	-Wpedantic -Wconversion -Wsign-conversion -Wfloat-equal \
-	-Wduplicated-cond -Wduplicated-branches -Wlogical-op \
-	-Wnull-dereference -Wuseless-cast -Wdouble-promotion -Wformat=2
+CXXFLAGS := -std=c++2a -Wall -Wcast-align -Wconversion -Wdouble-promotion \
+            -Wduplicated-branches -Wduplicated-cond -Wextra -Wfloat-equal \
+            -Wformat=2 -Wlogical-op -Wnon-virtual-dtor -Wnull-dereference \
+            -Wold-style-cast -Woverloaded-virtual -Wpedantic -Wshadow \
+            -Wsign-conversion -Wunused -Wuseless-cast
 SPECIFIC := -O3 -DNDEBUG -flto
 
 srcfiles := $(shell find ./src/ -name "*.cpp" -type f)
@@ -43,7 +43,12 @@ $(PROG): $(objects)
 
 all: $(PROG)
 
-debug: SPECIFIC = -Og -ggdb -DDEBUG -fsanitize=undefined,address -fno-omit-frame-pointer -fanalyzer -Werror
+## To be tested:
+# GCC 8: -fanalyzer -Werror
+# GCC 10: -Winline -Wmissing-declarations  # many false-positives
+# GCC 12: nothing not already activated by default or covered by -Wall -Wextra
+# GCC 13: nothing not already activated by default or covered by -Wall -Wextra
+debug: SPECIFIC = -Og -ggdb -DDEBUG -fsanitize=undefined,address -fno-omit-frame-pointer
 debug: all
 
 coverage: SPECIFIC = -O0 --coverage -fprofile-arcs -ftest-coverage -lgcov
