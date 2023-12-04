@@ -44,7 +44,8 @@ all: $(PROG)
 # GCC 10: -Winline -Wmissing-declarations  # many false-positives, not useful
 # GCC 12: nothing not already activated by default or covered by -Wall -Wextra
 # GCC 13: nothing not already activated by default or covered by -Wall -Wextra
-debug: SPECIFIC = -Og -ggdb -DDEBUG -fsanitize=undefined,address -fno-omit-frame-pointer \
+debug: SPECIFIC = -Og -ggdb -DDEBUG -D_GLIBCXX_DEBUG -fsanitize=undefined,address \
+                 -fno-omit-frame-pointer \
                  -Wcast-align -Wcast-qual -Wconversion -Wdate-time -Wdouble-promotion \
                  -Wduplicated-branches -Wduplicated-cond -Wfloat-equal -Wformat=2 \
                  -Wformat-overflow -Wlogical-op -Wnon-virtual-dtor -Wnull-dereference \
