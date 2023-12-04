@@ -56,14 +56,14 @@ debug: all
 
 coverage: SPECIFIC = -O0 --coverage -fprofile-arcs -ftest-coverage -lgcov
 coverage: all
-	bash ./tests/mumu.sh $(PROG)
+	bash ./tests/mumu.sh ./$(PROG)
 	bash ./tests/coverage.sh
 
 profile: SPECIFIC = -O1 -pg
 profile: all
 
 clean:
-	rm -f $(objects) $(PROG) compile_commands.json ./src/*.gcov \
+	rm -f $(objects) ./$(PROG) compile_commands.json ./src/*.gcov \
 	./src/*.gcda ./src/*.gcno ./src/.gdb_history ./*.gcov \
 	./src/main_coverage.info ./tests/gmon.out
 	rm -rf ./src/out
@@ -72,10 +72,10 @@ dist-clean: clean
 	rm -f *~ ./src/*~ ./tests/*~ ./man/*~
 
 install: $(PROG) $(MAN)
-	/usr/bin/install -c $(PROG) '/usr/local/bin'
+	/usr/bin/install -c ./$(PROG) '/usr/local/bin'
 	/usr/bin/install -c $(MAN) '/usr/local/share/man/man1'
 
 check:
-	bash ./tests/mumu.sh $(PROG)
+	bash ./tests/mumu.sh ./$(PROG)
 
 .PHONY: all clean coverage debug dist-clean install profile check
