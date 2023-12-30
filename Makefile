@@ -78,4 +78,5 @@ install: $(PROG) $(MAN)
 check:
 	bash ./tests/mumu.sh ./$(PROG)
 
+# make sure rules run even if no file was modified
 .PHONY: all clean coverage debug dist-clean install profile check
