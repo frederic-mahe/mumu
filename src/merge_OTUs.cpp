@@ -34,10 +34,20 @@
 auto find_root (std::unordered_map<std::string, struct OTU> &OTUs,
                 std::string root) -> std::string {
   while (OTUs[root].is_mergeable) {
+    // refactoring: performance: store parent ID in a variable instead of looking up
     root = {OTUs[root].father_id};
   }
   return root;
 }
+
+
+// auto add_reads_to_root (std::vector<unsigned long int>& son,
+//                         std::vector<unsigned long int>& root) -> void {
+//   std::ranges::transform(son.samples,
+//                          root.samples,
+//                          root.samples.begin(),
+//                          std::plus{});
+// }
 
 
 auto merge_OTUs (std::unordered_map<std::string, struct OTU> &OTUs) -> void {
@@ -49,6 +59,7 @@ auto merge_OTUs (std::unordered_map<std::string, struct OTU> &OTUs) -> void {
     // find the end of the merging chain
     const auto root = find_root(OTUs, OTUs[OTU_id].father_id);
     // add son's reads to root's reads
+    // refactoring: add_reads_to_root(OTUs[OTU_id], OTUs[root]);
     std::ranges::transform(OTUs[OTU_id].samples,
                            OTUs[root].samples,
                            OTUs[root].samples.begin(),
