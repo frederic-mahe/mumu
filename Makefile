@@ -28,8 +28,7 @@ CXX := g++
 CXXFLAGS := -std=c++2a -Wall -Wextra -Wpedantic
 SPECIFIC := -O3 -DNDEBUG -flto
 
-srcfiles := $(shell find ./src/ -name "*.cpp" -type f)
-objects  := $(patsubst %.cpp, %.o, $(srcfiles))
+objects  := $(patsubst %.cpp, %.o, $(wildcard src/*.cpp))
 
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) $(SPECIFIC) -c $< -o $@
