@@ -193,3 +193,20 @@ auto search_parent (std::unordered_map<std::string, struct OTU> &OTUs,
   }
   std::cout << "done" << std::endl;
 }
+
+
+// refactoring:
+// Move the Stats struct definition to its own header file to better
+// separate concerns. This improves modularity and organization.
+
+// Use C++20 ranges and views like zip to iterate over the samples
+// instead of manual indexing. This makes the code more idiomatic and
+// reduces errors.
+
+// Initialize son stats outside the parent testing loop to avoid
+// repeated work. This improves performance by avoiding redundant
+// computations.
+
+// Use std::string_view instead of std::string for IDs to avoid
+// unnecessary copying. This optimizes performance when passing
+// strings around.
