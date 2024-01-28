@@ -81,7 +81,7 @@ struct Match {
       std::tie(rhs.similarity, rhs.hit_sum_reads, rhs.hit_spread, hit_id);
   }
 
-  bool operator==(Match const& rhs) const = default;
+  auto operator==(Match const& rhs) const -> bool = default;
 };
 
 
