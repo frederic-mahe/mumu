@@ -71,7 +71,7 @@ struct Match {
   unsigned long int hit_spread {0};
   std::string hit_id;  // refactor: replace with string_view?
 
-  auto operator<=> (Match const& rhs) const {
+  auto operator<=>(Match const& rhs) const {
     // order by similarity,
     // if equal, order by abundance,
     // if equal, order by spread,
@@ -81,7 +81,7 @@ struct Match {
       std::tie(rhs.similarity, rhs.hit_sum_reads, rhs.hit_spread, hit_id);
   }
 
-  bool operator== (Match const& rhs) const = default;
+  bool operator==(Match const& rhs) const = default;
 };
 
 
