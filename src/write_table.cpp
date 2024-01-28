@@ -44,7 +44,7 @@ struct OTU_stats {
       std::tie(rhs.abundance, rhs.spread, OTU_id);
   }
 
-  bool operator== (OTU_stats const& rhs) const = default;
+  auto operator== (OTU_stats const& rhs) const -> bool = default;
 };
 
 
