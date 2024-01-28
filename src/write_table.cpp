@@ -35,7 +35,7 @@ struct OTU_stats {
   long int spread {0};  // refactor; type is not correct
   unsigned long int abundance {0};
 
-  auto operator<=> (OTU_stats const& rhs) const {
+  auto operator<=>(OTU_stats const& rhs) const {
     // order by abundance,
     // if equal, order by spread,
     // if equal, lexicographic ID order (A, B, ..., a, b, c, ...)
@@ -44,7 +44,7 @@ struct OTU_stats {
       std::tie(rhs.abundance, rhs.spread, OTU_id);
   }
 
-  auto operator== (OTU_stats const& rhs) const -> bool = default;
+  auto operator==(OTU_stats const& rhs) const -> bool = default;
 };
 
 
