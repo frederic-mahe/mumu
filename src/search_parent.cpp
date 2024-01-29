@@ -25,6 +25,8 @@
 #include <fstream>
 #include <iostream>
 #include <limits>
+#include <string>
+#include <unordered_map>
 #include "mumu.h"
 
 constexpr auto largest_double {std::numeric_limits<double>::max()};
