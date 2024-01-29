@@ -39,5 +39,5 @@ auto sort_matches (std::unordered_map<std::string, struct OTU> &OTUs) -> void {
     
     std::ranges::sort(OTUs[OTU_id].matches, std::ranges::greater{});
   }
-  std::cout << "done" << std::endl;
+  std::cout << "done\n";
 }

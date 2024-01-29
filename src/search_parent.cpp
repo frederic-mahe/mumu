@@ -193,7 +193,7 @@ auto search_parent (std::unordered_map<std::string, struct OTU> &OTUs,
     // read-only)
     test_parents(OTUs, OTUs[OTU_id], OTU_id, parameters, log_file);
   }
-  std::cout << "done" << std::endl;
+  std::cout << "done\n";
 }
 
 

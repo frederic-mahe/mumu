@@ -98,5 +98,5 @@ auto read_otu_table (std::unordered_map<std::string, struct OTU> &OTUs,
     {
       parse_each_otu(OTUs, line, n_samples);
     }
-  std::cout << "done, " << OTUs.size() << " entries" << std::endl;
+  std::cout << "done, " << OTUs.size() << " entries\n";
 }

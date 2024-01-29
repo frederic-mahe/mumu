@@ -110,5 +110,5 @@ auto read_match_list (std::unordered_map<std::string, struct OTU> &OTUs,
           .hit_id = hit}
         );  // no need to reserve(10)?
     }
-  std::cout << "done" << std::endl;
+  std::cout << "done\n";
 }

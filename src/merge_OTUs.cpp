@@ -69,7 +69,7 @@ auto merge_OTUs (std::unordered_map<std::string, struct OTU> &OTUs) -> void {
     OTUs[root].is_root = true;
     OTUs[root].sum_reads += OTUs[OTU_id].sum_reads;
   }
-  std::cout << "done" << std::endl;
+  std::cout << "done\n";
 }
 
 
@@ -84,5 +84,5 @@ auto update_spread_values (std::unordered_map<std::string, struct OTU> &OTUs) ->
     auto has_reads = [](const auto n_reads) { return n_reads > 0; };
     OTUs[OTU_id].spread = static_cast<unsigned int>(std::ranges::count_if(OTUs[OTU_id].samples, has_reads));
   }
-  std::cout << "done" << std::endl;
+  std::cout << "done\n";
 }
