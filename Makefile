@@ -30,10 +30,12 @@ SPECIFIC := -O3 -DNDEBUG -flto
 
 objects  := $(patsubst %.cpp, %.o, $(wildcard src/*.cpp))
 
-%.o: %.cpp
+dependencies := Makefile $(wildcard src/*.h)
+
+%.o: %.cpp $(dependencies)
 	$(CXX) $(CXXFLAGS) $(SPECIFIC) -c $< -o $@
 
-$(PROG): $(objects)
+$(PROG): $(objects) $(dependencies)
 	$(CXX) $(CXXFLAGS) $(SPECIFIC) -o $@ $(objects) $(LIBS)
 
 all: $(PROG)
