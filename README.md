@@ -80,6 +80,14 @@ Native compilation on Windows machine, as well as BSD systems is a
 work in progress.
 
 
+## wrapper
+
+- Adrien Taudière (@adrientaudiere) published
+  [mumu_pq](https://adrientaudiere.github.io/MiscMetabar/reference/mumu_pq.html),
+  a wrapper that allows to use `mumu` on
+  [phyloseq](https://joey711.github.io/phyloseq/) objects (R).
+
+
 ## Roadmap
 
 **mumu** is currently feature-complete (nothing is missing), but
