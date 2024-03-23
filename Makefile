@@ -83,11 +83,15 @@ dist-clean: clean
 	rm -f *~ ./src/*~ ./tests/*~ ./man/*~
 
 install: $(PROG) $(MAN)
-	/usr/bin/install -c ./$(PROG) '/usr/local/bin'
-	/usr/bin/install -c $(MAN) '/usr/local/share/man/man1'
+	$(INSTALL_PROGRAM) $(PROG) $(DESTDIR)$(bindir)
+	$(INSTALL_PROGRAM) $(MAN) $(DESTDIR)$(man1dir)
+
+uninstall:
+	rm $(DESTDIR)$(bindir)/$(PROG)
+	rm $(DESTDIR)$(man1dir)/$(PROG).1
 
 check:
 	bash ./tests/mumu.sh ./$(PROG)
 
 # make sure rules run even if no file was modified
-.PHONY: all clean coverage debug dist-clean install profile check
+.PHONY: all clean coverage debug dist-clean install uninstall profile check
