@@ -28,6 +28,16 @@ CXX := g++
 CXXFLAGS := -std=c++2a -Wall -Wextra -Wpedantic
 SPECIFIC := -O3 -DNDEBUG -flto
 
+prefix = /usr/local
+datarootdir = $(prefix)/share
+datadir = $(datarootdir)
+exec_prefix = $(prefix)
+bindir = $(exec_prefix)/bin
+mandir = $(datarootdir)/man
+man1dir = $(mandir)/man1
+INSTALL = /usr/bin/install
+INSTALL_PROGRAM = $(INSTALL)
+
 objects  := $(patsubst %.cpp, %.o, $(wildcard src/*.cpp))
 
 dependencies := Makefile $(wildcard src/*.h)
