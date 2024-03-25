@@ -21,6 +21,7 @@
 // 34398 MONTPELLIER CEDEX 5
 // France
 
+#include <algorithm>
 #include <cassert>
 #include <fstream>
 #include <iostream>
@@ -104,8 +105,8 @@ auto per_sample_ratios (std::unordered_map<std::string, struct OTU> &OTUs,
       stats.son_overlap_abundance += son_abundance;
     }
     const double ratio { static_cast<double>(father_abundance) / static_cast<double>(son_abundance) };
-    if (ratio < stats.smallest_ratio) { stats.smallest_ratio = ratio; }
-    if (ratio > stats.largest_ratio) { stats.largest_ratio = ratio; }
+    stats.smallest_ratio = std::min(ratio, stats.smallest_ratio);
+    stats.largest_ratio = std::max(ratio, stats.largest_ratio);
     if (ratio < stats.smallest_non_null_ratio and ratio > 0.0) {
       stats.smallest_non_null_ratio = ratio;
     }
