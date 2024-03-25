@@ -21,14 +21,15 @@
 // 34398 MONTPELLIER CEDEX 5
 // France
 
+#include <algorithm>  // std::ranges::count
 #include <fstream>
 #include <iostream>
 #include <numeric>
 #include <ranges>
 #include <sstream>
-#include <stdexcept>
 #include <string>
 #include <unordered_map>
+#include <utility>  // std::move
 #include "mumu.h"
 #include "utils.h"
 

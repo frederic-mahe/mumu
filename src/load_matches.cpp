@@ -23,13 +23,15 @@
 
 #include <fstream>
 #include <iostream>
-#include <numeric>
 #include <sstream>
 #include <stdexcept>
+#include <string>
+#include <unordered_map>
 #include "mumu.h"
 #include "utils.h"
 
 // // work in progress: use operator overload to parse match list file
+// #include <numeric>
 // struct Match_line {
 //   std::string query;
 //   std::string hit;

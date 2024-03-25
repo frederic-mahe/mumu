@@ -22,10 +22,13 @@
 // France
 
 #include <algorithm>
-#include <compare>
 #include <fstream>
+#include <functional>
 #include <ios>
 #include <iostream>
+#include <string>
+#include <vector>
+#include <unordered_map>
 #include <tuple>
 #include "mumu.h"
 

@@ -23,6 +23,8 @@
 
 #include <ios>
 #include <iostream>
+#include <string>
+#include <unordered_map>
 #include "mumu.h"
 #include "cli.h"
 #include "validate_args.h"

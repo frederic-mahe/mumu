@@ -21,6 +21,9 @@
 // 34398 MONTPELLIER CEDEX 5
 // France
 
+#include <cstdlib>  // std::exit
+#include <iostream>
+#include <string>
 #include "mumu.h"
 
 

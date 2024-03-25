@@ -21,10 +21,12 @@
 // 34398 MONTPELLIER CEDEX 5
 // France
 
+#include <iostream>
+#include <fstream>
+#include <string>
 #include "mumu.h"
 #include "utils.h"
 
-#include <fstream>
 
 auto check_mandatory_arguments(Parameters const &parameters) -> void {
   if (not parameters.is_otu_table) {
