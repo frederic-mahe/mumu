@@ -48,7 +48,7 @@ make install  # as root or sudo
   - a GNU/Linux 64-bit system,
   - `make` (version 4 or more recent),
   - a recent GCC compiler (GCC 10 or more recent, clang 17 or more recent),
-  - GNU tools for testing
+  - GNU Awk and other GNU tools for testing
 
 - run (see `mumu --help` and `man mumu` for details):
 
@@ -105,7 +105,8 @@ and supported by compilers.
 - [x] compile without warnings with GCC 11,
 - [x] compile without warnings with GCC 12.2,
 - [ ] compile without warnings with GCC 12.3 and GCC 13,
-- [x] compile with clang-17 (`std::ranges` is not supported in clang-16),
+- [x] compile without warnings with GCC 14 (alpha)
+- [x] compile with clang-17, 18 and 19 (`std::ranges` is not supported in clang-16),
 - [x] investigate the five minor failed tests when running on Alpine (as root),
 - [ ] add a column header to the log file? (see issue https://github.com/frederic-mahe/mumu/issues/4)
 - [ ] allow named pipes (input/output),
