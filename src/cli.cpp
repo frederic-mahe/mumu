@@ -36,26 +36,26 @@ constexpr auto n_options {12U};
 
 constexpr std::array<struct option, n_options> long_options {{
     // standard options
-    {"help",    no_argument,       nullptr, 'h'},
-    {"threads", required_argument, nullptr, 't'},
-    {"version", no_argument,       nullptr, 'v'},
+    {.name="help", .has_arg=no_argument, .flag=nullptr, .val='h'},
+    {.name="threads", .has_arg=required_argument, .flag=nullptr, .val='t'},
+    {.name="version", .has_arg=no_argument, .flag=nullptr, .val='v'},
 
     // input
-    {"otu_table",  required_argument, nullptr, 'o'},
-    {"match_list", required_argument, nullptr, 'm'},
+    {.name="otu_table", .has_arg=required_argument, .flag=nullptr, .val='o'},
+    {.name="match_list", .has_arg=required_argument, .flag=nullptr, .val='m'},
 
     // parameters
-    {"minimum_match",      required_argument, nullptr, 'a'},
-    {"minimum_ratio_type", required_argument, nullptr, 'b'},
-    {"minimum_ratio",      required_argument, nullptr, 'c'},
-    {"minimum_relative_cooccurence", required_argument, nullptr, 'd'},
+    {.name="minimum_match", .has_arg=required_argument, .flag=nullptr, .val='a'},
+    {.name="minimum_ratio_type", .has_arg=required_argument, .flag=nullptr, .val='b'},
+    {.name="minimum_ratio", .has_arg=required_argument, .flag=nullptr, .val='c'},
+    {.name="minimum_relative_cooccurence", .has_arg=required_argument, .flag=nullptr, .val='d'},
 
     // output
-    {"new_otu_table", required_argument, nullptr, 'n'},
-    {"log",           required_argument, nullptr, 'l'},
+    {.name="new_otu_table", .has_arg=required_argument, .flag=nullptr, .val='n'},
+    {.name="log", .has_arg=required_argument, .flag=nullptr, .val='l'},
 
     // mandatory terminal empty option struct
-    {nullptr, 0, nullptr, 0}
+    {.name=nullptr, .has_arg=0, .flag=nullptr, .val=0}
   }};
 // additional options?
 //  --minimum_spread n (spread threshold to consider as potential father)
