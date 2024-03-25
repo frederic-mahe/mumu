@@ -1,6 +1,6 @@
 // MUMU
 
-// Copyright (C) 2020-2023 Frederic Mahe
+// Copyright (C) 2020-2024 Frederic Mahe
 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ static_assert(UINT_MAX >= UINT32_MAX, "unsigned integers are too small");
 
 constexpr auto sepchar {'\t'};
 constexpr std::string_view n_version {"1.0.2"};
-constexpr std::string_view copyright_years {"2020-2023"};
+constexpr std::string_view copyright_years {"2020-2024"};
 constexpr auto threads_default {1U};
 constexpr auto minimum_match_default {84.0};
 constexpr auto minimum_relative_cooccurence_default {0.95};
