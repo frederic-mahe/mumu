@@ -16,14 +16,15 @@ slightly more merging with mumu (by a few percent).
 black-box tests, covering 100% of the application-specific C++
 code. Tests are written using common Unix/Linux shell utilities. Some
 C++ internal tests are also used (_assertions_), but these are only
-active at compile-time or at runtime when compiling with the `debug`
+active at compile-time, or at runtime when compiling with the `debug`
 flag.
 
 **mumu** uses C++20 features to make the code simpler, easier to
 maintain and to port to other systems. The downside is that using mumu
-requires a recent compiler and C++ libraries (GCC 10 or more
-recent, clang 17). If your system only provides an older compiler, a
-recipe for a singularity/docker image is available.
+requires a recent compiler and C++ libraries (GCC 10 or more recent,
+clang 17 or more recent). If your system only provides an older
+compiler, a recipe for a singularity/Apptainer/docker image is
+available.
 
 About the name of the project, *m* is simply the next letter after
 *l*, hence *mumu*. Any similarity to actual words is purely
@@ -108,13 +109,13 @@ and supported by compilers.
 - [x] compile without warnings with GCC 14 (alpha)
 - [x] compile with clang-17, 18 and 19 (`std::ranges` is not supported in clang-16),
 - [x] investigate the five minor failed tests when running on Alpine (as root),
-- [ ] add a column header to the log file? (see issue https://github.com/frederic-mahe/mumu/issues/4)
+- [ ] add a row of column header to the log file? (see issue https://github.com/frederic-mahe/mumu/issues/4)
 - [ ] allow named pipes (input/output),
-- [ ] test performances on ARM64 GNU/Linux (Raspberry),
-- [ ] faster output with `std::format` (in 2023),
+- [x] test performances on ARM64 GNU/Linux (Raspberry),
+- [ ] faster output with `std::format` (in 2024),
 - [ ] native compilation on Windows (issue with `getopt.h`) ,
 - [ ] native compilation on BSD (issue with the Makefile),
 - [ ] native compilation on macOS
 
-**mumu** releases will be following the [Semantic Versioning
+**mumu** releases follow the [Semantic Versioning
 2.0.0](http://semver.org/spec/v2.0.0.html) rules.
