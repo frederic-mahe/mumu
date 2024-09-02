@@ -28,7 +28,7 @@ CXX := g++
 CXXFLAGS := -std=c++2a -Wall -Wextra -Wpedantic
 SPECIFIC := -O3 -DNDEBUG -flto
 
-prefix = /usr/local
+prefix ?= /usr/local
 datarootdir = $(prefix)/share
 datadir = $(datarootdir)
 exec_prefix = $(prefix)
