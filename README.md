@@ -21,10 +21,9 @@ flag.
 
 **mumu** uses C++20 features to make the code simpler, easier to
 maintain and to port to other systems. The downside is that using mumu
-requires a recent compiler and C++ libraries (GCC 10 or more recent,
-clang 17 or more recent). If your system only provides an older
-compiler, a recipe for a singularity/Apptainer/docker image is
-available.
+requires a recent C++ compiler (GCC 10 or more recent, clang 17 or
+more recent). If your system only provides an older compiler, a recipe
+for a singularity/Apptainer/docker image is available.
 
 About the name of the project, *m* is simply the next letter after
 *l*, hence *mumu*. Any similarity to actual words is purely
