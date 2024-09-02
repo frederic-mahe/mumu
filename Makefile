@@ -37,6 +37,7 @@ mandir = $(datarootdir)/man
 man1dir = $(mandir)/man1
 INSTALL = /usr/bin/install
 INSTALL_PROGRAM = $(INSTALL)
+RMDIR := rmdir --parents --ignore-fail-on-non-empty
 
 objects  := $(patsubst %.cpp, %.o, $(wildcard src/*.cpp))
 
@@ -83,12 +84,16 @@ dist-clean: clean
 	rm -f *~ ./src/*~ ./tests/*~ ./man/*~
 
 install: $(PROG) $(MAN)
+	$(INSTALL_PROGRAM) --directory $(DESTDIR)$(bindir)
 	$(INSTALL_PROGRAM) $(PROG) $(DESTDIR)$(bindir)
+	$(INSTALL_PROGRAM) --directory $(DESTDIR)$(man1dir)
 	$(INSTALL_PROGRAM) $(MAN) $(DESTDIR)$(man1dir)
 
 uninstall:
 	rm $(DESTDIR)$(bindir)/$(PROG)
 	rm $(DESTDIR)$(man1dir)/$(PROG).1
+	$(RMDIR) $(DESTDIR)$(man1dir)/
+	$(RMDIR) $(DESTDIR)$(bindir)/
 
 check:
 	bash ./tests/mumu.sh ./$(PROG)
