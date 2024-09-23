@@ -9,8 +9,9 @@ post-clustering curation of metabarcoding data
 
 **mumu** is not a strict lulu clone. There is a [bug in
 lulu](https://github.com/tobiasgf/lulu/issues/8) that prevents some
-merging. Additionaly, mumu can chain merges, not lulu. This results in
-slightly more merging with mumu (by a few percent).
+merging from happening. Additionaly, mumu can chain merges, not
+lulu. This results in slightly more merging with mumu (by a few
+percent).
 
 **mumu** is fully tested, with 145 carefully crafted individual
 black-box tests, covering 100% of the application-specific C++
