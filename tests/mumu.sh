@@ -2040,7 +2040,7 @@ rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 # A	B	96.5
 # B	A	96.5
 
-## mumu when the is no overlap, smallest non-null abundance ratio can be null
+## mumu when there is no overlap, smallest non-null abundance ratio can be null
 DESCRIPTION="mumu no overlap: smallest non-null abundance ratio can be null"
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
@@ -2060,7 +2060,7 @@ awk '{exit $14 == 0.00 ? 0 : 1}' "${LOG}" && \
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
 
-## mumu when the is no overlap, average value of non-null abundance ratios can be null
+## mumu when there is no overlap, average value of non-null abundance ratios can be null
 DESCRIPTION="mumu no overlap: average value of non-null abundance ratios can be null"
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
@@ -2080,7 +2080,7 @@ awk '{exit $15 == 0.00 ? 0 : 1}' "${LOG}" && \
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
 
-## mumu when the is no overlap, overlap abundance of the query OTU is null
+## mumu when there is no overlap, overlap abundance of the query OTU is null
 DESCRIPTION="mumu no overlap: query overlap abundance is null"
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
@@ -2100,7 +2100,7 @@ awk '{exit $6 == 0 ? 0 : 1}' "${LOG}" && \
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
 
-## mumu when the is no overlap, overlap abundance of the parent OTU is null
+## mumu when there is no overlap, overlap abundance of the parent OTU is null
 DESCRIPTION="mumu no overlap: parent overlap abundance is null"
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
