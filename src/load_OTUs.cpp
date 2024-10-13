@@ -41,6 +41,13 @@ auto count_samples (const std::string &line) -> unsigned int {
 }
 
 
+auto check_number_of_samples(unsigned int const number_of_samples) -> void {
+  if (number_of_samples == 0) {
+    std::cout << "\nwarning: OTU table should have at least one sample\n";
+  }
+}
+
+
 auto output_first_line (const std::string &line,
                         struct Parameters const &parameters) -> void {
   // write header line to new OTU table
@@ -93,6 +100,7 @@ auto read_otu_table (std::unordered_map<std::string, struct OTU> &OTUs,
   std::getline(otu_table, line);
   output_first_line(line, parameters);
   const auto n_samples {count_samples(line)};
+  check_number_of_samples(n_samples);
 
   // parse other lines, and map the values
   while (std::getline(otu_table, line))
