@@ -993,6 +993,17 @@ LOG=$(mktemp)
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
+## mumu warns if an OTU table is empty or has only one column
+DESCRIPTION="mumu warns if OTU table contains no sample (zero or one column)"
+"${MUMU}" \
+    --otu_table <(printf "otu\nASV1\n") \
+    --match_list <(printf "ASV1\tASV2\t96.8\n") \
+    --new_otu_table /dev/null \
+    --log /dev/null | \
+    grep -wq "warning: OTU table should have at least one sample" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
 ## mumu accepts input with a single OTU (empty match list)
 DESCRIPTION="mumu accepts input with a single OTU (empty match list)"
 OTU_TABLE=$(mktemp)
