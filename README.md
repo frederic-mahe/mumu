@@ -107,8 +107,7 @@ and supported by compilers.
 - [x] compile without warnings with GCC 12.2,
 - [ ] compile without warnings with GCC 12.3 and GCC 13,
 - [x] compile without warnings with GCC 14 (alpha)
-- [x] compile with clang-17, 18 and 19 (`std::ranges` is not supported in clang-16),
-- [ ] compile with clang-20,
+- [x] compile with clang-17, 18, 19 and 20 (`std::ranges` is not supported in clang-16),
 - [x] investigate the five minor failed tests when running on Alpine (as root),
 - [ ] add a row of column header to the log file? (see issue https://github.com/frederic-mahe/mumu/issues/4)
 - [ ] silently strip quote symbols from input table? Exporters often
