@@ -102,11 +102,10 @@ and supported by compilers.
 - [x] high software quality score (softwipe),
 - [x] allow empty input files,
 - [x] allow process substitutions (input/output),
-- [x] compile without warnings with GCC 10,
-- [x] compile without warnings with GCC 11,
+- [x] compile without warnings with GCC 10 and 11,
 - [x] compile without warnings with GCC 12.2,
-- [ ] compile without warnings with GCC 12.3 and GCC 13,
-- [x] compile without warnings with GCC 14 (alpha)
+- [ ] compile without warnings with GCC 12.3,
+- [x] compile without warnings with GCC 13 and 14 (alpha)
 - [x] compile with clang-17, 18, 19 and 20 (`std::ranges` is not supported in clang-16),
 - [x] investigate the five minor failed tests when running on Alpine (as root),
 - [ ] add a row of column header to the log file? (see issue https://github.com/frederic-mahe/mumu/issues/4)
