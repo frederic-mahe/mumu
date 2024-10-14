@@ -52,7 +52,7 @@ $(PROG): $(objects) $(dependencies)
 all: $(PROG)
 
 ## To be tested:
-# GCC 8: -fanalyzer -Werror
+# GCC 8: -fanalyzer (C only, not C++) -Werror
 # GCC 10: -Winline -Wmissing-declarations  # many false-positives, not useful
 # GCC 12: nothing not already activated by default or covered by -Wall -Wextra
 # GCC 13: nothing not already activated by default or covered by -Wall -Wextra
