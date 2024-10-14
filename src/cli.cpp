@@ -22,8 +22,8 @@
 // France
 
 #include <getopt.h>  // see 'man getopt_long'
-#include "mumu.h"
-#include "utils.h"
+#include "mumu.hpp"
+#include "utils.hpp"
 
 #include <array>
 #include <cassert>

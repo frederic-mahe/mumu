@@ -26,7 +26,7 @@
 #include <iostream>
 #include <string>
 #include <unordered_map>
-#include "mumu.h"
+#include "mumu.hpp"
 
 
 // find the root of  the merging chain:

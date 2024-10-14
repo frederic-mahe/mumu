@@ -25,15 +25,15 @@
 #include <iostream>
 #include <string>
 #include <unordered_map>
-#include "mumu.h"
-#include "cli.h"
-#include "validate_args.h"
-#include "load_OTUs.h"
-#include "load_matches.h"
-#include "search_parent.h"
-#include "sort_matches.h"
-#include "merge_OTUs.h"
-#include "write_table.h"
+#include "mumu.hpp"
+#include "cli.hpp"
+#include "validate_args.hpp"
+#include "load_OTUs.hpp"
+#include "load_matches.hpp"
+#include "search_parent.hpp"
+#include "sort_matches.hpp"
+#include "merge_OTUs.hpp"
+#include "write_table.hpp"
 
 
 auto main (int argc, char** argv) -> int {

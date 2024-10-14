@@ -24,7 +24,7 @@
 #include <cstdlib>  // std::exit
 #include <iostream>
 #include <string>
-#include "mumu.h"
+#include "mumu.hpp"
 
 
 // C++20 refactor: transform into a variadic template

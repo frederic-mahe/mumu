@@ -41,7 +41,7 @@ RMDIR := rmdir --parents --ignore-fail-on-non-empty
 
 objects  := $(patsubst %.cpp, %.o, $(wildcard src/*.cpp))
 
-dependencies := Makefile $(wildcard src/*.h)
+dependencies := Makefile $(wildcard src/*.hpp)
 
 %.o: %.cpp $(dependencies)
 	$(CXX) $(CXXFLAGS) $(SPECIFIC) -c $< -o $@

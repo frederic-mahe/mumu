@@ -24,8 +24,8 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include "mumu.h"
-#include "utils.h"
+#include "mumu.hpp"
+#include "utils.hpp"
 
 
 auto check_mandatory_arguments(Parameters const &parameters) -> void {

@@ -26,7 +26,7 @@
 #include <functional>
 #include <string>
 #include <unordered_map>
-#include "mumu.h"
+#include "mumu.hpp"
 
 
 auto sort_matches (std::unordered_map<std::string, struct OTU> &OTUs) -> void {

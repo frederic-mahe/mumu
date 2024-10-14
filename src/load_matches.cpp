@@ -27,8 +27,8 @@
 #include <stdexcept>
 #include <string>
 #include <unordered_map>
-#include "mumu.h"
-#include "utils.h"
+#include "mumu.hpp"
+#include "utils.hpp"
 
 // // work in progress: use operator overload to parse match list file
 // #include <numeric>

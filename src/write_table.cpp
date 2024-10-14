@@ -30,7 +30,7 @@
 #include <vector>
 #include <unordered_map>
 #include <tuple>
-#include "mumu.h"
+#include "mumu.hpp"
 
 
 struct OTU_stats {
