@@ -113,6 +113,7 @@ and supported by compilers.
       quote strings, tripping some users,
 - [ ] allow named pipes (input/output),
 - [x] test performances on ARM64 GNU/Linux (Raspberry),
+- [x] test performances on RISC-V GNU/Linux (Banana Pi BPI-F3),
 - [ ] faster output with `std::format` (in 2025),
 - [ ] native compilation on Windows (issue with `getopt.h`) ,
 - [ ] native compilation on BSD (issue with the Makefile),
