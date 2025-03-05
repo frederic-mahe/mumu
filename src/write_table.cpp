@@ -33,6 +33,7 @@
 #include "mumu.hpp"
 
 
+namespace {
 struct OTU_stats {
   std::string OTU_id;  // should be a string_view
   long int spread {0};  // refactor; type is not correct
@@ -73,6 +74,7 @@ auto extract_OTU_stats (std::unordered_map<std::string, struct OTU> &OTUs)
 
   return sorted_OTUs;
 }
+} // namespace
 
 
 auto write_table (std::unordered_map<std::string, struct OTU> &OTUs,
