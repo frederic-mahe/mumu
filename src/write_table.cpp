@@ -54,7 +54,7 @@ namespace {
 
 
   [[nodiscard]]
-  auto extract_OTU_stats (std::unordered_map<std::string, struct OTU> &OTUs)
+  auto extract_OTU_stats(std::unordered_map<std::string, struct OTU> &OTUs)
     -> std::vector<struct OTU_stats> {
     // goal is to get a sortable list of OTUs
     std::vector<struct OTU_stats> sorted_OTUs;
@@ -78,8 +78,8 @@ namespace {
 } // namespace
 
 
-auto write_table (std::unordered_map<std::string, struct OTU> &OTUs,
-                  const std::string &new_otu_table_name) -> void {
+auto write_table(std::unordered_map<std::string, struct OTU> &OTUs,
+                 const std::string &new_otu_table_name) -> void {
   std::cout << "write new OTU table... ";
   // re-open output file
   std::ofstream new_otu_table {new_otu_table_name, std::ios_base::app};

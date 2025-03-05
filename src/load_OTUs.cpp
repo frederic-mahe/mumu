@@ -35,6 +35,7 @@
 
 
 namespace {
+
   [[nodiscard]]
   auto count_samples(const std::string &line) -> unsigned int {
     // number of column separators is equal to the number of samples

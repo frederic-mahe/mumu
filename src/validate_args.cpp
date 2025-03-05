@@ -29,6 +29,7 @@
 
 
 namespace {
+
   auto check_mandatory_arguments(Parameters const &parameters) -> void {
     if (not parameters.is_otu_table) {
       fatal("missing mandatory argument --otu_table filename");

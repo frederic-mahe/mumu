@@ -33,6 +33,7 @@
 
 
 namespace {
+
   constexpr auto n_options {12U};
 
   constexpr std::array<struct option, n_options> long_options {{
@@ -65,7 +66,7 @@ namespace {
   static_assert(long_options.back().val == 0, "last option must be empty");
 
 
-  auto help () -> void {
+  auto help() -> void {
     std::cout
       << "Usage: mumu " << n_version << '\n'
       << " -h, --help                           display this help and exit\n"
@@ -89,7 +90,7 @@ namespace {
   }
 
 
-  auto version () -> void {
+  auto version() -> void {
     std::cout
       << "mumu " << n_version << '\n'
       << "Copyright (C) " << copyright_years << " Frederic Mahe\n"
@@ -98,7 +99,7 @@ namespace {
 }
 
 
-auto parse_args (int argc, char ** argv, Parameters &parameters) -> void {
+auto parse_args(int argc, char ** argv, Parameters &parameters) -> void {
   // C++23 refactor: generate from long_options at compile-time
   const std::string short_options {"ht:vo:m:a:b:c:d:n:l:"};  // refactoring; string_view?
   auto option_character {0};
