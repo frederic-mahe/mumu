@@ -34,46 +34,47 @@
 
 
 namespace {
-struct OTU_stats {
-  std::string OTU_id;  // should be a string_view
-  long int spread {0};  // refactor; type is not correct
-  unsigned long int abundance {0};
 
-  auto operator<=>(OTU_stats const& rhs) const {
-    // order by abundance,
-    // if equal, order by spread,
-    // if equal, lexicographic ID order (A, B, ..., a, b, c, ...)
-    return
-      std::tie(abundance, spread, rhs.OTU_id) <=>
-      std::tie(rhs.abundance, rhs.spread, OTU_id);
+  struct OTU_stats {
+    std::string OTU_id;  // should be a string_view
+    long int spread {0};  // refactor; type is not correct
+    unsigned long int abundance {0};
+
+    auto operator<=>(OTU_stats const& rhs) const {
+      // order by abundance,
+      // if equal, order by spread,
+      // if equal, lexicographic ID order (A, B, ..., a, b, c, ...)
+      return
+        std::tie(abundance, spread, rhs.OTU_id) <=>
+        std::tie(rhs.abundance, rhs.spread, OTU_id);
+    }
+
+    auto operator==(OTU_stats const& rhs) const -> bool = default;
+  };
+
+
+  [[nodiscard]]
+  auto extract_OTU_stats (std::unordered_map<std::string, struct OTU> &OTUs)
+    -> std::vector<struct OTU_stats> {
+    // goal is to get a sortable list of OTUs
+    std::vector<struct OTU_stats> sorted_OTUs;
+    sorted_OTUs.reserve(OTUs.size());  // probably 25-50% too much
+    for (auto const& otu: OTUs) {  // replace with copy_if()?
+      const std::string& OTU_id {otu.first};
+      if (OTUs[OTU_id].is_merged) { continue; }  // skip merged OTUs
+
+      sorted_OTUs.push_back(OTU_stats {
+          .OTU_id = OTU_id,
+          .spread = OTUs[OTU_id].spread,
+          .abundance = OTUs[OTU_id].sum_reads}
+        );
+    }
+    // sort by decreasing abundance, spread and id name
+    std::ranges::sort(sorted_OTUs, std::ranges::greater{});
+    sorted_OTUs.shrink_to_fit();  // reduces memory usage
+
+    return sorted_OTUs;
   }
-
-  auto operator==(OTU_stats const& rhs) const -> bool = default;
-};
-
-
-[[nodiscard]]
-auto extract_OTU_stats (std::unordered_map<std::string, struct OTU> &OTUs)
-  -> std::vector<struct OTU_stats> {
-  // goal is to get a sortable list of OTUs
-  std::vector<struct OTU_stats> sorted_OTUs;
-  sorted_OTUs.reserve(OTUs.size());  // probably 25-50% too much
-  for (auto const& otu: OTUs) {  // replace with copy_if()?
-    const std::string& OTU_id {otu.first};
-    if (OTUs[OTU_id].is_merged) { continue; }  // skip merged OTUs
-
-    sorted_OTUs.push_back(OTU_stats {
-        .OTU_id = OTU_id,
-        .spread = OTUs[OTU_id].spread,
-        .abundance = OTUs[OTU_id].sum_reads}
-      );
-  }
-  // sort by decreasing abundance, spread and id name
-  std::ranges::sort(sorted_OTUs, std::ranges::greater{});
-  sorted_OTUs.shrink_to_fit();  // reduces memory usage
-
-  return sorted_OTUs;
-}
 } // namespace
 
 
