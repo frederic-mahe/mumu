@@ -34,6 +34,7 @@
 #include "utils.hpp"
 
 
+namespace {
 [[nodiscard]]
 auto count_samples (const std::string &line) -> unsigned int {
   // number of column separators is equal to the number of samples
@@ -87,6 +88,7 @@ auto parse_each_otu (std::unordered_map<std::string, struct OTU> &OTUs,
   otu.sum_reads = std::accumulate(otu.samples.begin(), otu.samples.end(), 0UL);
   OTUs[OTU_id] = std::move(otu);
 }
+} // namespace
 
 
 auto read_otu_table (std::unordered_map<std::string, struct OTU> &OTUs,
