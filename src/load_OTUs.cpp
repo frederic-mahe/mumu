@@ -63,7 +63,7 @@ namespace {
                       const unsigned int n_samples) -> void {
     // get OTU id
     const auto first_sep {line.find_first_of(sepchar)};
-    const std::string OTU_id {line.substr(0, first_sep)};
+    auto const OTU_id {line.substr(0, first_sep)};
 
     // check for duplicates
     if (OTUs.contains(OTU_id)) {

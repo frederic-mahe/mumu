@@ -60,7 +60,7 @@ namespace {
     std::vector<struct OTU_stats> sorted_OTUs;
     sorted_OTUs.reserve(OTUs.size());  // probably 25-50% too much
     for (auto const& otu: OTUs) {  // replace with copy_if()?
-      const std::string& OTU_id {otu.first};
+      auto const& OTU_id {otu.first};
       if (OTUs[OTU_id].is_merged) { continue; }  // skip merged OTUs
 
       sorted_OTUs.push_back(OTU_stats {

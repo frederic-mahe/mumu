@@ -107,7 +107,7 @@ namespace {
       if (father_abundance != 0) {
         stats.son_overlap_abundance += son_abundance;
       }
-      const double ratio { static_cast<double>(father_abundance) / static_cast<double>(son_abundance) };
+      auto const ratio { static_cast<double>(father_abundance) / static_cast<double>(son_abundance) };
       stats.smallest_ratio = std::min(ratio, stats.smallest_ratio);
       stats.largest_ratio = std::max(ratio, stats.largest_ratio);
       if (ratio > 0.0) {

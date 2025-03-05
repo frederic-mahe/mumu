@@ -58,7 +58,7 @@ namespace {
 auto merge_OTUs(std::unordered_map<std::string, struct OTU> &OTUs) -> void {
   std::cout << "merge OTUs... ";
   for (auto& otu : OTUs) {
-    const std::string& OTU_id {otu.first};
+    auto const & OTU_id {otu.first};
     // skip orphans
     if (not OTUs[OTU_id].is_mergeable) { continue; }
     // find the end of the merging chain
@@ -81,7 +81,7 @@ auto merge_OTUs(std::unordered_map<std::string, struct OTU> &OTUs) -> void {
 auto update_spread_values(std::unordered_map<std::string, struct OTU> &OTUs) -> void {
   std::cout << "update spread values... ";
   for (auto& otu : OTUs) {
-    const std::string& OTU_id {otu.first};
+    auto const& OTU_id {otu.first};
     // skip unmodified OTUs
     if (not OTUs[OTU_id].is_root) { continue; }
 
