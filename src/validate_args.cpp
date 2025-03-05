@@ -110,7 +110,7 @@ namespace {
 } // namespace
 
 
-auto validate_args (Parameters const &parameters) -> void {
+auto validate_args(Parameters const &parameters) -> void {
   check_mandatory_arguments(parameters);
   input_files_are_reachable(parameters);
   output_files_are_writable(parameters);
