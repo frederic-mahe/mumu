@@ -29,7 +29,7 @@
 #include "mumu.hpp"
 
 
-auto sort_matches (std::unordered_map<std::string, struct OTU> &OTUs) -> void {
+auto sort_matches(std::unordered_map<std::string, struct OTU> &OTUs) -> void {
   std::cout << "sort lists of matches... ";
   // refactor as range view
   for (auto& otu : OTUs) {
