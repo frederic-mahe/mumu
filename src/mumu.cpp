@@ -21,6 +21,7 @@
 // 34398 MONTPELLIER CEDEX 5
 // France
 
+#include <cstdlib>  // EXIT_SUCCESS
 #include <ios>
 #include <iostream>
 #include <string>
@@ -60,7 +61,7 @@ auto main (int argc, char** argv) -> int {
   update_spread_values(OTUs);
   write_table(OTUs, parameters.new_otu_table);
 
-  return 0;  // should be EXIT_SUCCESS??
+  return EXIT_SUCCESS;
 }
 
 
