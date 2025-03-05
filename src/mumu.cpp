@@ -75,3 +75,13 @@ auto main (int argc, char** argv) -> int {
 //   control on CPU/thread usage
 // - benchmark 'const auto& sample' or 'const auto sample' to print out OTUs,
 // - more user-defined types: replace "std::string" with "sequence_id" (semantic code)
+
+
+// mumu 2.0:
+// - accept table in long-format (cluster id, sample id, abundance):
+//   - store map<cluster_id, map<samples, abundances>>
+//   - list of samples A and B might not overlap!
+//   - pre-compute a list of sample ids, use it to compare cluster overlaps,
+//   - find parents, merge with parents, update map,
+//   - output (sorted?) results,
+//   - return a new table in long-format
