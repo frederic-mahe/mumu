@@ -68,8 +68,7 @@ auto main (int argc, char** argv) -> int {
 // TODO:
 
 // - const parameters = parse_args(argc, argv) -> Parameters
-// - don't close input files when testing (allow mumu to use named pipes)
-// - add a quiet option?
+// - don't close input files when testing (allow mumu to use named pipes) (not a priority)
 // - get rid of is_mergeable?
 // - use 'sort(par_unseq' to get parallel and/or vectorized sort,
 // - use async() to test potential parents? not cluster-friendly, no
