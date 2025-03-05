@@ -30,6 +30,9 @@
 #include <unordered_map>
 #include "mumu.hpp"
 
+
+namespace {
+
 constexpr auto largest_double {std::numeric_limits<double>::max()};
 constexpr auto accept_as_parent {"accepted"};  // reduce scope
 constexpr auto reject_as_parent {"rejected"};  // reduce scope
@@ -175,6 +178,7 @@ auto test_parents (std::unordered_map<std::string, struct OTU> &OTUs,
     break;
   }
 }
+} // namespace
 
 
 auto search_parent (std::unordered_map<std::string, struct OTU> &OTUs,
