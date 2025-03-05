@@ -33,68 +33,68 @@
 
 
 namespace {
-constexpr auto n_options {12U};
+  constexpr auto n_options {12U};
 
-constexpr std::array<struct option, n_options> long_options {{
-    // standard options
-    {.name="help", .has_arg=no_argument, .flag=nullptr, .val='h'},
-    {.name="threads", .has_arg=required_argument, .flag=nullptr, .val='t'},
-    {.name="version", .has_arg=no_argument, .flag=nullptr, .val='v'},
+  constexpr std::array<struct option, n_options> long_options {{
+      // standard options
+      {.name="help", .has_arg=no_argument, .flag=nullptr, .val='h'},
+      {.name="threads", .has_arg=required_argument, .flag=nullptr, .val='t'},
+      {.name="version", .has_arg=no_argument, .flag=nullptr, .val='v'},
 
-    // input
-    {.name="otu_table", .has_arg=required_argument, .flag=nullptr, .val='o'},
-    {.name="match_list", .has_arg=required_argument, .flag=nullptr, .val='m'},
+      // input
+      {.name="otu_table", .has_arg=required_argument, .flag=nullptr, .val='o'},
+      {.name="match_list", .has_arg=required_argument, .flag=nullptr, .val='m'},
 
-    // parameters
-    {.name="minimum_match", .has_arg=required_argument, .flag=nullptr, .val='a'},
-    {.name="minimum_ratio_type", .has_arg=required_argument, .flag=nullptr, .val='b'},
-    {.name="minimum_ratio", .has_arg=required_argument, .flag=nullptr, .val='c'},
-    {.name="minimum_relative_cooccurence", .has_arg=required_argument, .flag=nullptr, .val='d'},
+      // parameters
+      {.name="minimum_match", .has_arg=required_argument, .flag=nullptr, .val='a'},
+      {.name="minimum_ratio_type", .has_arg=required_argument, .flag=nullptr, .val='b'},
+      {.name="minimum_ratio", .has_arg=required_argument, .flag=nullptr, .val='c'},
+      {.name="minimum_relative_cooccurence", .has_arg=required_argument, .flag=nullptr, .val='d'},
 
-    // output
-    {.name="new_otu_table", .has_arg=required_argument, .flag=nullptr, .val='n'},
-    {.name="log", .has_arg=required_argument, .flag=nullptr, .val='l'},
+      // output
+      {.name="new_otu_table", .has_arg=required_argument, .flag=nullptr, .val='n'},
+      {.name="log", .has_arg=required_argument, .flag=nullptr, .val='l'},
 
-    // mandatory terminal empty option struct
-    {.name=nullptr, .has_arg=0, .flag=nullptr, .val=0}
-  }};
-// additional options?
-//  --minimum_spread n (spread threshold to consider as potential father)
+      // mandatory terminal empty option struct
+      {.name=nullptr, .has_arg=0, .flag=nullptr, .val=0}
+    }};
+  // additional options?
+  //  --minimum_spread n (spread threshold to consider as potential father)
 
-static_assert(not long_options.empty(), "long_options must have at least one (empty) option");
-static_assert(long_options.back().val == 0, "last option must be empty");
-
-
-auto help () -> void {
-  std::cout
-    << "Usage: mumu " << n_version << '\n'
-    << " -h, --help                           display this help and exit\n"
-    << " -v, --version                        display version information and exit\n"
-    << " -t, --threads INTEGER                number of threads to use (1)\n"
-    << '\n'
-    << "Input options (mandatory):\n"
-    << " --otu_table FILE                     tab-separated, samples in columns\n"
-    << " --match_list FILE                    tab-separated, OTU pairwise similarity scores\n"
-    << '\n'
-    << "Output options (mandatory):\n"
-    << " --new_otu_table FILE                 write an updated OTU table\n"
-    << " --log FILE                           record operations\n"
-    << '\n'
-    << "Computation parameters:\n"
-    << " --minimum_match FLOAT                minimum similarity threshold (84.0)\n"
-    << " --minimum_ratio FLOAT                minimum abundance ratio (1.0)\n"
-    << " --minimum_ratio_type STRING          \"min\" or \"avg\" abundance ratio (\"min\")\n"
-    << " --minimum_relative_cooccurence FLOAT relative father-son spread (0.95)\n\n"
-    << "See 'man mumu' for more details.\n";
-}
+  static_assert(not long_options.empty(), "long_options must have at least one (empty) option");
+  static_assert(long_options.back().val == 0, "last option must be empty");
 
 
-auto version () -> void {
-  std::cout
-    << "mumu " << n_version << '\n'
-    << "Copyright (C) " << copyright_years << " Frederic Mahe\n"
-    << "https://github.com/frederic-mahe/mumu\n\n";
-}
+  auto help () -> void {
+    std::cout
+      << "Usage: mumu " << n_version << '\n'
+      << " -h, --help                           display this help and exit\n"
+      << " -v, --version                        display version information and exit\n"
+      << " -t, --threads INTEGER                number of threads to use (1)\n"
+      << '\n'
+      << "Input options (mandatory):\n"
+      << " --otu_table FILE                     tab-separated, samples in columns\n"
+      << " --match_list FILE                    tab-separated, OTU pairwise similarity scores\n"
+      << '\n'
+      << "Output options (mandatory):\n"
+      << " --new_otu_table FILE                 write an updated OTU table\n"
+      << " --log FILE                           record operations\n"
+      << '\n'
+      << "Computation parameters:\n"
+      << " --minimum_match FLOAT                minimum similarity threshold (84.0)\n"
+      << " --minimum_ratio FLOAT                minimum abundance ratio (1.0)\n"
+      << " --minimum_ratio_type STRING          \"min\" or \"avg\" abundance ratio (\"min\")\n"
+      << " --minimum_relative_cooccurence FLOAT relative father-son spread (0.95)\n\n"
+      << "See 'man mumu' for more details.\n";
+  }
+
+
+  auto version () -> void {
+    std::cout
+      << "mumu " << n_version << '\n'
+      << "Copyright (C) " << copyright_years << " Frederic Mahe\n"
+      << "https://github.com/frederic-mahe/mumu\n\n";
+  }
 }
 
 
