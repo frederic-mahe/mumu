@@ -29,6 +29,8 @@
 #include "mumu.hpp"
 
 
+namespace {
+
 // find the root of  the merging chain:
 // OTU C can be merged with OTU B, that can merge with OTU A.
 // Hence, OTU C should be merged with OTU A.
@@ -50,6 +52,7 @@ auto find_root (std::unordered_map<std::string, struct OTU> &OTUs,
 //                          root.samples.begin(),
 //                          std::plus{});
 // }
+} // namespace
 
 
 auto merge_OTUs (std::unordered_map<std::string, struct OTU> &OTUs) -> void {
