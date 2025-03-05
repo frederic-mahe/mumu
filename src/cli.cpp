@@ -32,6 +32,7 @@
 #include <string>
 
 
+namespace {
 constexpr auto n_options {12U};
 
 constexpr std::array<struct option, n_options> long_options {{
@@ -93,6 +94,7 @@ auto version () -> void {
     << "mumu " << n_version << '\n'
     << "Copyright (C) " << copyright_years << " Frederic Mahe\n"
     << "https://github.com/frederic-mahe/mumu\n\n";
+}
 }
 
 
