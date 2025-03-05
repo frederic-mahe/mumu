@@ -583,49 +583,43 @@ rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 DESCRIPTION="mumu accepts thread values (short)"
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
-NEW_OTU_TABLE=$(mktemp)
-LOG=$(mktemp)
 "${MUMU}" \
     --otu_table "${OTU_TABLE}" \
     --match_list "${MATCH_LIST}" \
-    --new_otu_table "${NEW_OTU_TABLE}" \
-    --log "${LOG}" \
+    --new_otu_table /dev/null \
+    --log /dev/null \
     -t 1 > /dev/null 2>&1 && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
-rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}"
 
 ## mumu refuses null thread value
 DESCRIPTION="mumu refuses null thread value"
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
-NEW_OTU_TABLE=$(mktemp)
-LOG=$(mktemp)
 "${MUMU}" \
     --otu_table "${OTU_TABLE}" \
     --match_list "${MATCH_LIST}" \
-    --new_otu_table "${NEW_OTU_TABLE}" \
-    --log "${LOG}" \
+    --new_otu_table /dev/null \
+    --log /dev/null \
     --threads 0 > /dev/null 2>&1 && \
     failure "${DESCRIPTION}" || \
         success "${DESCRIPTION}"
-rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}"
 
 ## mumu refuses high thread value
 DESCRIPTION="mumu refuses high thread value (255 threads max)"
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
-NEW_OTU_TABLE=$(mktemp)
-LOG=$(mktemp)
 "${MUMU}" \
     --otu_table "${OTU_TABLE}" \
     --match_list "${MATCH_LIST}" \
-    --new_otu_table "${NEW_OTU_TABLE}" \
-    --log "${LOG}" \
+    --new_otu_table /dev/null \
+    --log /dev/null \
     --threads 256 > /dev/null 2>&1 && \
     failure "${DESCRIPTION}" || \
         success "${DESCRIPTION}"
-rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}"
 
 ## mumu stops with an error if the OTU table is not properly formatted
 DESCRIPTION="mumu stops with an error if the OTU table has a variable number of columns"
@@ -1364,7 +1358,6 @@ DESCRIPTION="mumu sorts matches by decreasing similarities when searching for a 
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
 NEW_OTU_TABLE=$(mktemp)
-LOG=$(mktemp)
 printf "OTUs\ts1\nA\t3\nB\t3\nC\t1\n" > "${OTU_TABLE}"
 printf "A\tC\t95.0\nC\tA\t95.0\nB\tC\t98.0\nC\tB\t98.0\n" > "${MATCH_LIST}"
 "${MUMU}" \
@@ -1377,7 +1370,7 @@ printf "A\tC\t95.0\nC\tA\t95.0\nB\tC\t98.0\nC\tB\t98.0\n" > "${MATCH_LIST}"
 awk '{if (NR == 2) {exit ($1 == "B" && $2 == 4) ? 0 : 1}}' "${NEW_OTU_TABLE}" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
-rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}"
 
 ## when there are several matches, sort them by similarity, abundance, spread, names
 #
@@ -1394,7 +1387,6 @@ DESCRIPTION="mumu sorts matches by decreasing similarities when searching for a 
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
 NEW_OTU_TABLE=$(mktemp)
-LOG=$(mktemp)
 printf "OTUs\ts1\nA\t3\nB\t3\nC\t1\n" > "${OTU_TABLE}"
 printf "B\tC\t98.0\nC\tB\t98.0\nA\tC\t95.0\nC\tA\t95.0\n" > "${MATCH_LIST}"
 "${MUMU}" \
@@ -1407,7 +1399,7 @@ printf "B\tC\t98.0\nC\tB\t98.0\nA\tC\t95.0\nC\tA\t95.0\n" > "${MATCH_LIST}"
 awk '{if (NR == 2) {exit ($1 == "B" && $2 == 4) ? 0 : 1}}' "${NEW_OTU_TABLE}" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
-rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}"
 
 
 ## when there are several matches, sort them by similarity, abundance, spread, names
@@ -1425,7 +1417,6 @@ DESCRIPTION="mumu sorts matches by decreasing abundance when searching for a par
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
 NEW_OTU_TABLE=$(mktemp)
-LOG=$(mktemp)
 printf "OTUs\ts1\nA\t2\nB\t3\nC\t1\n" > "${OTU_TABLE}"
 printf "A\tC\t98.0\nC\tA\t98.0\nB\tC\t98.0\nC\tB\t98.0\n" > "${MATCH_LIST}"
 "${MUMU}" \
@@ -1438,7 +1429,7 @@ printf "A\tC\t98.0\nC\tA\t98.0\nB\tC\t98.0\nC\tB\t98.0\n" > "${MATCH_LIST}"
 awk '{if (NR == 2) {exit ($1 == "B" && $2 == 4) ? 0 : 1}}' "${NEW_OTU_TABLE}" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
-rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}"
 
 ## when there are several matches, sort them by similarity, abundance, spread, names
 #
@@ -1455,7 +1446,6 @@ DESCRIPTION="mumu sorts matches by decreasing abundance when searching for a par
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
 NEW_OTU_TABLE=$(mktemp)
-LOG=$(mktemp)
 printf "OTUs\ts1\nA\t2\nB\t3\nC\t1\n" > "${OTU_TABLE}"
 printf "B\tC\t98.0\nC\tB\t98.0\nA\tC\t98.0\nC\tA\t98.0\n" > "${MATCH_LIST}"
 "${MUMU}" \
@@ -1468,7 +1458,7 @@ printf "B\tC\t98.0\nC\tB\t98.0\nA\tC\t98.0\nC\tA\t98.0\n" > "${MATCH_LIST}"
 awk '{if (NR == 2) {exit ($1 == "B" && $2 == 4) ? 0 : 1}}' "${NEW_OTU_TABLE}" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
-rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}"
 
 ## when there are several matches, sort them by similarity, abundance, spread, names
 #
@@ -1490,7 +1480,6 @@ DESCRIPTION="mumu sorts matches by decreasing spread when searching for a parent
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
 NEW_OTU_TABLE=$(mktemp)
-LOG=$(mktemp)
 printf "OTUs\ts1\ts2\nA\t3\t0\nB\t2\t1\nC\t1\t0\n" > "${OTU_TABLE}"
 printf "A\tC\t98.0\nC\tA\t98.0\nB\tC\t98.0\nC\tB\t98.0\n" > "${MATCH_LIST}"
 "${MUMU}" \
@@ -1503,7 +1492,7 @@ printf "A\tC\t98.0\nC\tA\t98.0\nB\tC\t98.0\nC\tB\t98.0\n" > "${MATCH_LIST}"
 awk '{if (NR == 2) {exit ($1 == "B" && $2 == 3 && $3 == 1) ? 0 : 1}}' "${NEW_OTU_TABLE}" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
-rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}"
 
 ## when there are several matches, sort them by similarity, abundance, spread, names
 #
@@ -1525,7 +1514,6 @@ DESCRIPTION="mumu sorts matches by decreasing spread when searching for a parent
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
 NEW_OTU_TABLE=$(mktemp)
-LOG=$(mktemp)
 printf "OTUs\ts1\ts2\nA\t3\t0\nB\t2\t1\nC\t1\t0\n" > "${OTU_TABLE}"
 printf "B\tC\t98.0\nC\tB\t98.0\nA\tC\t98.0\nC\tA\t98.0\n" > "${MATCH_LIST}"
 "${MUMU}" \
@@ -1538,7 +1526,7 @@ printf "B\tC\t98.0\nC\tB\t98.0\nA\tC\t98.0\nC\tA\t98.0\n" > "${MATCH_LIST}"
 awk '{if (NR == 2) {exit ($1 == "B" && $2 == 3 && $3 == 1) ? 0 : 1}}' "${NEW_OTU_TABLE}" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
-rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}"
 
 ## when there are several matches, sort them by similarity, abundance, spread, names
 #
@@ -1560,7 +1548,6 @@ DESCRIPTION="mumu sorts matches by ASCIIbetical order when searching for a paren
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
 NEW_OTU_TABLE=$(mktemp)
-LOG=$(mktemp)
 printf "OTUs\ts1\na\t3\nA\t3\nC\t1\n" > "${OTU_TABLE}"
 printf "a\tC\t98.0\nC\ta\t98.0\nA\tC\t98.0\nC\tA\t98.0\n" > "${MATCH_LIST}"
 "${MUMU}" \
@@ -1573,7 +1560,7 @@ printf "a\tC\t98.0\nC\ta\t98.0\nA\tC\t98.0\nC\tA\t98.0\n" > "${MATCH_LIST}"
 awk '{if (NR == 2) {exit ($1 == "A" && $2 == 4) ? 0 : 1}}' "${NEW_OTU_TABLE}" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
-rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}"
 
 ## when there are several matches, sort them by similarity, abundance, spread, names
 #
@@ -1595,7 +1582,6 @@ DESCRIPTION="mumu sorts matches by ASCIIbetical order when searching for a paren
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
 NEW_OTU_TABLE=$(mktemp)
-LOG=$(mktemp)
 printf "OTUs\ts1\na\t3\nA\t3\nC\t1\n" > "${OTU_TABLE}"
 printf "A\tC\t98.0\nC\tA\t98.0\na\tC\t98.0\nC\ta\t98.0\n" > "${MATCH_LIST}"
 "${MUMU}" \
@@ -1608,7 +1594,7 @@ printf "A\tC\t98.0\nC\tA\t98.0\na\tC\t98.0\nC\ta\t98.0\n" > "${MATCH_LIST}"
 awk '{if (NR == 2) {exit ($1 == "A" && $2 == 4) ? 0 : 1}}' "${NEW_OTU_TABLE}" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
-rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}"
 
 
 ## ------------------------------------------------------------------- log file
@@ -2224,8 +2210,6 @@ wait
 DESCRIPTION="mumu accepts empty OTUs (no reads)"
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
-NEW_OTU_TABLE=$(mktemp)
-LOG=$(mktemp)
 printf "OTUs\ts1\nA\t0\n" > "${OTU_TABLE}"
 printf "" > "${MATCH_LIST}"
 "${MUMU}" \
@@ -2236,7 +2220,7 @@ printf "" > "${MATCH_LIST}"
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 
-rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}"
 
 ## mumu accepts an empty OTU (hit, but no reads)
 ## except no merging, so the output table should have three lines
