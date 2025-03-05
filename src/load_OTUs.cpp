@@ -36,7 +36,7 @@
 
 namespace {
   [[nodiscard]]
-  auto count_samples (const std::string &line) -> unsigned int {
+  auto count_samples(const std::string &line) -> unsigned int {
     // number of column separators is equal to the number of samples
     return static_cast<unsigned int>(std::ranges::count(line, sepchar));
   }
@@ -49,17 +49,17 @@ namespace {
   }
 
 
-  auto output_first_line (const std::string &line,
-                          struct Parameters const &parameters) -> void {
+  auto output_first_line(const std::string &line,
+                         struct Parameters const &parameters) -> void {
     // write header line to new OTU table
     std::ofstream new_otu_table {parameters.new_otu_table};
     new_otu_table << line << '\n';
   }
 
 
-  auto parse_each_otu (std::unordered_map<std::string, struct OTU> &OTUs,
-                       std::string &line,
-                       const unsigned int n_samples) -> void {
+  auto parse_each_otu(std::unordered_map<std::string, struct OTU> &OTUs,
+                      std::string &line,
+                      const unsigned int n_samples) -> void {
     // get OTU id
     const auto first_sep {line.find_first_of(sepchar)};
     const std::string OTU_id {line.substr(0, first_sep)};
@@ -91,8 +91,8 @@ namespace {
 } // namespace
 
 
-auto read_otu_table (std::unordered_map<std::string, struct OTU> &OTUs,
-                     struct Parameters const &parameters) -> void {
+auto read_otu_table(std::unordered_map<std::string, struct OTU> &OTUs,
+                    struct Parameters const &parameters) -> void {
   std::cout << "parse OTU table... ";
   // input and output files, buffer
   std::ifstream otu_table {parameters.otu_table};
