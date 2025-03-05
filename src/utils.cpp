@@ -21,7 +21,7 @@
 // 34398 MONTPELLIER CEDEX 5
 // France
 
-#include <cstdlib>  // std::exit
+#include <cstdlib>  // std::exit, std::quick_exit
 #include <iostream>
 #include <string>
 #include "mumu.hpp"
@@ -32,6 +32,7 @@
 auto fatal(const std::string &message) -> void {
   std::cerr << '\n' << "Error: " << message << "\n";
   std::exit(EXIT_FAILURE);
+  // refactoring: std::quick_exit eliminates clang-tidy 'concurrency-mt-unsafe'
 }
 
 [[ noreturn ]]
