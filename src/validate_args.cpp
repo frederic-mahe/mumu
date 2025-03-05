@@ -28,6 +28,7 @@
 #include "utils.hpp"
 
 
+namespace {
 auto check_mandatory_arguments(Parameters const &parameters) -> void {
   if (not parameters.is_otu_table) {
     fatal("missing mandatory argument --otu_table filename");
@@ -105,6 +106,7 @@ auto check_numerical_parameters(Parameters const &parameters) -> void {
           std::string{use_average_value});
   }
 }
+} // namespace
 
 
 auto validate_args (Parameters const &parameters) -> void {
