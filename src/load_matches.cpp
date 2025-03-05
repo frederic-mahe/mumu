@@ -51,8 +51,8 @@
 // }
 
 
-auto read_match_list (std::unordered_map<std::string, struct OTU> &OTUs,
-                      struct Parameters const &parameters) -> void {
+auto read_match_list(std::unordered_map<std::string, struct OTU> &OTUs,
+                     struct Parameters const &parameters) -> void {
   std::cout << "parse match list... ";
   // open input file
   std::ifstream match_list {parameters.match_list};
