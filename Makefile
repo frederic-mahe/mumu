@@ -57,6 +57,7 @@ all: $(PROG)
 # GCC 12: nothing not already activated by default or covered by -Wall -Wextra
 # GCC 13: nothing not already activated by default or covered by -Wall -Wextra
 # GCC 14: -Wnrvo (Named Return Value Optimization)
+# GCC 15: nothing not already activated by default or covered by -Wall -Wextra
 debug: SPECIFIC = -Og -ggdb -DDEBUG -D_GLIBCXX_DEBUG -fsanitize=undefined,address \
                  -fno-omit-frame-pointer \
                  -Wcast-align -Wcast-qual -Wconversion -Wdate-time -Wdouble-promotion \
