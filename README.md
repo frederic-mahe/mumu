@@ -9,7 +9,7 @@ post-clustering curation of metabarcoding data
 
 **mumu** is not a strict lulu clone. There is a [bug in
 lulu](https://github.com/tobiasgf/lulu/issues/8) that prevents some
-merging from happening. Additionaly, mumu can chain merges, not
+merging from happening. Additionally, mumu can chain merges, not
 lulu. This results in slightly more merging with mumu (by a few
 percent).
 
@@ -89,7 +89,7 @@ work in progress.
   [phyloseq](https://joey711.github.io/phyloseq/) objects (R).
 
 
-## Roadmap
+## Road-map
 
 **mumu** is currently feature-complete (nothing is missing), but
 refactoring will continue and new versions will be released as soon as
