@@ -86,7 +86,7 @@ auto update_spread_values(std::unordered_map<std::string, struct OTU> &OTUs) -> 
     if (not OTUs[OTU_id].is_root) { continue; }
 
     // refactor: move to a new file count_occurrences
-    auto has_reads = [](const auto n_reads) { return n_reads != 0; };
+    auto has_reads = [](const auto n_reads) -> bool { return n_reads != 0; };
     OTUs[OTU_id].spread = static_cast<unsigned int>(std::ranges::count_if(OTUs[OTU_id].samples, has_reads));
   }
   std::cout << "done\n";
