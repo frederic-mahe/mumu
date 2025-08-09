@@ -49,6 +49,7 @@ namespace {
         std::tie(rhs.abundance, rhs.spread, OTU_id);
     }
 
+    // clang 22: warning: member function 'operator==' is not needed and will not be emitted [-Wunneeded-member-function]
     auto operator==(OTU_stats const& rhs) const -> bool = default;
   };
 
