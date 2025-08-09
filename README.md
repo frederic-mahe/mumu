@@ -51,7 +51,7 @@ make install  # as root or sudo
   - a recent GCC compiler (GCC 10 or more recent, clang 17 or more recent),
   - GNU Awk and other GNU tools for testing
 
-- run (see `mumu --help` and `man mumu` for details):
+- run (see `mumu --help` and `man mumu` for more details):
 
 ```sh
 mumu \
