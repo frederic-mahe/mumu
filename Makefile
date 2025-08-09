@@ -25,7 +25,7 @@ PROG := mumu
 MAN := man/$(PROG).1
 
 CXX := g++
-CXXFLAGS := -std=c++2a -Wall -Wextra -Wpedantic
+CXXFLAGS := -std=c++20 -Wall -Wextra -Wpedantic
 SPECIFIC := -O3 -DNDEBUG -flto
 
 prefix ?= /usr/local
