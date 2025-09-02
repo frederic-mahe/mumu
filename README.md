@@ -48,7 +48,8 @@ make install  # as root or sudo
 - dependencies are minimal:
   - a GNU/Linux 64-bit system,
   - `make` (version 4 or more recent),
-  - a recent GCC compiler (GCC 10 or more recent, clang 17 or more recent),
+  - a compiler: GCC 10 (2020) or more recent, or clang 17 (2023) or
+    more recent,
   - GNU Awk and other GNU tools for testing
 
 - run (see `mumu --help` and `man mumu` for more details):
