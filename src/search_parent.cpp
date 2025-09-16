@@ -86,6 +86,29 @@ namespace {
   }
 
 
+  auto print_log_header(std::ofstream& log_file) -> void {
+    log_file
+      << "son_id" << sepchar
+      << "father_id" << sepchar
+      << "similarity" << sepchar
+      << "son_total_abundance" << sepchar
+      << "father_total_abundance" << sepchar
+      << "son_overlap_abundance" << sepchar
+      << "father_overlap_abundance" << sepchar
+      << "son_spread" << sepchar
+      << "father_spread" << sepchar
+      << "father_overlap_spread" << sepchar
+      << "smallest_ratio" << sepchar
+      << "sum_ratio" << sepchar
+      << "avg_ratio" << sepchar
+      << "smallest_non_null_ratio" << sepchar
+      << "avg_non_null_ratio" << sepchar
+      << "largest_ratio" << sepchar
+      << "relative_cooccurence" << sepchar
+      << "status" << '\n';
+  }
+
+
   auto per_sample_ratios(std::unordered_map<std::string, struct OTU> &OTUs,
                          Stats &stats) -> void {
     // C++23 refactor: std::pow(2, std::numeric_limits<double>::digits)
