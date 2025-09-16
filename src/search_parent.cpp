@@ -97,14 +97,14 @@ namespace {
       << "parent_overlap_abundance" << sepchar  // 7.  sum through all samples where the query OTU is also present
       << "query_incidence" << sepchar  // 8.  number of samples where the query OTU is present
       << "parent_incidence" << sepchar  // 9.  number of samples where the potential parent OTU is present
-      << "parent_overlap_incidence" << sepchar  // 10. number of samples where both the potential parent OTU and the query OTU are present
+      << "common_incidence" << sepchar  // 10. number of samples where both the potential parent OTU and the query OTU are present
       << "smallest_ratio" << sepchar  // 11. smallest observed abundance ratio
       << "sum_ratio" << sepchar  // 12. sum of the abundance ratios
       << "avg_ratio" << sepchar  // 13. average value of abundance ratios
       << "smallest_non_null_ratio" << sepchar  // 14. smallest non-null abundance ratio
       << "avg_non_null_ratio" << sepchar  // 15. average value of non-null abundance ratios
       << "largest_ratio" << sepchar  // 16. largest ratio value
-      << "relative_incidence" << sepchar  // 17. relative incidence (parent overlap incidence / query incidence)
+      << "relative_incidence" << sepchar  // 17. relative incidence (common incidence / query incidence)
       << "status"  // 18. potential parent OTU is either accepted as a parent, or rejected
       << "\n";
   }
