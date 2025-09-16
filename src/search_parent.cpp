@@ -104,7 +104,7 @@ namespace {
       << "smallest_non_null_ratio" << sepchar  // 14. smallest non-null abundance ratio
       << "avg_non_null_ratio" << sepchar  // 15. average value of non-null abundance ratios
       << "largest_ratio" << sepchar  // 16. largest ratio value
-      << "relative_cooccurence" << sepchar  // 17. relative incidence (common incidence / query incidence)
+      << "relative_cooccurence" << sepchar  // 17. relative incidence (parent overlap incidence / query incidence)
       << "status"  // 18. potential parent OTU is either accepted as a parent, or rejected
       << "\n";
   }
