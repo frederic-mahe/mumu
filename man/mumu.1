@@ -117,13 +117,14 @@ vsearch \\
 .TP
 .BI \-l\fP,\fB\ \-\-log\~ "filename"
 Output file for OTU merging statistics (18 columns separated by
-tabulations). OTUs are processed in no specific order. For a given
-query OTU with potential parents, mumu will order potential parents by
-decreasing similarity with the query OTU, then by decreasing
-abundance, then by decreasing incidence (or spread), and finally by
-names (increasing ASCIIbetical order). Each potential parent is
-tested, and the search stops if parenthood criteria are matched or if
-the list is exhausted. The different columns correspond to:
+tabulations, first line is a header line with column names). OTUs are
+processed in no specific order. For a given query OTU with potential
+parents, mumu will order potential parents by decreasing similarity
+with the query OTU, then by decreasing abundance, then by decreasing
+incidence (or spread), and finally by names (increasing ASCIIbetical
+order). Each potential parent is tested, and the search stops if
+parenthood criteria are matched or if the list is exhausted. The
+different columns correspond to:
 .RS
 .RS
 .nr step 1 1
