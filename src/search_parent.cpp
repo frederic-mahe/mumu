@@ -209,6 +209,7 @@ auto search_parent(std::unordered_map<std::string, struct OTU> &OTUs,
   std::cout << "search for potential parent OTUs... ";
   // stats will be written to log file
   std::ofstream log_file {parameters.log};
+  print_log_header(log_file);
 
   for (auto& otu : OTUs) {
     auto const& OTU_id {otu.first};  // refactoring: replace with [first, second]?
