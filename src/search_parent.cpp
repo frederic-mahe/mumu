@@ -88,24 +88,25 @@ namespace {
 
   auto print_log_header(std::ofstream& log_file) -> void {
     log_file
-      << "son_id" << sepchar
-      << "father_id" << sepchar
-      << "similarity" << sepchar
-      << "son_total_abundance" << sepchar
-      << "father_total_abundance" << sepchar
-      << "son_overlap_abundance" << sepchar
-      << "father_overlap_abundance" << sepchar
-      << "son_spread" << sepchar
-      << "father_spread" << sepchar
-      << "father_overlap_spread" << sepchar
-      << "smallest_ratio" << sepchar
-      << "sum_ratio" << sepchar
-      << "avg_ratio" << sepchar
-      << "smallest_non_null_ratio" << sepchar
-      << "avg_non_null_ratio" << sepchar
-      << "largest_ratio" << sepchar
-      << "relative_cooccurence" << sepchar
-      << "status" << '\n';
+      << "query_id" << sepchar // 1.  name of query OTU
+      << "parent_id" << sepchar // 2.  name of potential parent OTU
+      << "similarity" << sepchar // 3.  percentage of similarity
+      << "query_total_abundance" << sepchar  // 4.  total abundance of the query OTU (sum through all samples)
+      << "parent_total_abundance" << sepchar  // 5.  total abundance of the potential parent OTU (sum through all samples)
+      << "query_overlap_abundance" << sepchar  // 6.  sum through all samples where the potential parent OTU is also present
+      << "parent_overlap_abundance" << sepchar  // 7.  sum through all samples where the query OTU is also present
+      << "query_incidence" << sepchar  // 8.  number of samples where the query OTU is present
+      << "parent_incidence" << sepchar  // 9.  number of samples where the potential parent OTU is present
+      << "parent_overlap_incidence" << sepchar  // 10. number of samples where both the potential parent OTU and the query OTU are present
+      << "smallest_ratio" << sepchar  // 11. smallest observed abundance ratio
+      << "sum_ratio" << sepchar  // 12. sum of the abundance ratios
+      << "avg_ratio" << sepchar  // 13. average value of abundance ratios
+      << "smallest_non_null_ratio" << sepchar  // 14. smallest non-null abundance ratio
+      << "avg_non_null_ratio" << sepchar  // 15. average value of non-null abundance ratios
+      << "largest_ratio" << sepchar  // 16. largest ratio value
+      << "relative_cooccurence" << sepchar  // 17. relative incidence (common incidence / query incidence)
+      << "status"  // 18. potential parent OTU is either accepted as a parent, or rejected
+      << "\n";
   }
 
 
