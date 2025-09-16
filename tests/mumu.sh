@@ -1599,8 +1599,26 @@ rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}"
 
 ## ------------------------------------------------------------------- log file
 
+## log file has 18 columns (no merge)
+DESCRIPTION="mumu log file header has 18 columns"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log "${LOG}" > /dev/null 2>&1
+awk 'END {exit NF == 18 ? 0 : 1}' "${LOG}" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
+exit
+
 ## log file has 18 columns
-DESCRIPTION="mumu log file has 18 columns"
+DESCRIPTION="mumu log file entries have 18 columns"
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
 NEW_OTU_TABLE=$(mktemp)
