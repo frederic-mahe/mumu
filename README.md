@@ -111,7 +111,7 @@ and supported by compilers.
 - [x] investigate the five minor failed tests when running on Alpine (as root),
 - [x] add a row of column header to the log file? (see issue https://github.com/frederic-mahe/mumu/issues/4)
 - [ ] silently strip quote symbols from input table? Exporters often
-      quote strings, tripping some users,
+      quote strings, tripping some users (see issue #7),
 - [ ] allow named pipes (input/output),
 - [x] test performances on ARM64 GNU/Linux (Raspberry),
 - [x] test performances on RISC-V GNU/Linux (Banana Pi BPI-F3),
