@@ -22,6 +22,7 @@
 // France
 
 #include <algorithm>  // std::ranges::count
+#include <cstdio>  // std::size_t
 #include <fstream>
 #include <iostream>
 #include <numeric>
@@ -58,12 +59,42 @@ namespace {
   }
 
 
+  auto skip_left_quote(std::string const &line,
+                       std::size_t const first_sep) -> std::size_t {
+    static constexpr auto quote = '"';
+    auto const has_sep = first_sep != std::string::npos;
+    auto const starts_with_quote = line.front() == quote;
+    return (has_sep and starts_with_quote) ? std::size_t{1} : std::size_t{0};
+  }
+
+
+  auto skip_right_quote(std::string const &line,
+                        std::size_t const first_sep) -> std::size_t {
+    static constexpr auto quote = '"';
+    auto const has_sep = first_sep != std::string::npos;
+    // cases: ID, empty
+    if (not has_sep) { return first_sep; }
+    // case: \t
+    if (first_sep == 0) { return first_sep; }
+    // cases: I\t, "\t, ID"\t, ID\t, ""\t
+    auto const ends_with_quote = (line.at(first_sep - 1) == quote);
+    return ends_with_quote ? first_sep - 1 : first_sep;
+  }
+
+
+  auto get_OTU_id(std::string const &line,
+                  std::size_t const first_sep) -> std::string {
+    auto const id_start = skip_left_quote(line, first_sep);
+    auto const id_count = skip_right_quote(line, first_sep) - id_start;
+    return line.substr(id_start, id_count);
+  }
+
+
   auto parse_each_otu(std::unordered_map<std::string, struct OTU> &OTUs,
                       std::string &line,
                       const unsigned int n_samples) -> void {
-    // get OTU id
-    const auto first_sep {line.find_first_of(sepchar)};
-    auto const OTU_id {line.substr(0, first_sep)};
+    auto const first_sep {line.find_first_of(sepchar)};
+    auto const OTU_id = get_OTU_id(line, first_sep);
 
     // check for duplicates
     if (OTUs.contains(OTU_id)) {
