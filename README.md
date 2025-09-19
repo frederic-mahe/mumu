@@ -110,7 +110,7 @@ and supported by compilers.
 - [x] compile with clang 17 to 21 (`std::ranges` is not supported in clang-16),
 - [x] investigate the five minor failed tests when running on Alpine (as root),
 - [x] add a row of column header to the log file? (see issue https://github.com/frederic-mahe/mumu/issues/4)
-- [ ] silently strip quote symbols from input table? Exporters often
+- [x] silently strip quote symbols from input table? Exporters often
       quote strings, tripping some users (see issue #7),
 - [ ] allow named pipes (input/output),
 - [x] test performances on ARM64 GNU/Linux (Raspberry),
