@@ -1016,7 +1016,7 @@ grep -Eq "^A[[:space:]]" "${NEW_OTU_TABLE}" && \
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
 # case: ""ID""
-DESCRIPTION="mumu silently removes terminal quotes from OTU ids in OTU table (internal quotes)"
+DESCRIPTION="mumu silently removes one layer of terminal quotes from OTU ids in OTU table (not recursive)"
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
 NEW_OTU_TABLE=$(mktemp)
