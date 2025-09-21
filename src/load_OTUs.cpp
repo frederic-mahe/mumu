@@ -96,6 +96,7 @@ namespace {
     auto const first_sep {line.find_first_of(sepchar)};
     auto const OTU_id = get_OTU_id(line, first_sep);
 
+    // strengthening: check for empty OTU_id?
     // check for duplicates
     if (OTUs.contains(OTU_id)) {
       fatal("duplicated OTU name: " + OTU_id);
