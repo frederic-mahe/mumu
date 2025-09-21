@@ -92,7 +92,7 @@ namespace {
     // threads (1 <= x <= 255)
     constexpr static auto max_threads {255};
     if (parameters.threads != 1) {
-      std::cout << "warning: mumu is not yet multithreaded.\n";
+      warn("mumu is not yet multithreaded");
     }
     if (parameters.threads < 1 or parameters.threads > max_threads) {
       fatal("--threads value must be between 1 and " + std::to_string(max_threads));
