@@ -13,7 +13,7 @@ merging from happening. Additionally, mumu can chain merges, not
 lulu. This results in slightly more merging with mumu (by a few
 percent).
 
-**mumu** is fully tested, with 157 carefully crafted individual
+**mumu** is fully tested, with 158 carefully crafted individual
 black-box tests, covering 100% of the application-specific C++
 code. Tests are written using common Unix/Linux shell utilities. Some
 C++ internal tests are also used (_assertions_), but these are only
