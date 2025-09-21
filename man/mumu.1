@@ -49,10 +49,11 @@ output version information and exit successfully.
 Input file containing the contingency table. One OTU per line, one
 sample per column, columns are separated by tabulations. The first
 line contains sample names (column names are irrelevant), and the
-first column contains OTU names. Each OTU name must be unique (ignores
-terminal quotes, if any). Abundance values are positive integers
-ranging from zero to 2^64 - 1. Decimal values are floored (0.9 becomes
-0). Here is a simple example with three samples and two OTUs:
+first column contains OTU names. Each OTU name must be unique. If
+present, leading and trailing double quotes are silently removed from
+OTU names. Abundance values are positive integers ranging from zero to
+2^64 - 1. Decimal values are floored (0.9 becomes 0). Here is a simple
+example with three samples and two OTUs:
 .sp 1
 .TS H
 center, tab (@);
