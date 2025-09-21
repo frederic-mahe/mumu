@@ -46,7 +46,7 @@ namespace {
 
   auto check_number_of_samples(unsigned int const number_of_samples) -> void {
     if (number_of_samples == 0) {
-      std::cout << "\nwarning: OTU table should have at least one sample\n";
+      warn("OTU table should have at least one sample");
     }
   }
 

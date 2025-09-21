@@ -260,7 +260,7 @@ MATCH_LIST=$(mktemp)
     --otu_table "${OTU_TABLE}" \
     --match_list "${MATCH_LIST}" \
     --new_otu_table /dev/null \
-    --log /dev/null > /dev/null && \
+    --log /dev/null > /dev/null 2>&1 && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}"
@@ -1128,8 +1128,8 @@ DESCRIPTION="mumu warns if OTU table contains no sample (zero or one column)"
     --otu_table <(printf "otu\nASV1\n") \
     --match_list <(printf "ASV1\tASV2\t96.8\n") \
     --new_otu_table /dev/null \
-    --log /dev/null | \
-    grep -wq "warning: OTU table should have at least one sample" && \
+    --log /dev/null 2>&1 | \
+    grep -wq "Warning: OTU table should have at least one sample" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 
