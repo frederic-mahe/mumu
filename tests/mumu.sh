@@ -1032,6 +1032,7 @@ grep -Eq "^\"A\"[[:space:]]" "${NEW_OTU_TABLE}" && \
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
+## aim for maximal flexibility for users (revisit if there are complains or confusion)
 DESCRIPTION="mumu accepts empty OTU ids in OTU table"
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
