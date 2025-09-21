@@ -23,6 +23,9 @@
 
 #include <string>
 
+
+auto warn(char const * message) -> void;
+
 [[ noreturn ]] auto fatal(const std::string &message) -> void;
 
 [[ noreturn ]] auto exit_successfully() -> void;

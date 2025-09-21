@@ -27,6 +27,11 @@
 #include "mumu.hpp"
 
 
+
+auto warn(char const * message) -> void {
+  std::cerr << '\n' << "Warning: " << message << "\n";
+}
+
 // C++20 refactor: transform into a variadic template
 [[ noreturn ]]
 auto fatal(const std::string &message) -> void {
