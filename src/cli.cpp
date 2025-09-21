@@ -166,7 +166,7 @@ auto parse_args(int argc, char ** argv, Parameters &parameters) -> void {
       exit_successfully();
 
     default:
-      std::cerr << "Warning: unknown option\n";
+      warn("unknown option");
     }
   }
 }
