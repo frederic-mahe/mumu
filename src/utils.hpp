@@ -29,6 +29,6 @@ auto warn(char const * message) -> void;
 auto warn(char const * message,
           std::string const & line_view) -> void;
 
-[[ noreturn ]] auto fatal(const std::string &message) -> void;
+[[ noreturn ]] auto fatal(std::string const & message) -> void;
 
 [[ noreturn ]] auto exit_successfully() -> void;

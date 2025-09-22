@@ -40,7 +40,7 @@ auto warn(char const * message,
 
 // C++20 refactor: transform into a variadic template
 [[ noreturn ]]
-auto fatal(const std::string &message) -> void {
+auto fatal(std::string const & message) -> void {
   std::cerr << '\n' << "Error: " << message << "\n";
   std::exit(EXIT_FAILURE);
   // refactoring: std::quick_exit eliminates clang-tidy 'concurrency-mt-unsafe'
