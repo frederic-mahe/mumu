@@ -65,12 +65,12 @@ auto read_match_list(std::unordered_map<std::string, struct OTU> &OTUs,
       std::string query;
       std::string hit;
       std::stringstream match_raw_data(line);
-      getline(match_raw_data, query, sepchar);
-      getline(match_raw_data, hit, sepchar);
-      getline(match_raw_data, buf, sepchar);
+      std::getline(match_raw_data, query, sepchar);
+      std::getline(match_raw_data, hit, sepchar);
+      std::getline(match_raw_data, buf, sepchar);
 
       // sanity check
-      if (getline(match_raw_data, buf, sepchar)) {
+      if (std::getline(match_raw_data, buf, sepchar)) {
         fatal("match list entry has more than three columns");
       }
 
