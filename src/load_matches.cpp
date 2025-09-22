@@ -77,9 +77,9 @@ auto read_match_list(std::unordered_map<std::string, struct OTU> &OTUs,
   std::string line;
   while (std::getline(match_list, line))
     {
-      std::string buf;
       std::string query;
       std::string hit;
+      std::string buf;
       std::stringstream match_raw_data(line);
       std::getline(match_raw_data, query, sepchar);
       std::getline(match_raw_data, hit, sepchar);
