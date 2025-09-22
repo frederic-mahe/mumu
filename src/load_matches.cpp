@@ -21,6 +21,7 @@
 // 34398 MONTPELLIER CEDEX 5
 // France
 
+#include <algorithm>
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -32,6 +33,15 @@
 
 
 namespace {
+
+  auto check_n_columns(std::string const & line) -> void {
+    static constexpr auto expected_n_sepchar = 2;
+    auto const count = std::ranges::count(line, sepchar);
+    if (count != expected_n_sepchar) {
+      fatal("match list entry does not have three columns: " + line);
+    }
+  }
+
 
   // C++17 refactoring: replace with std::from_chars
   auto extract_similarity(std::string const & buf,
@@ -80,6 +90,7 @@ auto read_match_list(std::unordered_map<std::string, struct OTU> &OTUs,
   std::string line;
   while (std::getline(match_list, line))
     {
+      check_n_columns(line);
       std::string query;
       std::string hit;
       std::string buf;
@@ -87,11 +98,6 @@ auto read_match_list(std::unordered_map<std::string, struct OTU> &OTUs,
       std::getline(match_raw_data, query, sepchar);
       std::getline(match_raw_data, hit, sepchar);
       std::getline(match_raw_data, buf, sepchar);
-
-      // sanity check
-      if (std::getline(match_raw_data, buf, sepchar)) {
-        fatal("match list entry has more than three columns");
-      }
 
       auto const similarity {extract_similarity(buf, line)};
 

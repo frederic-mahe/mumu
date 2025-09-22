@@ -820,13 +820,27 @@ rm -f "${OTU_TABLE}" "${MATCH_LIST}"
 DESCRIPTION="mumu stops with an error message if the match list > 3 columns"
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
-printf "A\tB\t96.5\nB\tA\t96.5\textra\n" > "${MATCH_LIST}"
+printf "A\tB\t96.5\textra\n" > "${MATCH_LIST}"
 "${MUMU}" \
     --otu_table "${OTU_TABLE}" \
     --match_list "${MATCH_LIST}" \
     --new_otu_table /dev/null \
     --log /dev/null 2>&1 > /dev/null | \
-    grep -q "^Error" && \
+    grep -q "^Error:" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}"
+
+DESCRIPTION="mumu stops with an error message if the match list < 3 columns"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+printf "A\tB\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table /dev/null \
+    --log /dev/null 2>&1 > /dev/null | \
+    grep -q "^Error:" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}"
