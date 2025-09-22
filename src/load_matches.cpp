@@ -36,6 +36,9 @@ namespace {
   // C++17 refactoring: replace with std::from_chars
   auto extract_similarity(std::string const & buf,
                           std::string const & line) -> double {
+    if (buf.empty()) {
+      fatal("empty similarity value in line: " + line);
+    }
     try {
       static_cast<void>(std::stod(buf));
     } catch ([[maybe_unused]] std::invalid_argument const& ex) {
@@ -88,10 +91,6 @@ auto read_match_list(std::unordered_map<std::string, struct OTU> &OTUs,
       // sanity check
       if (std::getline(match_raw_data, buf, sepchar)) {
         fatal("match list entry has more than three columns");
-      }
-
-      if (buf.empty()) {
-        fatal("empty similarity value in line: " + line);
       }
 
       auto const similarity {extract_similarity(buf, line)};
