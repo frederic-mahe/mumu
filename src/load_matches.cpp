@@ -33,6 +33,7 @@
 
 namespace {
 
+  // C++17 refactoring: replace with std::from_chars
   auto extract_similarity(std::string const & buf,
                           std::string const & line) -> double {
     try {
