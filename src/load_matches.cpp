@@ -33,6 +33,16 @@
 
 namespace {
 
+  auto extract_similarity(std::string const & buf,
+                          std::string const & line) -> double {
+    try {
+      static_cast<void>(std::stod(buf));
+    } catch ([[maybe_unused]] std::invalid_argument const& ex) {
+      fatal("illegal similarity value in line: " + line);
+    }
+    return std::stod(buf);
+  }
+
 }  // namespace
 
 // // work in progress: use operator overload to parse match list file
@@ -83,13 +93,7 @@ auto read_match_list(std::unordered_map<std::string, struct OTU> &OTUs,
         fatal("empty similarity value in line: " + line);
       }
 
-      try {
-        static_cast<void>(std::stod(buf));
-      } catch ([[maybe_unused]] std::invalid_argument const& ex) {
-        fatal("illegal similarity value in line: " + line);
-      }
-
-      const auto similarity {std::stod(buf)};
+      auto const similarity {extract_similarity(buf, line)};
 
       // ignore matches below our similarity threshold
       if (similarity < parameters.minimum_match) { continue; }
