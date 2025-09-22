@@ -33,8 +33,8 @@ auto warn(char const * message) -> void {
 }
 
 auto warn(char const * message,
-          std::string const & line_copy) -> void {
-  std::cerr << '\n' << "Warning: " << message << line_copy << "\n";
+          std::string const & line_view) -> void {
+  std::cerr << '\n' << "Warning: " << message << line_view << "\n";
 }
 
 // C++20 refactor: transform into a variadic template
