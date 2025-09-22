@@ -941,8 +941,8 @@ printf "A\tC\t96.5\nC\tA\t96.5\n" > "${MATCH_LIST}"
     --otu_table "${OTU_TABLE}" \
     --match_list "${MATCH_LIST}" \
     --new_otu_table "${NEW_OTU_TABLE}" \
-    --log "${LOG}" 2> /dev/null | \
-    grep -q "^warning: " && \
+    --log "${LOG}" 2>&1 > /dev/null | \
+    grep -q "^Warning: " && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"

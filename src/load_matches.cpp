@@ -91,7 +91,7 @@ auto read_match_list(std::unordered_map<std::string, struct OTU> &OTUs,
 
       // ignore match entries that are not in the OTU table
       if ((not OTUs.contains(hit)) or (not OTUs.contains(query))) {
-        std::cout << "\nwarning: one of these is not in the OTU table: " << line << '\n';
+        warn("one of these is not in the OTU table: ", line);
         continue;
       }
 
