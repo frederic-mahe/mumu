@@ -27,15 +27,16 @@
 #include "mumu.hpp"
 
 
-
 auto warn(char const * message) -> void {
   std::cerr << '\n' << "Warning: " << message << "\n";
 }
+
 
 auto warn(char const * message,
           std::string const & line_view) -> void {
   std::cerr << '\n' << "Warning: " << message << line_view << "\n";
 }
+
 
 // C++20 refactor: transform into a variadic template
 [[ noreturn ]]
@@ -44,6 +45,7 @@ auto fatal(const std::string &message) -> void {
   std::exit(EXIT_FAILURE);
   // refactoring: std::quick_exit eliminates clang-tidy 'concurrency-mt-unsafe'
 }
+
 
 [[ noreturn ]]
 auto exit_successfully() -> void {
