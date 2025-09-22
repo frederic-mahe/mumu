@@ -26,6 +26,9 @@
 
 auto warn(char const * message) -> void;
 
+auto warn(char const * message,
+          std::string const & line_copy) -> void;
+
 [[ noreturn ]] auto fatal(const std::string &message) -> void;
 
 [[ noreturn ]] auto exit_successfully() -> void;
