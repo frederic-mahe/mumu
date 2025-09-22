@@ -30,6 +30,11 @@
 #include "mumu.hpp"
 #include "utils.hpp"
 
+
+namespace {
+
+}  // namespace
+
 // // work in progress: use operator overload to parse match list file
 // #include <numeric>
 // struct Match_line {
