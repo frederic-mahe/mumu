@@ -38,7 +38,7 @@
 namespace {
 
   [[nodiscard]]
-  auto count_samples(const std::string &line) -> unsigned int {
+  auto count_samples(std::string const &line) -> unsigned int {
     // number of column separators is equal to the number of samples
     return static_cast<unsigned int>(std::ranges::count(line, sepchar));
   }
@@ -51,7 +51,7 @@ namespace {
   }
 
 
-  auto output_first_line(const std::string &line,
+  auto output_first_line(std::string const &line,
                          struct Parameters const &parameters) -> void {
     // write header line to new OTU table
     std::ofstream new_otu_table {parameters.new_otu_table};
@@ -92,7 +92,7 @@ namespace {
 
   auto parse_each_otu(std::unordered_map<std::string, struct OTU> &OTUs,
                       std::string &line,
-                      const unsigned int n_samples) -> void {
+                      unsigned int const n_samples) -> void {
     auto const first_sep {line.find_first_of(sepchar)};
     auto const OTU_id = get_OTU_id(line, first_sep);
 
@@ -106,7 +106,7 @@ namespace {
     OTU otu;
     otu.samples.reserve(n_samples);
     std::stringstream abundances {line.substr(first_sep + 1)};
-    for (const auto abundance : std::ranges::istream_view<unsigned long int>(abundances)) {
+    for (auto const abundance : std::ranges::istream_view<unsigned long int>(abundances)) {
       otu.samples.push_back(abundance);
     }
 
@@ -116,7 +116,7 @@ namespace {
     }
 
     // add more results to the map
-    auto has_reads = [](const auto n_reads) -> bool { return n_reads != 0; };
+    auto has_reads = [](auto const n_reads) -> bool { return n_reads != 0; };
     otu.spread = static_cast<unsigned int>(std::ranges::count_if(otu.samples, has_reads));
     otu.sum_reads = std::accumulate(otu.samples.begin(), otu.samples.end(), 0UL);
     OTUs[OTU_id] = std::move(otu);
@@ -134,7 +134,7 @@ auto read_otu_table(std::unordered_map<std::string, struct OTU> &OTUs,
   // first line
   std::getline(otu_table, line);
   output_first_line(line, parameters);
-  const auto n_samples {count_samples(line)};
+  auto const n_samples {count_samples(line)};
   check_number_of_samples(n_samples);
 
   // parse other lines, and map the values
