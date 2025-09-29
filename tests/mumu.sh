@@ -1164,6 +1164,49 @@ DESCRIPTION="mumu warns if OTU table contains no sample (zero or one column)"
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 
+# true-positive
+DESCRIPTION="mumu warns if an OTU table header contains a comma (csv)"
+"${MUMU}" \
+    --otu_table <(printf "OTUs,s1\nA,1\n") \
+    --match_list <(printf "") \
+    --new_otu_table /dev/null \
+    --log /dev/null 2>&1 | \
+    grep -wq "Warning: .*comma.*" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
+# mix
+DESCRIPTION="mumu warns if an OTU table header contains a comma (tsv with comma in sample name)"
+"${MUMU}" \
+    --otu_table <(printf "OTUs\ts1,\nA\t1\n") \
+    --match_list <(printf "") \
+    --new_otu_table /dev/null \
+    --log /dev/null 2>&1 | \
+    grep -wq "Warning: .*comma.*" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
+# true-negative
+DESCRIPTION="mumu does not warn about csv if an OTU table header contains no comma"
+"${MUMU}" \
+    --otu_table <(printf "OTUs\ts1\nA\t1\n") \
+    --match_list <(printf "") \
+    --new_otu_table /dev/null \
+    --log /dev/null 2>&1 | \
+    grep -wq "Warning: .*comma.*" && \
+    failure "${DESCRIPTION}" || \
+        success "${DESCRIPTION}"
+
+DESCRIPTION="mumu does not warn about csv if an OTU name contains a comma"
+"${MUMU}" \
+    --otu_table <(printf "OTUs\ts1\nA,\t1\n") \
+    --match_list <(printf "") \
+    --new_otu_table /dev/null \
+    --log /dev/null 2>&1 | \
+    grep -wq "Warning: .*comma.*" && \
+    failure "${DESCRIPTION}" || \
+        success "${DESCRIPTION}"
+
 ## mumu accepts input with a single OTU (empty match list)
 DESCRIPTION="mumu accepts input with a single OTU (empty match list)"
 OTU_TABLE=$(mktemp)
