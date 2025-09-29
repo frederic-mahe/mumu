@@ -47,7 +47,7 @@ dependencies := Makefile $(wildcard src/*.hpp)
 ## link time optimization
 # - use '-flto=auto' with GCC 12 and 13 to avoid a compilation warning
 # - use '-flto' with clang, and all other versions of GCC
-# - only clang >= 17 can compile mumu
+# - risk of using '-flto=auto' with clang 12 and 13, but only clang >= 17 can compile mumu
 CXXVERSION := $(shell $(CXX) -dumpversion)
 ifeq ($(CXXVERSION), 12)
 	SPECIFIC += -flto=auto
