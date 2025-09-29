@@ -46,7 +46,7 @@ dependencies := Makefile $(wildcard src/*.hpp)
 
 ## link time optimization
 # - use '-flto=auto' with GCC 12 and 13 to avoid a compilation warning
-# - use '-flto' with clang and all versions of GCC
+# - use '-flto' with clang, and all other versions of GCC
 GCCVERSION := $(shell $(CXX) -dumpversion)
 ifeq ($(GCCVERSION), 12)
 	SPECIFIC += -flto=auto
