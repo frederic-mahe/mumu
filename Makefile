@@ -26,7 +26,7 @@ MAN := man/$(PROG).1
 
 CXX := g++
 CXXFLAGS := -std=c++20 -Wall -Wextra -Wpedantic
-SPECIFIC := -O3 -DNDEBUG -flto
+SPECIFIC := -O3 -DNDEBUG
 
 prefix ?= /usr/local
 datarootdir = $(prefix)/share
@@ -42,6 +42,25 @@ RMDIR := rmdir --parents --ignore-fail-on-non-empty
 objects  := $(patsubst %.cpp, %.o, $(wildcard src/*.cpp))
 
 dependencies := Makefile $(wildcard src/*.hpp)
+
+
+## link time optimization (warning with GCC 12 and 13, not with newer versions)
+CLANG = clang
+COMPILER_VERSION := $(shell $(CXX) --version)
+ifeq ($(CLANG), $(findstring $(CLANG), $(COMPILER_VERSION)))
+	SPECIFIC += -flto=full
+else
+	GCCVERSION := $(shell gcc -dumpversion)
+	ifeq ($(GCCVERSION), 12)
+		SPECIFIC += -flto=auto
+	endif
+	ifeq ($(GCCVERSION), 13)
+		SPECIFIC += -flto=auto
+	else
+		SPECIFIC += -flto
+	endif
+endif
+
 
 %.o: %.cpp $(dependencies)
 	$(CXX) $(CXXFLAGS) $(SPECIFIC) -c $< -o $@
