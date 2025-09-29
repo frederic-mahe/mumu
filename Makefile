@@ -44,21 +44,17 @@ objects  := $(patsubst %.cpp, %.o, $(wildcard src/*.cpp))
 dependencies := Makefile $(wildcard src/*.hpp)
 
 
-## link time optimization (warning with GCC 12 and 13, not with newer versions)
-CLANG = clang
-COMPILER_VERSION := $(shell $(CXX) --version)
-ifeq ($(CLANG), $(findstring $(CLANG), $(COMPILER_VERSION)))
-	SPECIFIC += -flto=full
+## link time optimization
+# - use '-flto=auto' with GCC 12 and 13 to avoid a compilation warning
+# - use '-flto' with clang and all versions of GCC
+GCCVERSION := $(shell gcc -dumpversion)
+ifeq ($(GCCVERSION), 12)
+	SPECIFIC += -flto=auto
+endif
+ifeq ($(GCCVERSION), 13)
+	SPECIFIC += -flto=auto
 else
-	GCCVERSION := $(shell gcc -dumpversion)
-	ifeq ($(GCCVERSION), 12)
-		SPECIFIC += -flto=auto
-	endif
-	ifeq ($(GCCVERSION), 13)
-		SPECIFIC += -flto=auto
-	else
-		SPECIFIC += -flto
-	endif
+	SPECIFIC += -flto
 endif
 
 
