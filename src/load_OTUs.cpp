@@ -51,6 +51,14 @@ namespace {
   }
 
 
+  auto check_if_csv(std::string const &line) -> void {
+    static constexpr auto csv_separator = ',';  // comma
+    auto const n_separators = std::ranges::count(line, csv_separator);
+    if (n_separators == 0) { return; }
+    warn("commas in the OTU table header. Make sure the table is tsv, not csv");
+  }
+
+
   auto output_first_line(std::string const &line,
                          struct Parameters const &parameters) -> void {
     // write header line to new OTU table
@@ -136,6 +144,7 @@ auto read_otu_table(std::unordered_map<std::string, struct OTU> &OTUs,
   output_first_line(line, parameters);
   auto const n_samples {count_samples(line)};
   check_number_of_samples(n_samples);
+  check_if_csv(line);
 
   // parse other lines, and map the values
   while (std::getline(otu_table, line)) {
