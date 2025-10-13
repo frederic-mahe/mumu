@@ -134,6 +134,10 @@ auto parse_args(int argc, char ** argv, Parameters &parameters) -> void {
       parameters.minimum_relative_cooccurence = std::stod(optarg);
       break;
 
+    case 'e':  // legacy mode (replicate lulu's behavior)
+      parameters.is_legacy = true;
+      break;
+
     case 'h':  // help message
       help();
       exit_successfully();

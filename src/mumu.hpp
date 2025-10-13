@@ -63,6 +63,7 @@ struct Parameters {
   double minimum_ratio {minimum_ratio_default};
   double minimum_relative_cooccurence {minimum_relative_cooccurence_default};
   std::string_view minimum_ratio_type {use_minimum_value};
+  bool is_legacy {false};
 };
 
 
