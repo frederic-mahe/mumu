@@ -23,6 +23,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cmath>  // std::fabs
 #include <fstream>
 #include <iostream>
 #include <limits>
@@ -110,6 +111,12 @@ namespace {
   }
 
 
+  auto is_null(double const a_ratio) -> bool {
+    // assume that per-sample ratio is never < 1 / 10^17
+    return std::fabs(a_ratio) < std::numeric_limits<double>::epsilon();
+  }
+
+
   auto per_sample_ratios(std::unordered_map<std::string, struct OTU> &OTUs,
                          Stats &stats) -> void {
     // C++23 refactor: std::pow(2, std::numeric_limits<double>::digits)
@@ -170,6 +177,12 @@ namespace {
       if (stats.father_overlap_spread == 0) {
         stats.smallest_ratio = 0.0;
         stats.smallest_non_null_ratio = 0.0;
+        log_file << stats;
+        continue;
+      }
+
+      // reject: replicate lulu's behavior (no partial overlap)
+      if (parameters.is_legacy and is_null(stats.smallest_ratio)) {
         log_file << stats;
         continue;
       }
