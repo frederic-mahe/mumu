@@ -1097,6 +1097,60 @@ grep -Eq "^[[:space:]]" "${NEW_OTU_TABLE}" && \
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
 
+## --------------------------------------------------------------------- legacy
+
+DESCRIPTION="mumu accepts an optional parameter named legacy"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table /dev/null \
+    --log /dev/null \
+    --legacy > /dev/null 2>&1 && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}"
+
+# lulu rejects any match where one or more samples have no parent
+# presence. A parent missing in one sample means that the
+# 'minimum_ratio' value will be zero, which will lead to rejection and
+# makes the 'minimum_relative_cooccurence' option ineffective (unless
+# using 'minimum_ratio_type = avg')
+DESCRIPTION="mumu --legacy does not allow a parent to be missing in some samples"
+"${MUMU}" \
+    --otu_table <(printf "OTUs" ; printf "\t%s" s{01..22} ; printf "\n"
+                  printf "A\t0" ; printf "\t9%.0s" {1..21} ; printf "\n"
+                  printf "B" ; printf "\t1%.0s" {1..21} ; printf "\t0\n") \
+    --match_list <(printf "B\tA\t99.0\n") \
+    --legacy \
+    --log /dev/null \
+    --new_otu_table >(awk 'END {exit NR == 3 ? 0 : 1}' && \
+                          success "${DESCRIPTION}" || \
+                              failure "${DESCRIPTION}") > /dev/null
+
+wait
+
+# mumu can find the root of chained merges (A <- B <- C), but not lulu
+# B is merged with A, then it is not available anymore when C is dealt with
+DESCRIPTION="mumu --legacy does not allow chained merges"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+printf "OTUs\ts1\nA\t5\nB\t2\nC\t1\n" > "${OTU_TABLE}"
+printf "A\tB\t96.5\nB\tA\t96.5\nB\tC\t96.5\nC\tB\t96.5\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --legacy \
+    --log /dev/null 2>&1 > /dev/null
+awk '{if (NR > 1) {exit ($1 == "A" && $2 == 7) ? 0 : 1}}' "${NEW_OTU_TABLE}" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}"
+
+
 #*****************************************************************************#
 #                                                                             #
 #                               Functionality                                 #
