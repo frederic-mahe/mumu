@@ -162,16 +162,17 @@ namespace {
     assert(otu.spread != 0);  // empty son should be skipped
 
     for (auto& match : otu.matches) {
+      auto const& father = OTUs[match.hit_id];
       Stats stats {.son_id = OTU_id,
                    .father_id = match.hit_id,
                    .similarity = match.similarity,
                    .son_total_abundance = otu.sum_reads,
-                   .father_total_abundance = OTUs[match.hit_id].sum_reads,
+                   .father_total_abundance = father.sum_reads,
                    .son_spread = otu.spread,
-                   .father_spread = OTUs[match.hit_id].spread};  // refactoring: son's stats should be initialized outside of the loop, or separated into another struct
+                   .father_spread = father.spread};  // refactoring: son's stats should be initialized outside of the loop, or separated into another struct
 
       // reject: replicate lulu's behavior (no chained merges)
-      if (parameters.is_legacy and OTUs[match.hit_id].is_mergeable) {
+      if (parameters.is_legacy and father.is_mergeable) {
         // skip parent OTUs that can be merged with another ancestor
         continue;
       }
