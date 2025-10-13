@@ -86,7 +86,8 @@ namespace {
       << " --minimum_match FLOAT                minimum similarity threshold (84.0)\n"
       << " --minimum_ratio FLOAT                minimum abundance ratio (1.0)\n"
       << " --minimum_ratio_type STRING          \"min\" or \"avg\" abundance ratio (\"min\")\n"
-      << " --minimum_relative_cooccurence FLOAT relative father-son spread (0.95)\n\n"
+      << " --minimum_relative_cooccurence FLOAT relative father-son spread (0.95)\n"
+      << " --legacy                             behave like lulu\n\n"
       << "See 'man mumu' for more details.\n";
   }
 
