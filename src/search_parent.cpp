@@ -112,7 +112,7 @@ namespace {
 
 
   auto is_null(double const a_ratio) -> bool {
-    // assume that per-sample ratio is never < 1 / 10^17
+    // assume that per-sample ratio is never < 1 / 10^17 (epsilon double == 2.22045e-16)
     return std::fabs(a_ratio) < std::numeric_limits<double>::epsilon();
   }
 
