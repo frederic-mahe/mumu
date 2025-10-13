@@ -170,6 +170,12 @@ namespace {
                    .son_spread = otu.spread,
                    .father_spread = OTUs[match.hit_id].spread};  // refactoring: son's stats should be initialized outside of the loop, or separated into another struct
 
+      // reject: replicate lulu's behavior (no chained merges)
+      if (parameters.is_legacy and OTUs[match.hit_id].is_mergeable) {
+        // skip parent OTUs that can be merged with another ancestor
+        continue;
+      }
+
       // compute father/son ratios for all samples
       per_sample_ratios(OTUs, stats);
 
