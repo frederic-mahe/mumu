@@ -34,7 +34,7 @@
 
 namespace {
 
-  constexpr auto n_options {12U};
+  constexpr auto n_options {13U};
 
   constexpr std::array<struct option, n_options> long_options {{
       // standard options
@@ -51,6 +51,7 @@ namespace {
       {.name="minimum_ratio_type", .has_arg=required_argument, .flag=nullptr, .val='b'},
       {.name="minimum_ratio", .has_arg=required_argument, .flag=nullptr, .val='c'},
       {.name="minimum_relative_cooccurence", .has_arg=required_argument, .flag=nullptr, .val='d'},
+      {.name="legacy", .has_arg=no_argument, .flag=nullptr, .val='e'},
 
       // output
       {.name="new_otu_table", .has_arg=required_argument, .flag=nullptr, .val='n'},
@@ -101,7 +102,7 @@ namespace {
 
 auto parse_args(int argc, char ** argv, Parameters &parameters) -> void {
   // C++23 refactor: generate from long_options at compile-time
-  const std::string short_options {"ht:vo:m:a:b:c:d:n:l:"};  // refactoring; string_view?
+  const std::string short_options {"ht:vo:m:a:b:c:d:en:l:"};  // refactoring; string_view?
   auto option_character {0};
   auto option_index {0};
 
