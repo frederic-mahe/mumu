@@ -25,3 +25,5 @@
 #include <unordered_map>
 
 auto sort_matches(std::unordered_map<std::string, struct OTU> &OTUs) -> void;
+
+auto sort_matches_legacy(std::unordered_map<std::string, struct OTU> &OTUs) -> void;

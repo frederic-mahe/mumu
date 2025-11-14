@@ -42,3 +42,38 @@ auto sort_matches(std::unordered_map<std::string, struct OTU> & OTUs) -> void {
   }
   std::cout << "done\n";
 }
+
+
+auto sort_matches_legacy(std::unordered_map<std::string, struct OTU> & OTUs) -> void {
+  // lulu orders potential parents by decreasing spread (incidence),
+  // and then by decreasing total abundance
+  // R code: order(spread, total, decreasing = TRUE)
+  std::cout << "sort lists of matches (legacy sort) ... ";
+
+  auto compare_matches = [](struct Match const& lhs,
+                            struct Match const& rhs) -> bool {
+    // sort by decreasing spread...
+    if (lhs.hit_spread > rhs.hit_spread) {
+      return true;
+    }
+    if (lhs.hit_spread < rhs.hit_spread) {
+      return false;
+    }
+    // ...then ties are sorted by decreasing total abundance
+    if (lhs.hit_sum_reads > rhs.hit_sum_reads) {
+      return true;
+    }
+    return false;
+  };
+
+  for (auto & otu : OTUs) {
+    auto const & OTU_id {otu.first};
+
+    // ignore OTUs with zero or one match
+    if (OTUs[OTU_id].matches.size() < 2) { continue; }  // refactoring: useless?
+
+    std::ranges::sort(OTUs[OTU_id].matches, compare_matches);
+  }
+  std::cout << "done\n";
+}
+
