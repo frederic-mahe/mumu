@@ -51,7 +51,7 @@ auto main (int argc, char** argv) -> int {
   std::unordered_map<std::string, struct OTU> OTUs;
   read_otu_table(OTUs, parameters);
   read_match_list(OTUs, parameters);
-  sort_matches(OTUs);
+  sort_matches(OTUs, parameters);
 
   // find potential parents (could be multithreaded)
   search_parent(OTUs, parameters);
