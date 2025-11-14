@@ -98,6 +98,7 @@ namespace {
       << "Copyright (C) " << copyright_years << " Frederic Mahe\n"
       << "https://github.com/frederic-mahe/mumu\n\n";
   }
+
 }
 
 
