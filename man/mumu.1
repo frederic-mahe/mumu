@@ -286,6 +286,9 @@ biodiversity estimates. \fINature Communications\fR, 8(1), 1188
 .UE .
 .\" ============================================================================
 .SH KNOWN DIFFERENCES WITH LULU
+The logic in mumu and lulu differs in three key aspects, which explain
+differences in merging results.
+.PP
 In both lulu and mumu, the default \-\-minimum_relative_cooccurence
 threshold is set to 0.95, with the clear intention to allow potential
 parent OTUs to be relatively less abundant in some samples, or even
@@ -301,9 +304,6 @@ merged with an OTU A, lulu removes B from the pool of potential
 parents. With mumu, B remains available as potential parent for a less
 abundant OTU C, allowing the formation of a chain (C -> B -> A).
 .PP
-When using the \-\-legacy option, mumu behaves like lulu (no partial
-overlap, no chained merges).
-.PP
 Finally, lulu orders potential parents by decreasing spread
 (incidence), and then by decreasing total abundance, whereas mumu
 orders potential parents by decreasing similarity, then by decreasing
@@ -312,6 +312,9 @@ total abundance, then by decreasing spread, and finally by names
 .PP
 These differences combined explain why merging results can differ
 between mumu and lulu.
+.PP
+When using the \-\-legacy option, mumu behaves like lulu (same
+sorting, no partial overlap, no chained merges).
 .\" ============================================================================
 .SH REPORTING BUGS
 Submit suggestions and bug-reports at
