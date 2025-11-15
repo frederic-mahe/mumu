@@ -34,7 +34,7 @@ namespace {
   auto sort_matches_mumu(std::unordered_map<std::string, struct OTU> & OTUs) -> void {
     std::cout << "(mumu order) ... ";
     // refactor as range view
-    for (auto & otu : OTUs) {
+    for (auto const& otu : OTUs) {
       auto const & OTU_id {otu.first};
 
       // ignore OTUs with zero or one match
@@ -67,7 +67,7 @@ namespace {
       return false;
     };
 
-    for (auto & otu : OTUs) {
+    for (auto const& otu : OTUs) {
       auto const & OTU_id {otu.first};
 
       // ignore OTUs with zero or one match
