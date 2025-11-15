@@ -27,8 +27,10 @@
 
 #include <array>
 #include <cassert>
+#include <cmath>  // std::nextafter
 #include <cstdlib>  // atoi, atof, exit, EXIT_FAILURE, EXIT_SUCCESS
 #include <iostream>
+#include <limits>
 #include <string>
 
 
@@ -99,6 +101,21 @@ namespace {
       << "https://github.com/frederic-mahe/mumu\n\n";
   }
 
+
+  auto find_next_after(double const threshold) -> double {
+    // find the first representable value just after the theshold
+    static constexpr auto largest_double {std::numeric_limits<double>::max()};
+    return std::nextafter(threshold, largest_double);
+  }
+
+
+  auto update_match_threshold(Parameters &parameters) {
+    // lulu excludes match values <= threshold
+    // use a slightly larger threshold to replicate that behaviour in mumu,
+    // without having to compare doubles for equality
+    parameters.minimum_match = find_next_after(parameters.minimum_match);
+  }
+
 }
 
 
@@ -122,6 +139,9 @@ auto parse_args(int argc, char ** argv, Parameters &parameters) -> void {
 
     case 'a':  // minimum match (default is 84.0)
       parameters.minimum_match = std::stod(optarg);
+      if (parameters.is_legacy) {
+        update_match_threshold(parameters);
+      }
       break;
 
     case 'b':  // minimum ratio type (default is "min")
@@ -138,6 +158,7 @@ auto parse_args(int argc, char ** argv, Parameters &parameters) -> void {
 
     case 'e':  // legacy mode (replicate lulu's behavior)
       parameters.is_legacy = true;
+      update_match_threshold(parameters);
       break;
 
     case 'h':  // help message
