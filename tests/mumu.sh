@@ -1130,24 +1130,19 @@ DESCRIPTION="mumu --legacy does not allow a parent to be missing in some samples
                               failure "${DESCRIPTION}") > /dev/null
 wait
 
-# mumu can find the root of chained merges (A <- B <- C), but not lulu
-# B is merged with A, then it is not available anymore when C is dealt with
-DESCRIPTION="mumu --legacy does not allow chained merges"
-OTU_TABLE=$(mktemp)
-MATCH_LIST=$(mktemp)
-NEW_OTU_TABLE=$(mktemp)
-printf "OTUs\ts1\nA\t5\nB\t2\nC\t1\n" > "${OTU_TABLE}"
-printf "A\tB\t96.5\nB\tA\t96.5\nB\tC\t96.5\nC\tB\t96.5\n" > "${MATCH_LIST}"
+# lulu rejects similarity values equal to the set threshold (84.0 by default)
+DESCRIPTION="mumu --legacy rejects similarity values equal to the set threshold"
 "${MUMU}" \
-    --otu_table "${OTU_TABLE}" \
-    --match_list "${MATCH_LIST}" \
-    --new_otu_table "${NEW_OTU_TABLE}" \
+    --otu_table <(printf "OTUs\ts1\n"
+                  printf "A\t9\n"
+                  printf "B\t1\n") \
+    --match_list <(printf "B\tA\t84.0\n") \
     --legacy \
-    --log /dev/null 2>&1 > /dev/null
-awk '{if (NR > 1) {exit ($1 == "A" && $2 == 7) ? 0 : 1}}' "${NEW_OTU_TABLE}" && \
-    success "${DESCRIPTION}" || \
-        failure "${DESCRIPTION}"
-rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}"
+    --log /dev/null \
+    --new_otu_table >(awk 'END {exit $2 == 1 ? 0 : 1}' && \
+                          success "${DESCRIPTION}" || \
+                              failure "${DESCRIPTION}") > /dev/null
+wait
 
 
 #*****************************************************************************#
