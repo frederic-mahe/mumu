@@ -255,9 +255,11 @@ the 'minimum_relative_cooccurence'. Values greater than zero and up to
 one are accepted, and the default value is 0.95.
 .TP
 .BI \-e\fP,\fB\ \-\-legacy
-replicate lulu's behaviour (no partial overlap, and no chained
-merges). See section KNOWN DIFFERENCES WITH LULU (below) for more
-details.
+(experimental) replicate lulu's results by changing mumu's behaviour:
+no partial overlap, same sorting strategy for potential parents, same
+filtering strategy for similarity values. See section KNOWN
+DIFFERENCES WITH LULU (below) for more details. Users are invited to
+report issues.
 .TP
 .BI \-t\fP,\fB\ \-\-threads\~ "positive integer"
 multithreading is not activated. This option has no effect, mumu
@@ -289,32 +291,34 @@ biodiversity estimates. \fINature Communications\fR, 8(1), 1188
 The logic in mumu and lulu differs in three key aspects, which explain
 differences in merging results.
 .PP
-In both lulu and mumu, the default \-\-minimum_relative_cooccurence
-threshold is set to 0.95, with the clear intention to allow potential
-parent OTUs to be relatively less abundant in some samples, or even
-completely absent (i.e. a partial overlap). However, in lulu, a
-partial overlap yields a null minimum observed ratio value, which
-systematically eliminates the potential parent OTU, hence negating the
-effect of the \-\-minimum_relative_cooccurence option
+First, in both lulu and mumu, the default
+\-\-minimum_relative_cooccurence threshold is set to 0.95, with the
+clear intention to allow potential parent OTUs to be relatively less
+abundant in some samples, or even completely absent (i.e. a partial
+overlap). However, in lulu, a partial overlap yields a null minimum
+observed ratio value, which systematically eliminates the potential
+parent OTU, hence negating the effect of the
+\-\-minimum_relative_cooccurence option
 .UR https://github.com/tobiasgf/lulu/issues/8
 .UE .
 .PP
-Also, contrary to lulu, mumu allows chained merges. When an OTU B is
-merged with an OTU A, lulu removes B from the pool of potential
-parents. With mumu, B remains available as potential parent for a less
-abundant OTU C, allowing the formation of a chain (C -> B -> A).
-.PP
-Finally, lulu orders potential parents by decreasing spread
+Second, lulu orders potential parents by decreasing spread
 (incidence), and then by decreasing total abundance, whereas mumu
 orders potential parents by decreasing similarity, then by decreasing
 total abundance, then by decreasing spread, and finally by names
 (alphabetically, ASCII order).
 .PP
+Third, lulu rejects potential parents with a similarity value lesser
+or equal to the user defined threshold (84.0% by default), whereas
+mumu only rejects potential parents with a similarity value lesser
+than the user defined threshold.
+.PP
 These differences combined explain why merging results can differ
 between mumu and lulu.
 .PP
-When using the \-\-legacy option, mumu behaves like lulu (same
-sorting, no partial overlap, no chained merges).
+When using the \-\-legacy option, mumu behaves like lulu (no partial
+overlap, same sorting strategy for potential parents, same filtering
+strategy for similarity values).
 .\" ============================================================================
 .SH REPORTING BUGS
 Submit suggestions and bug-reports at
@@ -371,9 +375,10 @@ New features and important modifications of \fBmumu\fR (short lived
 or minor bug releases may not be mentioned):
 .RS
 .TP
-.BR v1.1.0\~ "released October 13th, 2025"
-add a uninstall Makefile target, add Makefile variables for package
-maintainers, fix clang-tidy warnings, improve performances.
+.BR v1.1.0\~ "released November 15th, 2025"
+add a \-\-legacy option, a header to the log table, new runtime checks
+and warnings, a uninstall Makefile target, and Makefile variables for
+package maintainers. Fix clang-tidy warnings, improve documentation.
 .TP
 .BR v1.0.2\~ "released March 23rd, 2023"
 fix a minor bug in the log output: some values where incorrect for
