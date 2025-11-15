@@ -16,3 +16,4 @@ dev_checks.sh
 mumu-alpine.sif
 test_dataset.tar.xz
 *.idx
+lulu.log_*
