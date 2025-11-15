@@ -9,9 +9,9 @@ post-clustering curation of metabarcoding data
 
 **mumu** is not a strict lulu clone. There is a [bug in
 lulu](https://github.com/tobiasgf/lulu/issues/8) that prevents some
-merging from happening. Additionally, mumu sorts input data
-differently; and mumu can chain merges, not lulu. This results in
-slightly more merging with mumu (by a few percent).
+merging from happening. Additionally, mumu filters and sorts input
+data differently. This results in slightly more merging with mumu (by
+a few percent).
 
 **mumu** is fully tested, with 165 carefully crafted individual
 black-box tests, covering 100% of the application-specific C++
@@ -21,12 +21,12 @@ active at compile-time, or at runtime when compiling with the `debug`
 flag.
 
 **mumu** uses C++20 features to make the code simpler, easier to
-maintain and to port to other systems. The downside is that using mumu
-requires a recent C++ compiler (GCC 10 or more recent, clang 17 or
-more recent). If your system only provides an older compiler, a recipe
-for a singularity/Apptainer/docker image is available.
+maintain and to port to other systems. Compiling mumu requires a
+compliant C++ compiler (GCC 10 or more recent, clang 17 or more
+recent). If your system only provides an older compiler, a recipe for
+a singularity/Apptainer/docker image is available.
 
-About the name of the project, *m* is simply the next letter after
+About the name of the project: *m* is simply the next letter after
 *l*, hence *mumu*. Any similarity to actual words is purely
 coincidental.
 
@@ -100,7 +100,7 @@ and supported by compilers.
 - [x] replicate lulu's results,
 - [x] fix lulu's bug,
 - [x] allow chained merges,
-- [x] high software quality score (softwipe),
+- [x] high software quality score ([softwipe](https://github.com/adrianzap/softwipe)),
 - [x] allow empty input files,
 - [x] allow process substitutions (input/output),
 - [x] compile without warnings with GCC 10 and 11,
@@ -115,6 +115,8 @@ and supported by compilers.
 - [ ] allow named pipes (input/output),
 - [x] test performances on ARM64 GNU/Linux (Raspberry),
 - [x] test performances on RISC-V GNU/Linux (Banana Pi BPI-F3),
+- [ ] support for support for sparse contingency tables,
+- [ ] faster input parsing through data buffers,
 - [ ] faster output with `std::format` (in 2026?),
 - [ ] native compilation on Windows (issue with `getopt.h`) ,
 - [ ] native compilation on BSD (issue with the Makefile),
