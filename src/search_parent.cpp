@@ -126,8 +126,8 @@ namespace {
     // for (std::pair<const &int, const &int> pair: std::views::zip(father, son)) // available in c++23
 
     // assert(v1.length() == v2.length())
-    auto& son = OTUs[stats.son_id].samples;
-    auto& father = OTUs[stats.father_id].samples;
+    auto const& son = OTUs[stats.son_id].samples;
+    auto const& father = OTUs[stats.father_id].samples;
     auto current_son_sample = son.begin();
     auto current_father_sample = father.begin();
     while (current_son_sample != son.end()) {  // check only one end, vectors have the same length
@@ -161,7 +161,7 @@ namespace {
 
     assert(otu.spread != 0);  // empty son should be skipped
 
-    for (auto& match : otu.matches) {
+    for (auto const& match : otu.matches) {
       auto const& father = OTUs[match.hit_id];
       Stats stats {.son_id = OTU_id,
                    .father_id = match.hit_id,
@@ -226,7 +226,7 @@ auto search_parent(std::unordered_map<std::string, struct OTU> &OTUs,
   std::ofstream log_file {parameters.log};
   print_log_header(log_file);
 
-  for (auto& otu : OTUs) {
+  for (auto const& otu : OTUs) {
     auto const& OTU_id {otu.first};  // refactoring: replace with [first, second]?
 
     // ignore empty OTUs (no spread, no reads)
