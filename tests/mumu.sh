@@ -1128,7 +1128,6 @@ DESCRIPTION="mumu --legacy does not allow a parent to be missing in some samples
     --new_otu_table >(awk 'END {exit NR == 3 ? 0 : 1}' && \
                           success "${DESCRIPTION}" || \
                               failure "${DESCRIPTION}") > /dev/null
-
 wait
 
 # mumu can find the root of chained merges (A <- B <- C), but not lulu
