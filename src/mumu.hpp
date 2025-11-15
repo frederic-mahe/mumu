@@ -51,7 +51,10 @@ struct Parameters {
   bool is_match_list {false};
   bool is_new_otu_table {false};
   bool is_log {false};
-  unsigned int padding_P {0};
+  bool is_legacy {false};  // not mandatory
+  bool padding_6 {false};
+  bool padding_7 {false};
+  bool padding_8 {false};
   std::string otu_table;
   std::string match_list;
   std::string new_otu_table;
@@ -63,7 +66,6 @@ struct Parameters {
   double minimum_ratio {minimum_ratio_default};
   double minimum_relative_cooccurence {minimum_relative_cooccurence_default};
   std::string_view minimum_ratio_type {use_minimum_value};
-  bool is_legacy {false};
 };
 
 
