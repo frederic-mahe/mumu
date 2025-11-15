@@ -99,7 +99,7 @@ namespace {
 
 
   auto parse_each_otu(std::unordered_map<std::string, struct OTU> &OTUs,
-                      std::string &line,
+                      std::string const &line,
                       unsigned int const n_samples) -> void {
     auto const first_sep {line.find_first_of(sepchar)};
     auto const OTU_id = get_OTU_id(line, first_sep);
