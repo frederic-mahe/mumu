@@ -113,6 +113,7 @@ namespace {
 
     // get abundance values (rest of the line, we know there are n samples)
     OTU otu;
+    otu.input_order = ticker;
     otu.samples.reserve(n_samples);
     std::stringstream abundances {line.substr(first_sep + 1)};
     for (auto const abundance : std::ranges::istream_view<unsigned long int>(abundances)) {
