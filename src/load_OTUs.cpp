@@ -147,8 +147,10 @@ auto read_otu_table(std::unordered_map<std::string, struct OTU> &OTUs,
   check_if_csv(line);
 
   // parse other lines, and map the values
+  auto ticker {1UL};
   while (std::getline(otu_table, line)) {
     parse_each_otu(OTUs, line, n_samples);
+    ++ticker;
   }
   std::cout << "done, " << OTUs.size() << " entries\n";
 }
