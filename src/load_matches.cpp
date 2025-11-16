@@ -124,6 +124,7 @@ auto read_match_list(std::unordered_map<std::string, struct OTU> &OTUs,
           .similarity = similarity,
           .hit_sum_reads = OTUs[hit].sum_reads,
           .hit_spread = OTUs[hit].spread,
+          .hit_input_order = OTUs[hit].input_order,
           .hit_id = hit}
         );  // no need to reserve(10)?
     }
