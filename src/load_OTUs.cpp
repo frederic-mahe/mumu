@@ -100,7 +100,8 @@ namespace {
 
   auto parse_each_otu(std::unordered_map<std::string, struct OTU> &OTUs,
                       std::string const &line,
-                      unsigned int const n_samples) -> void {
+                      unsigned int const n_samples,
+                      unsigned long int const ticker) -> void {
     auto const first_sep {line.find_first_of(sepchar)};
     auto const OTU_id = get_OTU_id(line, first_sep);
 
@@ -149,7 +150,7 @@ auto read_otu_table(std::unordered_map<std::string, struct OTU> &OTUs,
   // parse other lines, and map the values
   auto ticker {1UL};
   while (std::getline(otu_table, line)) {
-    parse_each_otu(OTUs, line, n_samples);
+    parse_each_otu(OTUs, line, n_samples, ticker);
     ++ticker;
   }
   std::cout << "done, " << OTUs.size() << " entries\n";
