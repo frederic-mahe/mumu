@@ -10,8 +10,8 @@ post-clustering curation of metabarcoding data
 **mumu** is not a strict lulu clone. There is a [bug in
 lulu](https://github.com/tobiasgf/lulu/issues/8) that prevents some
 merging from happening. Additionally, mumu filters and sorts input
-data differently. This results in slightly more merging with mumu (by
-a few percent).
+data differently. When combined, these differences result in slightly
+more merging with mumu (by a few percent).
 
 **mumu** is fully tested, with 165 carefully crafted individual
 black-box tests, covering 100% of the application-specific C++
@@ -84,10 +84,10 @@ work in progress.
 
 ## Wrapper
 
-- Adrien Taudière (@adrientaudiere) published
-  [mumu_pq](https://adrientaudiere.github.io/MiscMetabar/reference/mumu_pq.html),
-  a wrapper that allows to use `mumu` on
-  [phyloseq](https://joey711.github.io/phyloseq/) objects (R).
+Adrien Taudière (@adrientaudiere) published
+[mumu_pq](https://adrientaudiere.github.io/MiscMetabar/reference/mumu_pq.html),
+a wrapper that allows to use `mumu` on
+[phyloseq](https://joey711.github.io/phyloseq/) objects (R).
 
 
 ## Road-map
@@ -115,7 +115,7 @@ and supported by compilers.
 - [ ] allow named pipes (input/output),
 - [x] test performances on ARM64 GNU/Linux (Raspberry),
 - [x] test performances on RISC-V GNU/Linux (Banana Pi BPI-F3),
-- [ ] support for support for sparse contingency tables,
+- [ ] support for sparse contingency tables,
 - [ ] faster input parsing through data buffers,
 - [ ] faster output with `std::format` (in 2026?),
 - [ ] native compilation on Windows (issue with `getopt.h`) ,
