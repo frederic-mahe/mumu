@@ -73,6 +73,7 @@ struct Match {
   double similarity {0.0};
   unsigned long int hit_sum_reads {0};
   unsigned long int hit_spread {0};
+  unsigned long int hit_input_order {0};
   std::string hit_id;  // refactor: replace with string_view?
 
   auto operator<=>(Match const& rhs) const {
