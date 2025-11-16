@@ -1144,6 +1144,54 @@ DESCRIPTION="mumu --legacy rejects similarity values equal to the set threshold"
                               failure "${DESCRIPTION}") > /dev/null
 wait
 
+# lulu orders potential parents by decreasing spread (incidence),
+# and then by decreasing total abundance, and then by input order
+#
+# different spread: B > A
+DESCRIPTION="mumu --legacy sorts by decreasing spread (merge with B)"
+"${MUMU}" \
+    --otu_table <(printf "OTUs\ts1\ts2\n"
+                  printf "A\t8\t0\n"
+                  printf "B\t4\t4\n"
+                  printf "C\t1\t0\n") \
+    --match_list <(printf "C\tA\t99.0\n" ; printf "C\tB\t99.0\n") \
+    --legacy \
+    --new_otu_table /dev/null \
+    --log >(awk 'END {exit $2 == "B" ? 0 : 1}' && \
+                success "${DESCRIPTION}" || \
+                    failure "${DESCRIPTION}") > /dev/null
+wait
+
+# same spread, different total abundance: B > A
+DESCRIPTION="mumu --legacy sorts by decreasing total abundance (merge with B)"
+"${MUMU}" \
+    --otu_table <(printf "OTUs\ts1\ts2\n"
+                  printf "A\t4\t4\n"
+                  printf "B\t4\t5\n"
+                  printf "C\t1\t1\n") \
+    --match_list <(printf "C\tA\t99.0\n" ; printf "C\tB\t99.0\n") \
+    --legacy \
+    --new_otu_table /dev/null \
+    --log >(awk 'END {exit $2 == "B" ? 0 : 1}' && \
+                success "${DESCRIPTION}" || \
+                    failure "${DESCRIPTION}") > /dev/null
+wait
+
+# same spread, same total abundance, different input order: B before A
+DESCRIPTION="mumu --legacy preserves OTU input order (merge with B)"
+"${MUMU}" \
+    --otu_table <(printf "OTUs\ts1\ts2\n"
+                  printf "B\t4\t4\n"
+                  printf "A\t4\t4\n"
+                  printf "C\t1\t1\n") \
+    --match_list <(printf "C\tA\t99.0\n" ; printf "C\tB\t99.0\n") \
+    --legacy \
+    --new_otu_table /dev/null \
+    --log >(awk 'END {exit $2 == "B" ? 0 : 1}' && \
+                success "${DESCRIPTION}" || \
+                    failure "${DESCRIPTION}") > /dev/null
+wait
+
 
 #*****************************************************************************#
 #                                                                             #
