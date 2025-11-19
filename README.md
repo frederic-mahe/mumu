@@ -11,7 +11,8 @@ post-clustering curation of metabarcoding data
 lulu](https://github.com/tobiasgf/lulu/issues/8) that prevents some
 merging from happening. Additionally, mumu filters and sorts input
 data differently. When combined, these differences result in slightly
-more merging with mumu (by a few percent).
+more merging with mumu (by a few percent). Use the `--legacy` option
+if you need to reproduce lulu's results.
 
 **mumu** is fully tested, with 169 carefully crafted individual
 black-box tests, covering 100% of the application-specific C++
