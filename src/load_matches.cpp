@@ -110,21 +110,24 @@ auto read_match_list(std::unordered_map<std::string, struct OTU> &OTUs,
         continue;
       }
 
+      auto const &hit_otu = OTUs[hit];
+      auto &query_otu = OTUs[query];
+
       // ignore matches to lesser abundant OTUs
-      if (OTUs[query].sum_reads >= OTUs[hit].sum_reads) {
+      if (query_otu.sum_reads >= hit_otu.sum_reads) {
         continue;
       }
 
       // // refactoring: ignore matches to or from empty OTUs
-      // if (OTUs[query].sum_reads == 0 or OTUs[hit].sum_reads == 0) {
+      // if (OTUs[query].sum_reads == 0 or hit_otu.sum_reads == 0) {
       //   continue;
       // }
 
-      OTUs[query].matches.push_back(Match {
+      query_otu.matches.push_back(Match {
           .similarity = similarity,
-          .hit_sum_reads = OTUs[hit].sum_reads,
-          .hit_spread = OTUs[hit].spread,
-          .hit_input_order = OTUs[hit].input_order,
+          .hit_sum_reads = hit_otu.sum_reads,
+          .hit_spread = hit_otu.spread,
+          .hit_input_order = hit_otu.input_order,
           .hit_id = hit}
         );  // no need to reserve(10)?
     }
