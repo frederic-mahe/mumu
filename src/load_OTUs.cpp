@@ -131,6 +131,7 @@ namespace {
     otu.sum_reads = std::accumulate(otu.samples.begin(), otu.samples.end(), 0UL);
     OTUs[OTU_id] = std::move(otu);
   }
+
 } // namespace
 
 
