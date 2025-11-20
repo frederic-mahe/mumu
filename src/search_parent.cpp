@@ -34,12 +34,14 @@
 
 namespace {
 
-  constexpr auto largest_double {std::numeric_limits<double>::max()};
   constexpr auto accept_as_parent {"accepted"};  // reduce scope
-  constexpr auto reject_as_parent {"rejected"};  // reduce scope
 
   // refactoring: move to a separate header file stats.h
   struct Stats {
+  private:
+    static constexpr auto largest_double{std::numeric_limits<double>::max()};
+    static constexpr auto reject_as_parent {"rejected"};
+  public:
     std::string son_id;  //refactoring: string_view
     std::string father_id;
     double similarity {0.0};
