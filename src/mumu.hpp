@@ -36,7 +36,7 @@ static_assert(UINT_MAX >= UINT32_MAX, "unsigned integers are too small");
 
 constexpr auto sepchar {'\t'};
 constexpr std::string_view n_version {"1.1.0"};
-constexpr std::string_view copyright_years {"2020-2024"};
+constexpr std::string_view copyright_years {"2020-2025"};
 constexpr auto threads_default {1U};
 constexpr auto minimum_match_default {84.0};
 constexpr auto minimum_relative_cooccurence_default {0.95};
