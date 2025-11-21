@@ -961,6 +961,21 @@ printf "A\tC\t96.5\nC\tA\t96.5\n" > "${MATCH_LIST}"
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
+DESCRIPTION="mumu accepts more than 10 match entries per parent"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+printf "OTUs\ts\nA\t9\nB\t1\nC\t1\nD\t1\nE\t1\nF\t1\nG\t1\nH\t1\nI\t1\nJ\t1\nK\t1\nL\t1\n" > "${OTU_TABLE}"
+printf "B\tA\t99\nC\tA\t99\nD\tA\t99\nE\tA\t99\nF\tA\t99\nG\tA\t99\nH\tA\t99\nI\tA\t99\nJ\tA\t99\nK\tA\t99\nL\tA\t99\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --log /dev/null \
+    --new_otu_table /dev/stdout | \
+    awk '/^A/ {exit $2 == 20 ? 0 : 1}' && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}"
+
 # case: ID
 DESCRIPTION="mumu silently removes quotes from OTU ids in OTU table (no quotes)"
 OTU_TABLE=$(mktemp)
