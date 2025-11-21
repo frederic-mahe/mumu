@@ -5,6 +5,6 @@ authors:
   given-names: "Frédéric"
   orcid: "https://orcid.org/0000-0002-2808-0984"
 title: "mumu: post-clustering curation tool for metabarcoding data"
-version: 1.0.2
-date-released: 2023-03-25
+version: 1.1.0
+date-released: 2025-11-15
 url: "https://github.com/frederic-mahe/mumu"
