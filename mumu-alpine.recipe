@@ -20,7 +20,7 @@ From: alpine:edge
 
 %labels
     Author Frédéric Mahé
-    Version v1.0.2
+    Version v1.1.0
 
 %help
     mumu requires C++ compilers and libraries with C++20 support. This container allows mumu to run on older systems.
