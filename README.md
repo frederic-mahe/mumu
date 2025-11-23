@@ -14,7 +14,7 @@ data differently. When combined, these differences result in slightly
 more merging with mumu (by a few percent). Use the `--legacy` option
 if you need to reproduce lulu's results.
 
-**mumu** is fully tested, with 170 carefully crafted individual
+**mumu** is fully tested, with 173 carefully crafted individual
 black-box tests, covering 100% of the application-specific C++
 code. Tests are written using common Unix/Linux shell utilities. Some
 C++ internal tests are also used (_assertions_), but these are only
