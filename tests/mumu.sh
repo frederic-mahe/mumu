@@ -1318,6 +1318,36 @@ DESCRIPTION="mumu does not warn about csv if an OTU name contains a comma"
     failure "${DESCRIPTION}" || \
         success "${DESCRIPTION}"
 
+DESCRIPTION="mumu accepts non-ascii chars in OTU name"
+"${MUMU}" \
+    --otu_table <(printf "OTUs\ts1\né\t1\n") \
+    --match_list <(printf "") \
+    --new_otu_table /dev/stdout \
+    --log /dev/null 2>&1 | \
+    grep -wq "^é" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
+DESCRIPTION="mumu accepts non-ascii chars in match list"
+"${MUMU}" \
+    --otu_table <(printf "OTUs\ts1\nA\t1\né\t1\n") \
+    --match_list <(printf "é\tA\t99.0\n") \
+    --new_otu_table /dev/stdout \
+    --log /dev/null 2>&1 | \
+    grep -wq "^é" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
+DESCRIPTION="mumu accepts non-ascii chars in match list (merge)"
+"${MUMU}" \
+    --otu_table <(printf "OTUs\ts1\né\t9\nA\t1\n") \
+    --match_list <(printf "A\té\t99.0\n") \
+    --new_otu_table /dev/stdout \
+    --log /dev/null 2>&1 | \
+    grep -wqE "é[[:blank:]]10" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
 ## mumu accepts input with a single OTU (empty match list)
 DESCRIPTION="mumu accepts input with a single OTU (empty match list)"
 OTU_TABLE=$(mktemp)
