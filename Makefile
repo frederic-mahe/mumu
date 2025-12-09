@@ -28,10 +28,10 @@ CXX := g++
 CXXFLAGS := -std=c++20 -Wall -Wextra -Wpedantic
 SPECIFIC := -O3 -DNDEBUG
 
-prefix ?= /usr/local
-datarootdir = $(prefix)/share
+PREFIX ?= /usr/local
+datarootdir = $(PREFIX)/share
 datadir = $(datarootdir)
-exec_prefix = $(prefix)
+exec_prefix = $(PREFIX)
 bindir = $(exec_prefix)/bin
 mandir = $(datarootdir)/man
 man1dir = $(mandir)/man1
