@@ -78,7 +78,7 @@ work in progress.
 
 ## Getting Started
 
-run:
+simply run:
 
 ```sh
 mumu \
