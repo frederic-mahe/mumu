@@ -99,6 +99,7 @@ where the input `OTU.table` is formatted as such:
 and the input `matches.list` is formatted as such:
 
 | B | A | 95.6 |
+| - | - | ---- |
 
 See `mumu --help` and `man mumu` for more details.
 
