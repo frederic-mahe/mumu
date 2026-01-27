@@ -88,6 +88,18 @@ mumu \
     --new_otu_table new_OTU.table
 ```
 
+where the input `OTU.table` is formatted as such:
+
+| OTUs | sample1 | sample2 | sample3 |
+|------|---------|---------|---------|
+| A    | 12      | 9       | 24      |
+| B    | 3       | 0       | 6       |
+
+
+and the input `matches.list` is formatted as such:
+
+| B | A | 95.6 |
+
 See `mumu --help` and `man mumu` for more details.
 
 
