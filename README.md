@@ -35,7 +35,7 @@ About the name of the project: *m* is simply the next letter after
 coincidental.
 
 
-## Getting Started
+## Install
 
 - [clone](https://github.com/frederic-mahe/mumu.git) or
   [download](https://github.com/frederic-mahe/mumu/archive/refs/heads/main.zip)
@@ -75,7 +75,10 @@ singularity run mumu-alpine.sif --help
 Native compilation on Windows machine, as well as BSD systems is a
 work in progress.
 
-- run (see `mumu --help` and `man mumu` for more details):
+
+## Getting Started
+
+run (see `mumu --help` and `man mumu` for more details):
 
 ```sh
 mumu \
