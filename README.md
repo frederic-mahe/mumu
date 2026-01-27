@@ -7,6 +7,9 @@ fast and robust C++ implementation of
 [lulu](https://github.com/tobiasgf/lulu), a R package for
 post-clustering curation of metabarcoding data
 
+
+## About
+
 **mumu** is not a strict lulu clone. There is a [bug in
 lulu](https://github.com/tobiasgf/lulu/issues/8) that prevents some
 merging from happening. Additionally, mumu filters and sorts input
