@@ -78,7 +78,7 @@ work in progress.
 
 ## Getting Started
 
-run (see `mumu --help` and `man mumu` for more details):
+run:
 
 ```sh
 mumu \
@@ -87,6 +87,8 @@ mumu \
     --log /dev/null \
     --new_otu_table new_OTU.table
 ```
+
+See `mumu --help` and `man mumu` for more details.
 
 
 ## Wrapper
