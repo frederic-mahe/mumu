@@ -56,16 +56,6 @@ make install  # as root or sudo
     more recent,
   - GNU Awk and other GNU tools for testing
 
-- run (see `mumu --help` and `man mumu` for more details):
-
-```sh
-mumu \
-    --otu_table OTU.table \
-    --match_list matches.list \
-    --log /dev/null \
-    --new_otu_table new_OTU.table
-```
-
 - alternatively, build an [Apptainer](http://apptainer.org/)
   (ex-singularity) image for systems with older compilers:
 
@@ -84,6 +74,16 @@ singularity run mumu-alpine.sif --help
 
 Native compilation on Windows machine, as well as BSD systems is a
 work in progress.
+
+- run (see `mumu --help` and `man mumu` for more details):
+
+```sh
+mumu \
+    --otu_table OTU.table \
+    --match_list matches.list \
+    --log /dev/null \
+    --new_otu_table new_OTU.table
+```
 
 
 ## Wrapper
