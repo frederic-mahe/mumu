@@ -56,22 +56,6 @@ make install  # as root or sudo
     more recent,
   - GNU Awk and other GNU tools for testing
 
-- alternatively, build an [Apptainer](http://apptainer.org/)
-  (ex-singularity) image for systems with older compilers:
-
-```sh
-# build image with singularity 3.8.5
-# (Alpine edge with GCC 11.2 [2022-02-25])
-singularity \
-    build \
-    --fakeroot \
-    --force mumu-alpine.sif \
-    mumu-alpine.recipe
-
-# test (image is appr. 4 MB)
-singularity run mumu-alpine.sif --help
-```
-
 Native compilation on Windows machine, as well as BSD systems is a
 work in progress.
 
@@ -110,6 +94,25 @@ Adrien Taudière (@adrientaudiere) published
 [mumu_pq](https://adrientaudiere.github.io/MiscMetabar/reference/mumu_pq.html),
 a wrapper that allows to use `mumu` on
 [phyloseq](https://joey711.github.io/phyloseq/) objects (R).
+
+
+## Advanced users
+
+build an [Apptainer](http://apptainer.org/) (ex-singularity) image for
+operating systems with older compilers:
+
+```sh
+# build image with singularity 3.8.5
+# (Alpine edge with GCC 11.2 [2022-02-25])
+singularity \
+    build \
+    --fakeroot \
+    --force mumu-alpine.sif \
+    mumu-alpine.recipe
+
+# test (image is appr. 4 MB)
+singularity run mumu-alpine.sif --help
+```
 
 
 ## Road-map
