@@ -53,14 +53,10 @@ make install  # as root or sudo
 ```
 
 dependencies are minimal:
- - a GNU/Linux 64-bit system,
+ - a 64-bit operating system,
  - `make` (version 4 or more recent),
- - a compiler: GCC 10 (2020) or more recent, or clang 17 (2023) or
-   more recent,
+ - GCC 10 (2020) or more recent, or clang 17 (2023) or more recent,
  - GNU Awk and other GNU tools for testing
-
-Native compilation on Windows machine, as well as BSD systems is a
-work in progress.
 
 
 ## Getting Started
