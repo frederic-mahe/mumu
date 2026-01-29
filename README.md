@@ -95,7 +95,7 @@ a wrapper that allows to use `mumu` on
 [phyloseq](https://joey711.github.io/phyloseq/) objects (R).
 
 
-## Advanced users {#advanced-users}
+## [Advanced users]
 
 build an [Apptainer](http://apptainer.org/) (ex-singularity) image for
 operating systems with older compilers:
