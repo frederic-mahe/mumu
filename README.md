@@ -28,10 +28,12 @@ flag.
 maintain and to port to other operating systems. Please note that mumu
 has been tested on GNU/Linux. Compilation on other operating systems,
 such as macOS, BSD, or Windows should be possible but remains
-untested. Compiling mumu requires a compliant C++ compiler (GCC 10 or
-more recent, clang 17 or more recent). If your system only provides an
-older compiler, a recipe for a singularity/Apptainer/docker image is
-available (see section [Advanced users](#advanced-users)).
+untested. Compiling mumu requires a compliant C++ compiler
+([GCC](https://gcc.gnu.org/) 10 or more recent,
+[clang](https://clang.llvm.org/) 17 or more recent). If your system
+only provides an older compiler, a recipe for a
+singularity/Apptainer/docker image is available (see section [Advanced
+users](#advanced-users)).
 
 About the name of the project: *m* is simply the next letter after
 *l*, hence *mumu*. Any similarity to actual words is purely
