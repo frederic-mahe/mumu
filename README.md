@@ -117,9 +117,9 @@ singularity run mumu-alpine.sif --help
 ## Road-map
 
 **mumu** is currently feature-complete (nothing is missing), but
-refactoring will continue and new versions will be released as soon as
-more C++ features (C++20 modules, C++23 ranges, C++26 contracts, etc.)
-are standardized and supported by compilers.
+refactoring will continue and as more C++ features (C++20 modules,
+C++23 ranges, C++26 contracts, etc.) are standardized and supported by
+compilers.
 
 - [x] replicate lulu's results,
 - [x] fix lulu's bug,
