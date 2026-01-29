@@ -37,9 +37,9 @@ coincidental.
 
 ## Install
 
-- [clone](https://github.com/frederic-mahe/mumu.git) or
-  [download](https://github.com/frederic-mahe/mumu/archive/refs/heads/main.zip)
-  a copy the repository:
+[clone](https://github.com/frederic-mahe/mumu.git) or
+[download](https://github.com/frederic-mahe/mumu/archive/refs/heads/main.zip)
+a copy the repository:
 
 ```sh
 git clone https://github.com/frederic-mahe/mumu.git
@@ -49,12 +49,12 @@ make check
 make install  # as root or sudo
 ```
 
-- dependencies are minimal:
-  - a GNU/Linux 64-bit system,
-  - `make` (version 4 or more recent),
-  - a compiler: GCC 10 (2020) or more recent, or clang 17 (2023) or
-    more recent,
-  - GNU Awk and other GNU tools for testing
+dependencies are minimal:
+ - a GNU/Linux 64-bit system,
+ - `make` (version 4 or more recent),
+ - a compiler: GCC 10 (2020) or more recent, or clang 17 (2023) or
+   more recent,
+ - GNU Awk and other GNU tools for testing
 
 Native compilation on Windows machine, as well as BSD systems is a
 work in progress.
