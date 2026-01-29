@@ -25,10 +25,13 @@ active at compile-time, or at runtime when compiling with the `debug`
 flag.
 
 **mumu** uses C++20 features to make the code simpler, easier to
-maintain and to port to other systems. Compiling mumu requires a
-compliant C++ compiler (GCC 10 or more recent, clang 17 or more
-recent). If your system only provides an older compiler, a recipe for
-a singularity/Apptainer/docker image is available.
+maintain and to port to other operating systems. Please note that mumu
+has been tested on GNU/Linux. Compilation on other operating systems,
+such as macOS, BSD, or Windows should be possible but remains
+untested. Compiling mumu requires a compliant C++ compiler (GCC 10 or
+more recent, clang 17 or more recent). If your system only provides an
+older compiler, a recipe for a singularity/Apptainer/docker image is
+available.
 
 About the name of the project: *m* is simply the next letter after
 *l*, hence *mumu*. Any similarity to actual words is purely
