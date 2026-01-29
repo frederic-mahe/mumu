@@ -31,7 +31,7 @@ such as macOS, BSD, or Windows should be possible but remains
 untested. Compiling mumu requires a compliant C++ compiler (GCC 10 or
 more recent, clang 17 or more recent). If your system only provides an
 older compiler, a recipe for a singularity/Apptainer/docker image is
-available.
+available (see section [Advanced users](#Advanced users).
 
 About the name of the project: *m* is simply the next letter after
 *l*, hence *mumu*. Any similarity to actual words is purely
