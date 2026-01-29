@@ -8,7 +8,7 @@ fast and robust C++ implementation of
 post-clustering curation of metabarcoding data
 
 
-## About
+## about
 
 **mumu** is not a strict lulu clone. There is a [bug in
 lulu](https://github.com/tobiasgf/lulu/issues/8) that prevents some
@@ -38,7 +38,7 @@ About the name of the project: *m* is simply the next letter after
 coincidental.
 
 
-## Install
+## install
 
 [clone](https://github.com/frederic-mahe/mumu.git) or
 [download](https://github.com/frederic-mahe/mumu/archive/refs/heads/main.zip)
@@ -59,7 +59,7 @@ dependencies are minimal:
  - GNU Awk and other GNU tools for testing
 
 
-## Getting Started
+## getting started
 
 simply run:
 
@@ -87,7 +87,7 @@ and the input `matches.list` is formatted as such:
 See `mumu --help` and `man mumu` for more details.
 
 
-## Wrapper
+## wrapper
 
 Adrien Taudière (@adrientaudiere) published
 [mumu_pq](https://adrientaudiere.github.io/MiscMetabar/reference/mumu_pq.html),
@@ -95,7 +95,7 @@ a wrapper that allows to use `mumu` on
 [phyloseq](https://joey711.github.io/phyloseq/) objects (R).
 
 
-## Advanced users
+## advanced users
 
 build an [Apptainer](http://apptainer.org/) (ex-singularity) image for
 operating systems with older compilers:
@@ -114,7 +114,7 @@ singularity run mumu-alpine.sif --help
 ```
 
 
-## Road-map
+## road-map
 
 **mumu** is currently feature-complete (nothing is missing), but
 refactoring will continue and as more C++ features (C++20 modules,
