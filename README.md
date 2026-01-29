@@ -31,7 +31,7 @@ such as macOS, BSD, or Windows should be possible but remains
 untested. Compiling mumu requires a compliant C++ compiler (GCC 10 or
 more recent, clang 17 or more recent). If your system only provides an
 older compiler, a recipe for a singularity/Apptainer/docker image is
-available (see section [Advanced users](#Advanced users).
+available (see section [Advanced users](#advanced-users)).
 
 About the name of the project: *m* is simply the next letter after
 *l*, hence *mumu*. Any similarity to actual words is purely
@@ -95,7 +95,7 @@ a wrapper that allows to use `mumu` on
 [phyloseq](https://joey711.github.io/phyloseq/) objects (R).
 
 
-## Advanced users
+## Advanced users {#advanced-users}
 
 build an [Apptainer](http://apptainer.org/) (ex-singularity) image for
 operating systems with older compilers:
