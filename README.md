@@ -35,7 +35,7 @@ untested. Compiling mumu requires a compliant C++ compiler
 ([GCC](https://gcc.gnu.org/) 10 or more recent,
 [clang](https://clang.llvm.org/) 17 or more recent). If your system
 only provides an older compiler, a recipe for a
-singularity/Apptainer/docker image is available (see section [Advanced
+singularity/Apptainer/docker image is available (see section [advanced
 users](#advanced-users)).
 
 About the name of the project: *m* is simply the next letter after
