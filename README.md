@@ -7,6 +7,9 @@ fast and robust C++ implementation of
 [lulu](https://github.com/tobiasgf/lulu), a R package for
 post-clustering curation of metabarcoding data
 
+In short, **mumu** is a general clustering method that uses both
+pairwise similarity *and* co-abundance patterns.
+
 
 ## about
 
