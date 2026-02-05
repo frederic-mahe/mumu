@@ -89,7 +89,25 @@ and the input `matches.list` is formatted as such:
 | B | A | 95.6 |
 | - | - | ---- |
 
-See `mumu --help` and `man mumu` for more details.
+
+Given a fasta file `input.fasta`, a correct list of matches can be
+produced with [vsearch](https://github.com/torognes/vsearch) for all
+OTU pairs with at least 84% similarity (`--id 0.84`, see `mumu --help`
+and `man mumu` for more details):
+
+```sh
+vsearch
+    --usearch_global input.fasta
+    --db input.fasta
+    --self
+    --id 0.84
+    --iddef 1
+    --userfields query+target+id
+    --maxaccepts 0
+    --query_cov 0.9
+    --maxhits 10
+    --userout matches.list
+```
 
 
 ## wrapper
