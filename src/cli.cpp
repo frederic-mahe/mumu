@@ -36,7 +36,7 @@
 
 namespace {
 
-  constexpr auto n_options {13U};
+  constexpr auto n_options {14U};
 
   constexpr std::array<struct option, n_options> long_options {{
       // standard options
@@ -53,6 +53,7 @@ namespace {
       {.name="minimum_ratio_type", .has_arg=required_argument, .flag=nullptr, .val='b'},
       {.name="minimum_ratio", .has_arg=required_argument, .flag=nullptr, .val='c'},
       {.name="minimum_relative_cooccurence", .has_arg=required_argument, .flag=nullptr, .val='d'},
+      {.name="minimum_relative_cooccurrence", .has_arg=required_argument, .flag=nullptr, .val='d'},
       {.name="legacy", .has_arg=no_argument, .flag=nullptr, .val='e'},
 
       // output
