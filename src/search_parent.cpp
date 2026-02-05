@@ -196,7 +196,7 @@ namespace {
       stats.relative_cooccurence = 1.0 * stats.father_overlap_spread / stats.son_spread;
 
       // reject: incidence ratio with the potential parent is too low
-      if (stats.relative_cooccurence < parameters.minimum_relative_cooccurence) {
+      if (stats.relative_cooccurence < parameters.minimum_relative_cooccurrence) {
         log_file << stats;
         continue;
       }
