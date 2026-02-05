@@ -40,7 +40,7 @@ constexpr std::string_view n_version {"1.1.0"};
 constexpr std::string_view copyright_years {"2020-2026"};
 constexpr auto threads_default {1U};
 constexpr auto minimum_match_default {84.0};
-constexpr auto minimum_relative_cooccurence_default {0.95};
+constexpr auto minimum_relative_cooccurrence_default {0.95};
 constexpr auto minimum_ratio_default {1.0};
 constexpr std::string_view use_minimum_value {"min"};
 constexpr std::string_view use_average_value {"avg"};
@@ -65,7 +65,7 @@ struct Parameters {
   unsigned long int threads {threads_default};
   double minimum_match {minimum_match_default};
   double minimum_ratio {minimum_ratio_default};
-  double minimum_relative_cooccurence {minimum_relative_cooccurence_default};
+  double minimum_relative_cooccurence {minimum_relative_cooccurrence_default};
   std::string_view minimum_ratio_type {use_minimum_value};
 };
 
