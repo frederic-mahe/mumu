@@ -52,7 +52,7 @@ namespace {
       {.name="minimum_match", .has_arg=required_argument, .flag=nullptr, .val='a'},
       {.name="minimum_ratio_type", .has_arg=required_argument, .flag=nullptr, .val='b'},
       {.name="minimum_ratio", .has_arg=required_argument, .flag=nullptr, .val='c'},
-      {.name="minimum_relative_cooccurence", .has_arg=required_argument, .flag=nullptr, .val='d'},
+      {.name="minimum_relative_cooccurence", .has_arg=required_argument, .flag=nullptr, .val='d'},  // deprecated
       {.name="minimum_relative_cooccurrence", .has_arg=required_argument, .flag=nullptr, .val='d'},
       {.name="legacy", .has_arg=no_argument, .flag=nullptr, .val='e'},
 
