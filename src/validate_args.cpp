@@ -83,7 +83,7 @@ namespace {
       fatal("--minimum_ratio value must be greater than zero");
     }
 
-    // minimum relative cooccurence (0 < x <= 1)
+    // minimum relative cooccurrence (0 < x <= 1)
     if (parameters.minimum_relative_cooccurrence <= 0.0 or
         parameters.minimum_relative_cooccurrence > 1.0) {
       fatal("--minimum_relative_cooccurrence value must be between zero and one");
