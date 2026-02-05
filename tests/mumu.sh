@@ -1130,7 +1130,7 @@ rm -f "${OTU_TABLE}" "${MATCH_LIST}"
 # lulu rejects any match where one or more samples have no parent
 # presence. A parent missing in one sample means that the
 # 'minimum_ratio' value will be zero, which will lead to rejection and
-# makes the 'minimum_relative_cooccurence' option ineffective (unless
+# makes the 'minimum_relative_cooccurrence' option ineffective (unless
 # using 'minimum_ratio_type = avg')
 DESCRIPTION="mumu --legacy does not allow a parent to be missing in some samples"
 "${MUMU}" \
@@ -2545,7 +2545,7 @@ unset initial accepted final
 
 # lulu's README states:
 # If the number of samples where the 'potential parent' has a positive
-# presence is below the minimum_relative_cooccurence (default 95%,
+# presence is below the minimum_relative_cooccurrence (default 95%,
 # meaning that 1 in 20 samples are allowed to have no parent presence),
 # the 'potential parent' is rejected.
 
@@ -2553,7 +2553,7 @@ unset initial accepted final
 # parent presence. A parent missing in one sample means that the
 # 'minimum_ratio' value will be zero, which will lead to rejection
 # (unless the user sets the 'minimum_ratio' value to zero!?) and makes
-# the 'minimum_relative_cooccurence' option ineffective (unless using
+# the 'minimum_relative_cooccurrence' option ineffective (unless using
 # 'minimum_ratio_type = avg').
 
 # To solve that, the minimum_ratio should be searched among the
@@ -2561,7 +2561,7 @@ unset initial accepted final
 
 # Here 'A' is missing from the first sample (and present in one more
 # sample so 'A' and 'B' have the same spread). The relative
-# cooccurence is then 20/21 = 0.95238, which is greater than 0.95, the
+# cooccurrence is then 20/21 = 0.95238, which is greater than 0.95, the
 # default value. With mumu, 'A' is then accepted as the parent of
 # 'B'. With lulu, there is no merging (confirmed with a toy-example:
 # https://github.com/tobiasgf/lulu/issues/8).
