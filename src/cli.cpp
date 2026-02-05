@@ -155,6 +155,7 @@ auto parse_args(int argc, char ** argv, Parameters &parameters) -> void {
 
     case 'd':  // minimum relative cooccurence (default is 0.95)
       parameters.minimum_relative_cooccurence = std::stod(optarg);
+      parameters.minimum_relative_cooccurrence = std::stod(optarg);
       break;
 
     case 'e':  // legacy mode (replicate lulu's behavior)
