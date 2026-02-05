@@ -500,7 +500,7 @@ LOG=$(mktemp)
         success "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
-## mumu accepts minimum_relative_cooccurence values
+## mumu accepts minimum_relative_cooccurrence values
 DESCRIPTION="mumu accepts minimum_relative_cooccurence values"
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
@@ -516,7 +516,7 @@ LOG=$(mktemp)
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
-## mumu stops with an error if minimum_relative_cooccurence is null
+## mumu stops with an error if minimum_relative_cooccurrence is null
 DESCRIPTION="mumu stops with an error if minimum_relative_cooccurence = zero"
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
@@ -532,7 +532,7 @@ LOG=$(mktemp)
         success "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
-## mumu stops with an error if minimum_relative_cooccurence is greater than 1
+## mumu stops with an error if minimum_relative_cooccurrence is greater than 1
 DESCRIPTION="mumu stops with an error if minimum_relative_cooccurence > 1"
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
