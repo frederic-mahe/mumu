@@ -59,7 +59,7 @@ namespace {
     double smallest_non_null_ratio {largest_double};
     double avg_non_null_ratio {0.0};
     double largest_ratio {0.0};
-    double relative_cooccurence {0.0};
+    double relative_cooccurrence {0.0};
     std::string status {reject_as_parent};
   };
 
@@ -84,7 +84,7 @@ namespace {
       << stats.smallest_non_null_ratio << sepchar
       << stats.avg_non_null_ratio << sepchar
       << stats.largest_ratio << sepchar
-      << stats.relative_cooccurence << sepchar
+      << stats.relative_cooccurrence << sepchar
       << stats.status << '\n';
   }
 
@@ -193,10 +193,10 @@ namespace {
       // populate overlap stats
       stats.avg_ratio = stats.sum_ratio / stats.son_spread;
       stats.avg_non_null_ratio = stats.sum_ratio / stats.father_overlap_spread;
-      stats.relative_cooccurence = 1.0 * stats.father_overlap_spread / stats.son_spread;
+      stats.relative_cooccurrence = 1.0 * stats.father_overlap_spread / stats.son_spread;
 
       // reject: incidence ratio with the potential parent is too low
-      if (stats.relative_cooccurence < parameters.minimum_relative_cooccurrence) {
+      if (stats.relative_cooccurrence < parameters.minimum_relative_cooccurrence) {
         log_file << stats;
         continue;
       }
