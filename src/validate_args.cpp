@@ -84,9 +84,9 @@ namespace {
     }
 
     // minimum relative cooccurence (0 < x <= 1)
-    if (parameters.minimum_relative_cooccurence <= 0.0 or
-        parameters.minimum_relative_cooccurence > 1.0) {
-      fatal("--minimum_relative_cooccurence value must be between zero and one");
+    if (parameters.minimum_relative_cooccurrence <= 0.0 or
+        parameters.minimum_relative_cooccurrence > 1.0) {
+      fatal("--minimum_relative_cooccurrence value must be between zero and one");
     }
 
     // threads (1 <= x <= 255)
