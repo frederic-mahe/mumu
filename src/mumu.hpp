@@ -66,6 +66,7 @@ struct Parameters {
   double minimum_match {minimum_match_default};
   double minimum_ratio {minimum_ratio_default};
   double minimum_relative_cooccurence {minimum_relative_cooccurrence_default};
+  double minimum_relative_cooccurrence {minimum_relative_cooccurrence_default};
   std::string_view minimum_ratio_type {use_minimum_value};
 };
 
