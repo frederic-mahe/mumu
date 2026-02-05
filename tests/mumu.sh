@@ -532,6 +532,23 @@ LOG=$(mktemp)
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
+## mumu silently accepts duplicated options
+DESCRIPTION="mumu silently accepts duplicated options"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log "${LOG}" \
+    --minimum_relative_cooccurrence 0.5 \
+    --minimum_relative_cooccurence 0.5 > /dev/null 2>&1 && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
 ## mumu stops with an error if minimum_relative_cooccurrence is null
 DESCRIPTION="mumu stops with an error if minimum_relative_cooccurence = zero"
 OTU_TABLE=$(mktemp)
