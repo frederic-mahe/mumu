@@ -517,7 +517,7 @@ LOG=$(mktemp)
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
 ## mumu accepts minimum_relative_cooccurrence values
-DESCRIPTION="mumu accepts minimum_relative_cooccurence values"
+DESCRIPTION="mumu accepts minimum_relative_cooccurrence values"
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
 NEW_OTU_TABLE=$(mktemp)
@@ -527,7 +527,7 @@ LOG=$(mktemp)
     --match_list "${MATCH_LIST}" \
     --new_otu_table "${NEW_OTU_TABLE}" \
     --log "${LOG}" \
-    --minimum_relative_cooccurence 0.5 > /dev/null 2>&1 && \
+    --minimum_relative_cooccurrence 0.5 > /dev/null 2>&1 && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
@@ -550,7 +550,7 @@ LOG=$(mktemp)
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
 ## mumu stops with an error if minimum_relative_cooccurrence is null
-DESCRIPTION="mumu stops with an error if minimum_relative_cooccurence = zero"
+DESCRIPTION="mumu stops with an error if minimum_relative_cooccurrence = zero"
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
 NEW_OTU_TABLE=$(mktemp)
@@ -560,13 +560,13 @@ LOG=$(mktemp)
     --match_list "${MATCH_LIST}" \
     --new_otu_table "${NEW_OTU_TABLE}" \
     --log "${LOG}" \
-    --minimum_relative_cooccurence 0 > /dev/null 2>&1 && \
+    --minimum_relative_cooccurrence 0 > /dev/null 2>&1 && \
     failure "${DESCRIPTION}" || \
         success "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
 ## mumu stops with an error if minimum_relative_cooccurrence is greater than 1
-DESCRIPTION="mumu stops with an error if minimum_relative_cooccurence > 1"
+DESCRIPTION="mumu stops with an error if minimum_relative_cooccurrence > 1"
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
 NEW_OTU_TABLE=$(mktemp)
@@ -576,7 +576,7 @@ LOG=$(mktemp)
     --match_list "${MATCH_LIST}" \
     --new_otu_table "${NEW_OTU_TABLE}" \
     --log "${LOG}" \
-    --minimum_relative_cooccurence 1.1 > /dev/null 2>&1 && \
+    --minimum_relative_cooccurrence 1.1 > /dev/null 2>&1 && \
     failure "${DESCRIPTION}" || \
         success "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
