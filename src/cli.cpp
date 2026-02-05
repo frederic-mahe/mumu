@@ -73,24 +73,24 @@ namespace {
   auto help() -> void {
     std::cout
       << "Usage: mumu " << n_version << '\n'
-      << " -h, --help                           display this help and exit\n"
-      << " -v, --version                        display version information and exit\n"
-      << " -t, --threads INTEGER                number of threads to use (1)\n"
+      << " -h, --help                            display this help and exit\n"
+      << " -v, --version                         display version information and exit\n"
+      << " -t, --threads INTEGER                 number of threads to use (1)\n"
       << '\n'
       << "Input options (mandatory):\n"
-      << " --otu_table FILE                     tab-separated, samples in columns\n"
-      << " --match_list FILE                    tab-separated, OTU pairwise similarity scores\n"
+      << " --otu_table FILE                      tab-separated, samples in columns\n"
+      << " --match_list FILE                     tab-separated, OTU pairwise similarity scores\n"
       << '\n'
       << "Output options (mandatory):\n"
-      << " --new_otu_table FILE                 write an updated OTU table\n"
-      << " --log FILE                           record operations\n"
+      << " --new_otu_table FILE                  write an updated OTU table\n"
+      << " --log FILE                            record operations\n"
       << '\n'
       << "Computation parameters:\n"
-      << " --minimum_match FLOAT                minimum similarity threshold (84.0)\n"
-      << " --minimum_ratio FLOAT                minimum abundance ratio (1.0)\n"
-      << " --minimum_ratio_type STRING          \"min\" or \"avg\" abundance ratio (\"min\")\n"
+      << " --minimum_match FLOAT                 minimum similarity threshold (84.0)\n"
+      << " --minimum_ratio FLOAT                 minimum abundance ratio (1.0)\n"
+      << " --minimum_ratio_type STRING           \"min\" or \"avg\" abundance ratio (\"min\")\n"
       << " --minimum_relative_cooccurrence FLOAT relative father-son spread (0.95)\n"
-      << " --legacy                             behave like lulu\n\n"
+      << " --legacy                              behave like lulu\n\n"
       << "See 'man mumu' for more details.\n";
   }
 
