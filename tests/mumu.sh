@@ -500,8 +500,8 @@ LOG=$(mktemp)
         success "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
-## mumu accepts deprecated option minimum_relative_cooccurence
-DESCRIPTION="mumu accepts deprecated option minimum_relative_cooccurence"
+## mumu accepts deprecated option spelling
+DESCRIPTION="mumu accepts deprecated option spelling"
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
 NEW_OTU_TABLE=$(mktemp)
