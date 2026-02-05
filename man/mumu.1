@@ -23,7 +23,7 @@ mumu \(em post-clustering curation of metabarcoding data
 .OP \-\-minimum_match float
 .OP \-\-minimum_ratio float
 .OP \-\-minimum_ratio_type min|avg
-.OP \-\-minimum_relative_cooccurence float
+.OP \-\-minimum_relative_cooccurrence float
 .OP \-\-legacy
 .YS
 .PP
@@ -248,14 +248,14 @@ the 'minimum_ratio' value, then the potential parent OTU is
 rejected. Any positive value greater than zero is accepted, and the
 default value is 1.0.
 .TP
-.BI \-d\fP,\fB\ \-\-minimum_relative_cooccurence\~ "positive float"
+.BI \-d\fP,\fB\ \-\-minimum_relative_cooccurrence\~ "positive float"
 minimum incidence ratio observed between a potential parent OTU and a
-query OTU. The relative cooccurence ratio is computed as the number of
+query OTU. The relative cooccurrence ratio is computed as the number of
 samples where both the potential parent OTU and the query OTU are
 present divided by the number of samples where the query OTU is
 present. A potential parent OTU is rejected if its relative
-cooccurence is strictly smaller than
-the 'minimum_relative_cooccurence'. Values greater than zero and up to
+cooccurrence is strictly smaller than
+the 'minimum_relative_cooccurrence'. Values greater than zero and up to
 one are accepted, and the default value is 0.95.
 .TP
 .BI \-e\fP,\fB\ \-\-legacy
@@ -296,13 +296,13 @@ The logic in mumu and lulu differs in three key aspects, which explain
 differences in merging results.
 .PP
 First, in both lulu and mumu, the default
-\-\-minimum_relative_cooccurence threshold is set to 0.95, with the
+\-\-minimum_relative_cooccurrence threshold is set to 0.95, with the
 clear intention to allow potential parent OTUs to be relatively less
 abundant in some samples, or even completely absent (i.e. a partial
 overlap). However, in lulu, a partial overlap yields a null minimum
 observed ratio value, which systematically eliminates the potential
 parent OTU, hence negating the effect of the
-\-\-minimum_relative_cooccurence option
+\-\-minimum_relative_cooccurrence option
 .UR https://github.com/tobiasgf/lulu/issues/8
 .UE .
 .PP
