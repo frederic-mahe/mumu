@@ -2390,7 +2390,7 @@ awk 'NR > 1 {exit $16 == "2.00" ? 0 : 1}' "${LOG}" && \
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
-DESCRIPTION="mumu log column 17 is the relative co-occurence value"
+DESCRIPTION="mumu log column 17 is the relative co-occurrence value"
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
 NEW_OTU_TABLE=$(mktemp)
