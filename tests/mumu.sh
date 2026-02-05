@@ -331,7 +331,7 @@ LOG=$(mktemp)
     --minimum_match 84.0 \
     --minimum_ratio_type min \
     --minimum_ratio 1.0 \
-    --minimum_relative_cooccurence 0.95 > /dev/null 2>&1 && \
+    --minimum_relative_cooccurrence 0.95 > /dev/null 2>&1 && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
