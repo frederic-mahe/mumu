@@ -60,7 +60,8 @@ make install  # as root or sudo
 dependencies are minimal:
  - a 64-bit operating system,
  - `make` (version 4 or more recent),
- - GCC 10 (2020) or more recent, or clang 17 (2023) or more recent,
+ - [GCC](https://gcc.gnu.org/) 10 (2020) or more recent, or
+   [clang](https://clang.llvm.org/) 17 (2023) or more recent,
  - GNU Awk and other GNU tools for testing
 
 
