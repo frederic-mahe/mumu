@@ -62,7 +62,7 @@ dependencies are minimal:
  - `make` (version 4 or more recent),
  - [GCC](https://gcc.gnu.org/) 10 (2020) or more recent, or
    [clang](https://clang.llvm.org/) 17 (2023) or more recent,
- - GNU Awk and other GNU tools for testing
+ - [GNU Awk](https://www.gnu.org/software/gawk/) and other GNU tools for testing
 
 
 ## getting started
