@@ -160,7 +160,7 @@ compilers.
 - [x] silently strip quote symbols from input table? Exporters often
       quote strings, tripping some users (see issue #7),
 - [ ] allow named pipes (input/output),
-- [x] test performances on ARM64 GNU/Linux (Raspberry),
+- [x] test performances on ARM64 GNU/Linux (Raspberry Pi 3B+),
 - [x] test performances on RISC-V GNU/Linux (Banana Pi BPI-F3),
 - [ ] support for sparse contingency tables,
 - [ ] faster input parsing through data buffers,
