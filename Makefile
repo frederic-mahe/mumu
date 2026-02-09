@@ -40,7 +40,8 @@ INSTALL_PROGRAM = $(INSTALL)
 RMDIR := rmdir --parents --ignore-fail-on-non-empty
 
 hpp_files := $(wildcard src/*.hpp)
-objects  := $(patsubst %.cpp, %.o, $(wildcard src/*.cpp))
+cpp_files := $(wildcard src/*.cpp)
+objects  := $(patsubst %.cpp, %.o, $(cpp_files))
 dependencies := Makefile $(hpp_files)
 
 
