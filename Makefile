@@ -23,6 +23,7 @@
 
 PROG := mumu
 MAN := man/$(PROG).1
+SRC := src
 
 CXX := g++
 CXXFLAGS := -std=c++20 -Wall -Wextra -Wpedantic
@@ -39,8 +40,8 @@ INSTALL = /usr/bin/install
 INSTALL_PROGRAM = $(INSTALL)
 RMDIR := rmdir --parents --ignore-fail-on-non-empty
 
-hpp_files := $(wildcard src/*.hpp)
-cpp_files := $(wildcard src/*.cpp)
+hpp_files := $(wildcard $(SRC)/*.hpp)
+cpp_files := $(wildcard $(SRC)/*.cpp)
 objects   := $(cpp_files:.cpp=.o)
 dependencies := Makefile $(hpp_files)
 
@@ -99,14 +100,14 @@ profile: all
 
 
 clean:
-	rm -f $(objects) ./$(PROG) compile_commands.json ./src/*.gcov \
-	./src/*.gcda ./src/*.gcno ./src/.gdb_history ./*.gcov \
-	./src/main_coverage.info ./tests/gmon.out
-	rm -rf ./src/out
+	rm -f $(objects) ./$(PROG) compile_commands.json ./$(SRC)/*.gcov \
+	./$(SRC)/*.gcda ./$(SRC)/*.gcno ./$(SRC)/.gdb_history ./*.gcov \
+	./$(SRC)/main_coverage.info ./tests/gmon.out
+	rm -rf ./$(SRC)/out
 
 
 dist-clean: clean
-	rm -f *~ ./src/*~ ./tests/*~ ./man/*~
+	rm -f *~ ./$(SRC)/*~ ./tests/*~ ./man/*~
 
 
 install: $(PROG) $(MAN)
