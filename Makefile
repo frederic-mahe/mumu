@@ -40,7 +40,6 @@ INSTALL_PROGRAM = $(INSTALL)
 RMDIR := rmdir --parents --ignore-fail-on-non-empty
 
 objects  := $(patsubst %.cpp, %.o, $(wildcard src/*.cpp))
-
 dependencies := Makefile $(wildcard src/*.hpp)
 
 
@@ -65,7 +64,9 @@ endif
 $(PROG): $(objects) $(dependencies)
 	$(CXX) $(CXXFLAGS) $(SPECIFIC) -o $@ $(objects) $(LIBS)
 
+
 all: $(PROG)
+
 
 ## To be tested:
 # GCC 8: -fanalyzer (C only, not C++) -Werror
@@ -84,13 +85,16 @@ debug: SPECIFIC = -O0 -ggdb -DDEBUG -D_GLIBCXX_DEBUG \
                  -Wuseless-cast -Wvla
 debug: all
 
+
 coverage: SPECIFIC = -O0 --coverage -fprofile-arcs -ftest-coverage -lgcov
 coverage: all
 	bash ./tests/mumu.sh ./$(PROG)
 	bash ./tests/coverage.sh
 
+
 profile: SPECIFIC = -O1 -pg
 profile: all
+
 
 clean:
 	rm -f $(objects) ./$(PROG) compile_commands.json ./src/*.gcov \
@@ -98,8 +102,10 @@ clean:
 	./src/main_coverage.info ./tests/gmon.out
 	rm -rf ./src/out
 
+
 dist-clean: clean
 	rm -f *~ ./src/*~ ./tests/*~ ./man/*~
+
 
 install: $(PROG) $(MAN)
 	$(INSTALL_PROGRAM) --directory $(DESTDIR)$(bindir)
@@ -107,14 +113,17 @@ install: $(PROG) $(MAN)
 	$(INSTALL_PROGRAM) --directory $(DESTDIR)$(man1dir)
 	$(INSTALL_PROGRAM) $(MAN) $(DESTDIR)$(man1dir)
 
+
 uninstall:
 	rm $(DESTDIR)$(bindir)/$(PROG)
 	rm $(DESTDIR)$(man1dir)/$(PROG).1
 	$(RMDIR) $(DESTDIR)$(man1dir)/
 	$(RMDIR) $(DESTDIR)$(bindir)/
 
+
 check:
 	bash ./tests/mumu.sh ./$(PROG)
+
 
 # make sure rules run even if no file was modified
 .PHONY: all clean coverage debug dist-clean install uninstall profile check
