@@ -27,6 +27,7 @@ MAN := man/$(PROG).1
 SRC := src
 
 CXX := g++
+PRE_FLAGS := -MMD -MP
 CXXFLAGS := -std=c++20 -Wall -Wextra -Wpedantic
 SPECIFIC := -O3 -DNDEBUG
 
@@ -41,10 +42,10 @@ INSTALL = /usr/bin/install
 INSTALL_PROGRAM = $(INSTALL)
 RMDIR := rmdir --parents --ignore-fail-on-non-empty
 
-hpp_files := $(wildcard $(SRC)/*.hpp)
 cpp_files := $(wildcard $(SRC)/*.cpp)
 objects   := $(cpp_files:.cpp=.o)
-dependencies := Makefile $(hpp_files)
+dep_files := $(cpp_files:.cpp=.d)
+dependencies := Makefile
 
 
 ## link time optimization
@@ -63,10 +64,10 @@ endif
 
 
 %.o: %.cpp $(dependencies)
-	$(CXX) $(CXXFLAGS) $(SPECIFIC) -c $< -o $@
+	$(CXX) $(PRE_FLAGS) $(CXXFLAGS) $(SPECIFIC) -c $< -o $@
 
-$(PROG): $(objects) $(dependencies)
-	$(CXX) $(CXXFLAGS) $(SPECIFIC) -o $@ $(objects) $(LIBS)
+$(PROG): $(objects)
+	$(CXX) $(CXXFLAGS) $(SPECIFIC) -o $@ $^ $(LIBS)
 
 
 all: $(PROG)
@@ -101,7 +102,7 @@ profile: all
 
 
 clean:
-	rm -f $(objects) ./$(PROG) compile_commands.json ./$(SRC)/*.gcov \
+	rm -f $(objects) $(dep_files) ./$(PROG) compile_commands.json ./$(SRC)/*.gcov \
 	./$(SRC)/*.gcda ./$(SRC)/*.gcno ./$(SRC)/.gdb_history ./*.gcov \
 	./$(SRC)/main_coverage.info ./tests/gmon.out
 	rm -rf ./$(SRC)/out
@@ -131,3 +132,8 @@ check: $(PROG)
 
 # make sure rules run even if no file was modified
 .PHONY: all clean coverage debug dist-clean install uninstall profile check
+
+
+## include all the dependency files (*.d)
+# '-' before 'include' prevents complaining about missing .d files
+-include $(dep_files)
