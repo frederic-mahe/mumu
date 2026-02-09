@@ -39,8 +39,9 @@ INSTALL = /usr/bin/install
 INSTALL_PROGRAM = $(INSTALL)
 RMDIR := rmdir --parents --ignore-fail-on-non-empty
 
+hpp_files := $(wildcard src/*.hpp)
 objects  := $(patsubst %.cpp, %.o, $(wildcard src/*.cpp))
-dependencies := Makefile $(wildcard src/*.hpp)
+dependencies := Makefile $(hpp_files)
 
 
 ## link time optimization
