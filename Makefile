@@ -41,7 +41,7 @@ RMDIR := rmdir --parents --ignore-fail-on-non-empty
 
 hpp_files := $(wildcard src/*.hpp)
 cpp_files := $(wildcard src/*.cpp)
-objects  := $(patsubst %.cpp, %.o, $(cpp_files))
+objects   := $(cpp_files:.cpp=.o)
 dependencies := Makefile $(hpp_files)
 
 
