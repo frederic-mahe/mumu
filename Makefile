@@ -92,8 +92,7 @@ debug: all
 
 
 coverage: SPECIFIC = -O0 --coverage -fprofile-arcs -ftest-coverage -lgcov
-coverage: all
-	bash ./tests/mumu.sh ./$(PROG)
+coverage: all check
 	bash ./tests/coverage.sh
 
 
