@@ -21,6 +21,7 @@
 # 34398 MONTPELLIER CEDEX 5
 # France
 
+SHELL = /bin/sh
 PROG := mumu
 MAN := man/$(PROG).1
 SRC := src
