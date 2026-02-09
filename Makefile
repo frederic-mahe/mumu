@@ -121,7 +121,7 @@ uninstall:
 	$(RMDIR) $(DESTDIR)$(bindir)/
 
 
-check:
+check: $(PROG)
 	bash ./tests/mumu.sh ./$(PROG)
 
 
