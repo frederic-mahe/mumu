@@ -105,7 +105,7 @@ profile: all
 
 
 clean:
-	rm -f $(objects) $(dep_files) ./$(PROG) \
+	rm -f ./$(PROG) $(objects) $(dep_files) \
 	./$(SRC)/.gdb_history \
 	$(gcov_files) \
 	$(tidy_files) \
