@@ -46,8 +46,8 @@ cpp_files  := $(wildcard $(SRC)/*.cpp)
 objects    := $(cpp_files:.cpp=.o)
 dep_files  := $(cpp_files:.cpp=.d)
 gcov_files := $(cpp_files:.cpp=.gcov)
-gcda_files := $(cpp_files:.cpp=.gcda)
-gcno_files := $(cpp_files:.cpp=.gcno)
+gcov_files += $(cpp_files:.cpp=.gcda)
+gcov_files += $(cpp_files:.cpp=.gcno)
 dependencies := Makefile
 
 
@@ -105,7 +105,7 @@ profile: all
 
 clean:
 	rm -f $(objects) $(dep_files) ./$(PROG) compile_commands.json $(gcov_files) \
-	$(gcda_files) $(gcno_files) ./$(SRC)/.gdb_history \
+	./$(SRC)/.gdb_history \
 	./$(SRC)/main_coverage.info ./tests/gmon.out
 	rm -rf ./$(SRC)/out
 
