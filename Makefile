@@ -91,7 +91,7 @@ debug: SPECIFIC = -O0 -ggdb -DDEBUG -D_GLIBCXX_DEBUG \
                  -Wformat-overflow -Wlogical-op -Wnon-virtual-dtor -Wnull-dereference \
                  -Wold-style-cast -Woverloaded-virtual -Wshadow -Wsign-conversion \
                  -Wuninitialized -Wunsafe-loop-optimizations -Wunused -Wunused-macros \
-                 -Wuseless-cast -Wvla
+                 -Wuseless-cast -Wvla -Werror
 debug: all
 
 
