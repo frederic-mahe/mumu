@@ -45,6 +45,7 @@ RMDIR := rmdir --parents --ignore-fail-on-non-empty
 cpp_files  := $(wildcard $(SRC)/*.cpp)
 objects    := $(cpp_files:.cpp=.o)
 dep_files  := $(cpp_files:.cpp=.d)
+gcov_files := $(cpp_files:.cpp=.gcov)
 dependencies := Makefile
 
 
@@ -101,7 +102,7 @@ profile: all
 
 
 clean:
-	rm -f $(objects) $(dep_files) ./$(PROG) compile_commands.json ./$(SRC)/*.gcov \
+	rm -f $(objects) $(dep_files) ./$(PROG) compile_commands.json $(gcov_files) \
 	./$(SRC)/*.gcda ./$(SRC)/*.gcno ./$(SRC)/.gdb_history \
 	./$(SRC)/main_coverage.info ./tests/gmon.out
 	rm -rf ./$(SRC)/out
