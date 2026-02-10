@@ -40,6 +40,7 @@ mandir = $(datarootdir)/man
 man1dir = $(mandir)/man1
 INSTALL = /usr/bin/install
 INSTALL_PROGRAM = $(INSTALL)
+RM := rm --force
 RMDIR := rmdir --parents --ignore-fail-on-non-empty
 
 cpp_files  := $(wildcard $(SRC)/*.cpp)
@@ -105,16 +106,16 @@ profile: all
 
 
 clean:
-	rm -f ./$(PROG) $(objects) $(dep_files) \
+	$(RM) ./$(PROG) $(objects) $(dep_files) \
 	$(gcov_files) \
 	$(tidy_files) \
 	./$(SRC)/.gdb_history \
 	./$(SRC)/main_coverage.info ./tests/gmon.out
-	rm -rf ./$(SRC)/out
+	$(RM) --recursive ./$(SRC)/out
 
 
 dist-clean: clean
-	rm -f *~ ./$(SRC)/*~ ./tests/*~ ./man/*~
+	$(RM) *~ ./$(SRC)/*~ ./tests/*~ ./man/*~
 
 
 install: $(PROG) $(MAN)
@@ -125,8 +126,8 @@ install: $(PROG) $(MAN)
 
 
 uninstall:
-	rm $(DESTDIR)$(bindir)/$(PROG)
-	rm $(DESTDIR)$(man1dir)/$(PROG).1
+	$(RM) $(DESTDIR)$(bindir)/$(PROG)
+	$(RM) $(DESTDIR)$(man1dir)/$(PROG).1
 	$(RMDIR) $(DESTDIR)$(man1dir)/
 	$(RMDIR) $(DESTDIR)$(bindir)/
 
