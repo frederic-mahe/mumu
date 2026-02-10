@@ -42,9 +42,9 @@ INSTALL = /usr/bin/install
 INSTALL_PROGRAM = $(INSTALL)
 RMDIR := rmdir --parents --ignore-fail-on-non-empty
 
-cpp_files := $(wildcard $(SRC)/*.cpp)
-objects   := $(cpp_files:.cpp=.o)
-dep_files := $(cpp_files:.cpp=.d)
+cpp_files  := $(wildcard $(SRC)/*.cpp)
+objects    := $(cpp_files:.cpp=.o)
+dep_files  := $(cpp_files:.cpp=.d)
 dependencies := Makefile
 
 
