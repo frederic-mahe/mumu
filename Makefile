@@ -102,7 +102,7 @@ profile: all
 
 clean:
 	rm -f $(objects) $(dep_files) ./$(PROG) compile_commands.json ./$(SRC)/*.gcov \
-	./$(SRC)/*.gcda ./$(SRC)/*.gcno ./$(SRC)/.gdb_history ./*.gcov \
+	./$(SRC)/*.gcda ./$(SRC)/*.gcno ./$(SRC)/.gdb_history \
 	./$(SRC)/main_coverage.info ./tests/gmon.out
 	rm -rf ./$(SRC)/out
 
