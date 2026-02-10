@@ -106,9 +106,9 @@ profile: all
 
 clean:
 	rm -f ./$(PROG) $(objects) $(dep_files) \
-	./$(SRC)/.gdb_history \
 	$(gcov_files) \
 	$(tidy_files) \
+	./$(SRC)/.gdb_history \
 	./$(SRC)/main_coverage.info ./tests/gmon.out
 	rm -rf ./$(SRC)/out
 
