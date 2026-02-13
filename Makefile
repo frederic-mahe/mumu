@@ -71,6 +71,7 @@ endif
 %.o: %.cpp $(dependencies)
 	$(CXX) $(PRE_FLAGS) $(CXXFLAGS) $(SPECIFIC) -c $< -o $@
 
+
 $(PROG): $(objects)
 	$(CXX) $(CXXFLAGS) $(SPECIFIC) -o $@ $^ $(LIBS)
 
