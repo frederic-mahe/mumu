@@ -1,4 +1,5 @@
 #!/bin/bash -
+# shellcheck disable=SC2015
 
 ## Declare a color code for test results
 RED="\033[1;31m"
@@ -7,7 +8,7 @@ NO_COLOR="\033[0m"
 
 failure () {
     printf "${RED}FAIL${NO_COLOR}: ${1}\n"
-    exit -1
+    exit 1
 }
 
 success () {
