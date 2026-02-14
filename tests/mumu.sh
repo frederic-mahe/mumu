@@ -797,9 +797,7 @@ DESCRIPTION="mumu accepts decimal abundance values with an integral part in the 
      --match_list <(printf "") \
      --new_otu_table /dev/stdout \
      --log /dev/null 2> /dev/null | \
-     grep -qw "0$")
-
-(( $? == 0 )) && \
+     grep -qw "0$") && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 
@@ -810,11 +808,9 @@ DESCRIPTION="mumu rejects decimal abundance values without an integral part in t
      --match_list <(printf "") \
      --new_otu_table /dev/stdout \
      --log /dev/null 2> /dev/null | \
-     grep -qw "0$")
-
-(( $? == 1 )) && \
-    success "${DESCRIPTION}" || \
-        failure "${DESCRIPTION}"
+     grep -qw "0$") && \
+    failure "${DESCRIPTION}" || \
+        success "${DESCRIPTION}"
 
 DESCRIPTION="mumu floors decimal abundance values in the OTU table (5.9 -> 5)"
 "${MUMU}" \
