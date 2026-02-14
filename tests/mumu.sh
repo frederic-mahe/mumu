@@ -1939,7 +1939,7 @@ printf "a\tC\t98.0\nC\ta\t98.0\nA\tC\t98.0\nC\tA\t98.0\n" > "${MATCH_LIST}"
     --minimum_ratio_type "avg" \
     --minimum_ratio 1.5 \
     --new_otu_table "${NEW_OTU_TABLE}" \
-    --log /dev/null 2>&1 > /dev/null
+    --log /dev/null > /dev/null
 awk '{if (NR == 2) {exit ($1 == "A" && $2 == 4) ? 0 : 1}}' "${NEW_OTU_TABLE}" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
