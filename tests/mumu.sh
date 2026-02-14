@@ -2568,7 +2568,7 @@ accepted=$(grep -c "accepted$" "${LOG}")
 final=$(tail -n +2 "${NEW_OTU_TABLE}" | wc -l)
 initial=$(tail -n +2 "${OTU_TABLE}" | wc -l)
 
-(( $initial == $accepted + $final )) && \
+(( initial == accepted + final )) && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 
