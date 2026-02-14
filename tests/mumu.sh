@@ -791,24 +791,26 @@ DESCRIPTION="mumu trims decimal abundance values in the OTU table (0.0 -> 0)"
         failure "${DESCRIPTION}"
 
 DESCRIPTION="mumu accepts decimal abundance values with an integral part in the OTU table (0.1 -> 0)"
+# use a subshell to mask the exception message
 ("${MUMU}" \
      --otu_table <(printf "OTUs\ts1\nA\t0.1\n") \
      --match_list <(printf "") \
      --new_otu_table /dev/stdout \
      --log /dev/null 2> /dev/null | \
-     grep -qw "0$")  # use a subshell to mask the exception message
+     grep -qw "0$")
 
 (( $? == 0 )) && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 
 DESCRIPTION="mumu rejects decimal abundance values without an integral part in the OTU table (.1 -> 0)"
+# use a subshell to mask the exception message
 ("${MUMU}" \
      --otu_table <(printf "OTUs\ts1\nA\t.1\n") \
      --match_list <(printf "") \
      --new_otu_table /dev/stdout \
      --log /dev/null 2> /dev/null | \
-     grep -qw "0$")  # use a subshell to mask the exception message
+     grep -qw "0$")
 
 (( $? == 1 )) && \
     success "${DESCRIPTION}" || \
