@@ -2560,7 +2560,7 @@ printf "A\tB\t96.5\nB\tA\t96.5\nB\tC\t96.5\nC\tB\t96.5\n" > "${MATCH_LIST}"
     --otu_table "${OTU_TABLE}" \
     --match_list "${MATCH_LIST}" \
     --new_otu_table "${NEW_OTU_TABLE}" \
-    --log "${LOG}" 2>&1 > /dev/null
+    --log "${LOG}" > /dev/null
 
 accepted=$(grep -c "accepted$" "${LOG}")
 final=$(tail -n +2 "${NEW_OTU_TABLE}" | wc -l)
