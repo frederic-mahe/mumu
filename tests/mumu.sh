@@ -1439,7 +1439,7 @@ printf "OTUs\ts1\ts1\ts1\nA\t1\t5\t10\n" > "${OTU_TABLE}"
     --otu_table "${OTU_TABLE}" \
     --match_list "${MATCH_LIST}" \
     --new_otu_table "${NEW_OTU_TABLE}" \
-    --log "${LOG}" 2>&1 > /dev/null && \
+    --log "${LOG}" > /dev/null && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
