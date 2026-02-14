@@ -35,7 +35,7 @@ DESCRIPTION="check if mumu is executable"
 
 ## Print a header
 SECTION_NAME="mumu: interface tests"
-LINE=$(printf "%076s\n" | tr " " "-")
+LINE=$(printf "%076s\n" " " | tr " " "-")
 printf "# %s %s\n" "${LINE:${#SECTION_NAME}}" "${SECTION_NAME}"
 
 
