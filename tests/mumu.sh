@@ -187,7 +187,7 @@ if [[ "$(whoami)" != "root" ]] && grep -q -v "sudo" <(groups "$(whoami)") ; then
     MATCH_LIST=$(mktemp)
     NEW_OTU_TABLE=$(mktemp)
     LOG=$(mktemp)
-    chmod -r "${OTU_TABLE}"
+    chmod a-r "${OTU_TABLE}"
     "${MUMU}" \
         --otu_table "${OTU_TABLE}" \
         --match_list "${MATCH_LIST}" \
@@ -196,7 +196,7 @@ if [[ "$(whoami)" != "root" ]] && grep -q -v "sudo" <(groups "$(whoami)") ; then
         grep -q "^Error:" && \
         success "${DESCRIPTION}" || \
             failure "${DESCRIPTION}"
-    chmod +r "${OTU_TABLE}"
+    chmod a+r "${OTU_TABLE}"
     rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
     ## mumu stops with an error if input files can't be read
@@ -205,7 +205,7 @@ if [[ "$(whoami)" != "root" ]] && grep -q -v "sudo" <(groups "$(whoami)") ; then
     MATCH_LIST=$(mktemp)
     NEW_OTU_TABLE=$(mktemp)
     LOG=$(mktemp)
-    chmod -r "${MATCH_LIST}"
+    chmod a-r "${MATCH_LIST}"
     "${MUMU}" \
         --otu_table "${OTU_TABLE}" \
         --match_list "${MATCH_LIST}" \
@@ -214,7 +214,7 @@ if [[ "$(whoami)" != "root" ]] && grep -q -v "sudo" <(groups "$(whoami)") ; then
         grep -q "^Error:" && \
         success "${DESCRIPTION}" || \
             failure "${DESCRIPTION}"
-    chmod +r "${MATCH_LIST}"
+    chmod a+r "${MATCH_LIST}"
     rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
     ## mumu stops with an error if output files can't be overwritten
@@ -223,7 +223,7 @@ if [[ "$(whoami)" != "root" ]] && grep -q -v "sudo" <(groups "$(whoami)") ; then
     MATCH_LIST=$(mktemp)
     NEW_OTU_TABLE=$(mktemp)
     LOG=$(mktemp)
-    chmod -w "${NEW_OTU_TABLE}"
+    chmod a-w "${NEW_OTU_TABLE}"
     "${MUMU}" \
         --otu_table "${OTU_TABLE}" \
         --match_list "${MATCH_LIST}" \
@@ -232,7 +232,7 @@ if [[ "$(whoami)" != "root" ]] && grep -q -v "sudo" <(groups "$(whoami)") ; then
         grep -q "^Error:" && \
         success "${DESCRIPTION}" || \
             failure "${DESCRIPTION}"
-    chmod +w "${NEW_OTU_TABLE}"
+    chmod a+w "${NEW_OTU_TABLE}"
     rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
     ## mumu outputs a warning if output files can't be overwritten
