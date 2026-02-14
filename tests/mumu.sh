@@ -912,7 +912,7 @@ MATCH_LIST=$(mktemp)
     --otu_table <(printf "OTUs\ts1\nA\t2\nB\t1\n") \
     --match_list "${MATCH_LIST}" \
     --new_otu_table /dev/null \
-    --log /dev/null 2>&1 > /dev/null && \
+    --log /dev/null > /dev/null && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 rm -f "${MATCH_LIST}"
