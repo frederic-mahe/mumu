@@ -1678,7 +1678,7 @@ printf "OTUs\ts1\na\t1\nB\t1\n" > "${OTU_TABLE}"
     --otu_table "${OTU_TABLE}" \
     --match_list "${MATCH_LIST}" \
     --new_otu_table "${NEW_OTU_TABLE}" \
-    --log "${LOG}" 2>&1 > /dev/null
+    --log "${LOG}" > /dev/null
 awk '{if (NR == 6) {exit ($1 == "a" && $2 == 1) ? 0 : 1}}' "${NEW_OTU_TABLE}" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
