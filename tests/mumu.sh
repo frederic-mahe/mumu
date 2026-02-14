@@ -7,13 +7,14 @@ GREEN="\033[1;32m"
 NO_COLOR="\033[0m"
 
 failure () {
-    printf "${RED}FAIL${NO_COLOR}: ${1}\n"
+    printf "%bFAIL%b: %s\n" "${RED}" "${NO_COLOR}" "${1}"
     exit 1
 }
 
 success () {
-    printf "${GREEN}PASS${NO_COLOR}: ${1}\n"
+    printf "%bPASS%b: %s\n" "${GREEN}" "${NO_COLOR}" "${1}"
 }
+
 
 ## use the first mumu binary in $PATH by default, unless user wants
 ## to test another binary
