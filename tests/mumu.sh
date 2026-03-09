@@ -595,7 +595,7 @@ LOG=$(mktemp)
     --new_otu_table "${NEW_OTU_TABLE}" \
     --log "${LOG}" \
     --threads 2 2>&1 > /dev/null | \
-    grep -wq "Warning: mumu is not yet multithreaded" && \
+    grep -qw "Warning: mumu is not yet multithreaded" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
@@ -1304,7 +1304,7 @@ DESCRIPTION="mumu warns if OTU table contains no sample (zero or one column)"
     --match_list <(printf "ASV1\tASV2\t96.8\n") \
     --new_otu_table /dev/null \
     --log /dev/null 2>&1 | \
-    grep -wq "Warning: OTU table should have at least one sample" && \
+    grep -qw "Warning: OTU table should have at least one sample" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 
@@ -1315,7 +1315,7 @@ DESCRIPTION="mumu warns if an OTU table header contains a comma (csv)"
     --match_list <(printf "") \
     --new_otu_table /dev/null \
     --log /dev/null 2>&1 | \
-    grep -wq "Warning: .*comma.*" && \
+    grep -qw "Warning: .*comma.*" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 
@@ -1326,7 +1326,7 @@ DESCRIPTION="mumu warns if an OTU table header contains a comma (tsv with comma 
     --match_list <(printf "") \
     --new_otu_table /dev/null \
     --log /dev/null 2>&1 | \
-    grep -wq "Warning: .*comma.*" && \
+    grep -qw "Warning: .*comma.*" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 
@@ -1337,7 +1337,7 @@ DESCRIPTION="mumu does not warn about csv if an OTU table header contains no com
     --match_list <(printf "") \
     --new_otu_table /dev/null \
     --log /dev/null 2>&1 | \
-    grep -wq "Warning: .*comma.*" && \
+    grep -qw "Warning: .*comma.*" && \
     failure "${DESCRIPTION}" || \
         success "${DESCRIPTION}"
 
@@ -1347,7 +1347,7 @@ DESCRIPTION="mumu does not warn about csv if an OTU name contains a comma"
     --match_list <(printf "") \
     --new_otu_table /dev/null \
     --log /dev/null 2>&1 | \
-    grep -wq "Warning: .*comma.*" && \
+    grep -qw "Warning: .*comma.*" && \
     failure "${DESCRIPTION}" || \
         success "${DESCRIPTION}"
 
@@ -1357,7 +1357,7 @@ DESCRIPTION="mumu accepts non-ascii chars in OTU name"
     --match_list <(printf "") \
     --new_otu_table /dev/stdout \
     --log /dev/null 2>&1 | \
-    grep -wq "^é" && \
+    grep -qw "^é" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 
@@ -1367,7 +1367,7 @@ DESCRIPTION="mumu accepts non-ascii chars in match list"
     --match_list <(printf "é\tA\t99.0\n") \
     --new_otu_table /dev/stdout \
     --log /dev/null 2>&1 | \
-    grep -wq "^é" && \
+    grep -qw "^é" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 
@@ -1377,7 +1377,7 @@ DESCRIPTION="mumu accepts non-ascii chars in match list (merge)"
     --match_list <(printf "A\té\t99.0\n") \
     --new_otu_table /dev/stdout \
     --log /dev/null 2>&1 | \
-    grep -wqE "é[[:blank:]]10" && \
+    grep -Eqw "é[[:blank:]]10" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 
