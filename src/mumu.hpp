@@ -101,5 +101,5 @@ struct OTU {
   bool is_mergeable {false};
   bool is_merged {false};
   bool is_root {false};
-  bool padding_O {false};
+  bool padding_8 {false};
 };
