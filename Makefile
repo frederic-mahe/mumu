@@ -102,7 +102,7 @@ coverage: all check
 	bash ./tests/coverage.sh
 
 
-profile: SPECIFIC = -O1 -pg
+profile: SPECIFIC = -O2 -pg
 profile: all
 
 
