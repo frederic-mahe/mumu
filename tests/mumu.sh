@@ -1562,7 +1562,7 @@ awk '{if (NR > 1) {exit ($1 == "A" && $2 == 8) ? 0 : 1}}' "${NEW_OTU_TABLE}" && 
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
 ## OTUs with the same abundance are not merged
-# A son cannot be as abundant as its father (to avoid circular linking
+# A child cannot be as abundant as its parent (to avoid circular linking
 # among OTUs of the same abundance).
 # expect OTU table with three lines
 DESCRIPTION="mumu OTUs with the same abundance are not merged"
