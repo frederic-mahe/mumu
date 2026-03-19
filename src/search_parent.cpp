@@ -42,7 +42,7 @@ namespace {
     static constexpr auto largest_double{std::numeric_limits<double>::max()};
     static constexpr auto reject_as_parent {"rejected"};
   public:
-    std::string son_id;  //refactoring: string_view
+    std::string child_id;  //refactoring: string_view
     std::string parent_id;
     double similarity {0.0};
     unsigned long int son_total_abundance {1};  // refactoring: can't be zero, but zero is clearer?
@@ -68,7 +68,7 @@ namespace {
     output_stream.precision(2);
     return output_stream
       << std::fixed
-      << stats.son_id << sepchar
+      << stats.child_id << sepchar
       << stats.parent_id << sepchar
       << stats.similarity << sepchar
       << stats.son_total_abundance << sepchar
@@ -128,7 +128,7 @@ namespace {
     // for (std::pair<const &int, const &int> pair: std::views::zip(father, son)) // available in c++23
 
     // assert(v1.length() == v2.length())
-    auto const& son = OTUs[stats.son_id].samples;
+    auto const& son = OTUs[stats.child_id].samples;
     auto const& father = OTUs[stats.parent_id].samples;
     auto current_son_sample = son.begin();
     auto current_father_sample = father.begin();
@@ -165,7 +165,7 @@ namespace {
 
     for (auto const& match : otu.matches) {
       auto const& father = OTUs[match.hit_id];
-      Stats stats {.son_id = OTU_id,
+      Stats stats {.child_id = OTU_id,
                    .parent_id = match.hit_id,
                    .similarity = match.similarity,
                    .son_total_abundance = otu.sum_reads,
