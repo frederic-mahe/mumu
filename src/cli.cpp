@@ -64,7 +64,7 @@ namespace {
       {.name=nullptr, .has_arg=0, .flag=nullptr, .val=0}
     }};
   // additional options?
-  //  --minimum_spread n (spread threshold to consider as potential father)
+  //  --minimum_spread n (spread threshold to consider as potential parent)
 
   static_assert(not long_options.empty(), "long_options must have at least one (empty) option");
   static_assert(long_options.back().val == 0, "last option must be empty");
