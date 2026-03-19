@@ -164,14 +164,14 @@ namespace {
     assert(otu.spread != 0);  // empty son should be skipped
 
     for (auto const& match : otu.matches) {
-      auto const& father = OTUs[match.hit_id];
+      auto const& parent = OTUs[match.hit_id];
       Stats stats {.child_id = OTU_id,
                    .parent_id = match.hit_id,
                    .similarity = match.similarity,
                    .child_total_abundance = otu.sum_reads,
-                   .parent_total_abundance = father.sum_reads,
+                   .parent_total_abundance = parent.sum_reads,
                    .child_spread = otu.spread,
-                   .parent_spread = father.spread};  // refactoring: son's stats should be initialized outside of the loop, or separated into another struct
+                   .parent_spread = parent.spread};  // refactoring: son's stats should be initialized outside of the loop, or separated into another struct
 
       // compute parent/child ratios for all samples
       per_sample_ratios(OTUs, stats);
