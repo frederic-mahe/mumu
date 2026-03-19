@@ -251,7 +251,7 @@ auto search_parent(std::unordered_map<std::string, struct OTU> &OTUs,
 // instead of manual indexing. This makes the code more idiomatic and
 // reduces errors.
 
-// Initialize son stats outside the parent testing loop to avoid
+// Initialize child stats outside the parent testing loop to avoid
 // repeated work. This improves performance by avoiding redundant
 // computations.
 
