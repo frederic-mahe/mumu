@@ -128,11 +128,11 @@ namespace {
     // for (std::pair<const &int, const &int> pair: std::views::zip(parent, child)) // available in c++23
 
     // assert(v1.length() == v2.length())
-    auto const& son = OTUs[stats.child_id].samples;
-    auto const& father = OTUs[stats.parent_id].samples;
-    auto current_child_sample = son.begin();
-    auto current_parent_sample = father.begin();
-    while (current_child_sample != son.end()) {  // check only one end, vectors have the same length
+    auto const& child = OTUs[stats.child_id].samples;
+    auto const& parent = OTUs[stats.parent_id].samples;
+    auto current_child_sample = child.begin();
+    auto current_parent_sample = parent.begin();
+    while (current_child_sample != child.end()) {  // check only one end, vectors have the same length
       auto child_abundance = *current_child_sample++;
       const auto& parent_abundance = *current_parent_sample++;
       if (child_abundance == 0) { continue; }  // skip this sample
