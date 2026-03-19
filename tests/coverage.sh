@@ -14,6 +14,7 @@ coverage=$(
          }'
         )
 
+grep -E "^[[:space:]]+={5}:" ./*.cpp.gcov
 rm -f ./*.gcov
 
 echo "coverage: ${coverage}%"
