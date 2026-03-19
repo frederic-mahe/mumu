@@ -161,7 +161,7 @@ namespace {
                     Parameters const &parameters,
                     std::ofstream &log_file) -> void {
 
-    assert(otu.spread != 0);  // empty son should be skipped
+    assert(otu.spread != 0);  // empty child should be skipped
 
     for (auto const& match : otu.matches) {
       auto const& parent = OTUs[match.hit_id];
@@ -171,7 +171,7 @@ namespace {
                    .child_total_abundance = otu.sum_reads,
                    .parent_total_abundance = parent.sum_reads,
                    .child_spread = otu.spread,
-                   .parent_spread = parent.spread};  // refactoring: son's stats should be initialized outside of the loop, or separated into another struct
+                   .parent_spread = parent.spread};  // refactoring: child's stats should be initialized outside of the loop, or separated into another struct
 
       // compute parent/child ratios for all samples
       per_sample_ratios(OTUs, stats);

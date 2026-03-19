@@ -45,9 +45,9 @@ namespace {
   }
 
 
-  // auto add_reads_to_root (std::vector<unsigned long int>& son,
+  // auto add_reads_to_root (std::vector<unsigned long int>& child,
   //                         std::vector<unsigned long int>& root) -> void {
-  //   std::ranges::transform(son.samples,
+  //   std::ranges::transform(child.samples,
   //                          root.samples,
   //                          root.samples.begin(),
   //                          std::plus{});
@@ -63,7 +63,7 @@ auto merge_OTUs(std::unordered_map<std::string, struct OTU> &OTUs) -> void {
     if (not OTUs[OTU_id].is_mergeable) { continue; }
     // find the end of the merging chain
     const auto root = find_root(OTUs, OTUs[OTU_id].parent_id);
-    // add son's reads to root's reads
+    // add child's reads to root's reads
     // refactoring: add_reads_to_root(OTUs[OTU_id], OTUs[root]);
     std::ranges::transform(OTUs[OTU_id].samples,
                            OTUs[root].samples,
