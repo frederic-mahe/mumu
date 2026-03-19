@@ -39,7 +39,7 @@ namespace {
                  std::string root) -> std::string {
     while (OTUs[root].is_mergeable) {
       // refactoring: performance: store parent ID in a variable instead of looking up
-      root = {OTUs[root].father_id};
+      root = {OTUs[root].parent_id};
     }
     return root;
   }
@@ -62,7 +62,7 @@ auto merge_OTUs(std::unordered_map<std::string, struct OTU> &OTUs) -> void {
     // skip orphans
     if (not OTUs[OTU_id].is_mergeable) { continue; }
     // find the end of the merging chain
-    const auto root = find_root(OTUs, OTUs[OTU_id].father_id);
+    const auto root = find_root(OTUs, OTUs[OTU_id].parent_id);
     // add son's reads to root's reads
     // refactoring: add_reads_to_root(OTUs[OTU_id], OTUs[root]);
     std::ranges::transform(OTUs[OTU_id].samples,

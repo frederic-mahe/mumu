@@ -43,7 +43,7 @@ namespace {
     static constexpr auto reject_as_parent {"rejected"};
   public:
     std::string son_id;  //refactoring: string_view
-    std::string father_id;
+    std::string parent_id;
     double similarity {0.0};
     unsigned long int son_total_abundance {1};  // refactoring: can't be zero, but zero is clearer?
     unsigned long int father_total_abundance {0};  // refactoring: same as above?
@@ -69,7 +69,7 @@ namespace {
     return output_stream
       << std::fixed
       << stats.son_id << sepchar
-      << stats.father_id << sepchar
+      << stats.parent_id << sepchar
       << stats.similarity << sepchar
       << stats.son_total_abundance << sepchar
       << stats.father_total_abundance << sepchar
@@ -129,7 +129,7 @@ namespace {
 
     // assert(v1.length() == v2.length())
     auto const& son = OTUs[stats.son_id].samples;
-    auto const& father = OTUs[stats.father_id].samples;
+    auto const& father = OTUs[stats.parent_id].samples;
     auto current_son_sample = son.begin();
     auto current_father_sample = father.begin();
     while (current_son_sample != son.end()) {  // check only one end, vectors have the same length
@@ -166,7 +166,7 @@ namespace {
     for (auto const& match : otu.matches) {
       auto const& father = OTUs[match.hit_id];
       Stats stats {.son_id = OTU_id,
-                   .father_id = match.hit_id,
+                   .parent_id = match.hit_id,
                    .similarity = match.similarity,
                    .son_total_abundance = otu.sum_reads,
                    .father_total_abundance = father.sum_reads,
@@ -213,7 +213,7 @@ namespace {
       // accept: mark OTU and output stats
       stats.status = accept_as_parent;
       otu.is_mergeable = true;
-      otu.father_id = match.hit_id;
+      otu.parent_id = match.hit_id;
       log_file << stats;
       break;
     }

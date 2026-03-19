@@ -94,7 +94,7 @@ struct Match {
 struct OTU {
   std::vector<struct Match> matches;
   std::vector<unsigned long int> samples;
-  std::string father_id;  // std::string_view? no
+  std::string parent_id;  // std::string_view? no
   unsigned long int input_order {0};
   unsigned long int sum_reads {0};
   unsigned int spread {0};
