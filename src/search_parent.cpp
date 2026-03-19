@@ -45,13 +45,13 @@ namespace {
     std::string child_id;  //refactoring: string_view
     std::string parent_id;
     double similarity {0.0};
-    unsigned long int son_total_abundance {1};  // refactoring: can't be zero, but zero is clearer?
-    unsigned long int father_total_abundance {0};  // refactoring: same as above?
-    unsigned long int son_overlap_abundance {0};
-    unsigned long int father_overlap_abundance {0};
-    unsigned int son_spread {0};
-    unsigned int father_spread {0};
-    unsigned int father_overlap_spread {0};
+    unsigned long int child_total_abundance {1};  // refactoring: can't be zero, but zero is clearer?
+    unsigned long int parent_total_abundance {0};  // refactoring: same as above?
+    unsigned long int child_overlap_abundance {0};
+    unsigned long int parent_overlap_abundance {0};
+    unsigned int child_spread {0};
+    unsigned int parent_spread {0};
+    unsigned int parent_overlap_spread {0};
     unsigned int padding {0};
     double smallest_ratio {largest_double};
     double sum_ratio {0.0};
@@ -71,13 +71,13 @@ namespace {
       << stats.child_id << sepchar
       << stats.parent_id << sepchar
       << stats.similarity << sepchar
-      << stats.son_total_abundance << sepchar
-      << stats.father_total_abundance << sepchar
-      << stats.son_overlap_abundance << sepchar
-      << stats.father_overlap_abundance << sepchar
-      << stats.son_spread << sepchar
-      << stats.father_spread << sepchar
-      << stats.father_overlap_spread << sepchar
+      << stats.child_total_abundance << sepchar
+      << stats.parent_total_abundance << sepchar
+      << stats.child_overlap_abundance << sepchar
+      << stats.parent_overlap_abundance << sepchar
+      << stats.child_spread << sepchar
+      << stats.parent_spread << sepchar
+      << stats.parent_overlap_spread << sepchar
       << stats.smallest_ratio << sepchar
       << stats.sum_ratio << sepchar
       << stats.avg_ratio << sepchar
@@ -130,26 +130,26 @@ namespace {
     // assert(v1.length() == v2.length())
     auto const& son = OTUs[stats.child_id].samples;
     auto const& father = OTUs[stats.parent_id].samples;
-    auto current_son_sample = son.begin();
-    auto current_father_sample = father.begin();
-    while (current_son_sample != son.end()) {  // check only one end, vectors have the same length
-      auto son_abundance = *current_son_sample++;
-      const auto& father_abundance = *current_father_sample++;
-      if (son_abundance == 0) { continue; }  // skip this sample
-      assert(father_abundance <= largest_int_without_precision_loss);
-      if (father_abundance != 0) {
-        stats.son_overlap_abundance += son_abundance;
+    auto current_child_sample = son.begin();
+    auto current_parent_sample = father.begin();
+    while (current_child_sample != son.end()) {  // check only one end, vectors have the same length
+      auto child_abundance = *current_child_sample++;
+      const auto& parent_abundance = *current_parent_sample++;
+      if (child_abundance == 0) { continue; }  // skip this sample
+      assert(parent_abundance <= largest_int_without_precision_loss);
+      if (parent_abundance != 0) {
+        stats.child_overlap_abundance += child_abundance;
       }
-      auto const ratio { static_cast<double>(father_abundance) / static_cast<double>(son_abundance) };
+      auto const ratio { static_cast<double>(parent_abundance) / static_cast<double>(child_abundance) };
       stats.smallest_ratio = std::min(ratio, stats.smallest_ratio);
       stats.largest_ratio = std::max(ratio, stats.largest_ratio);
       if (ratio > 0.0) {
         stats.smallest_non_null_ratio = std::min(ratio, stats.smallest_non_null_ratio);
       }
       stats.sum_ratio += ratio;
-      if (father_abundance != 0) {
-        ++stats.father_overlap_spread;
-        stats.father_overlap_abundance += father_abundance;
+      if (parent_abundance != 0) {
+        ++stats.parent_overlap_spread;
+        stats.parent_overlap_abundance += parent_abundance;
       }
     }
   }
@@ -168,16 +168,16 @@ namespace {
       Stats stats {.child_id = OTU_id,
                    .parent_id = match.hit_id,
                    .similarity = match.similarity,
-                   .son_total_abundance = otu.sum_reads,
-                   .father_total_abundance = father.sum_reads,
-                   .son_spread = otu.spread,
-                   .father_spread = father.spread};  // refactoring: son's stats should be initialized outside of the loop, or separated into another struct
+                   .child_total_abundance = otu.sum_reads,
+                   .parent_total_abundance = father.sum_reads,
+                   .child_spread = otu.spread,
+                   .parent_spread = father.spread};  // refactoring: son's stats should be initialized outside of the loop, or separated into another struct
 
       // compute father/son ratios for all samples
       per_sample_ratios(OTUs, stats);
 
       // reject: no overlap with the potential parent
-      if (stats.father_overlap_spread == 0) {
+      if (stats.parent_overlap_spread == 0) {
         stats.smallest_ratio = 0.0;
         stats.smallest_non_null_ratio = 0.0;
         log_file << stats;
@@ -191,9 +191,9 @@ namespace {
       }
 
       // populate overlap stats
-      stats.avg_ratio = stats.sum_ratio / stats.son_spread;
-      stats.avg_non_null_ratio = stats.sum_ratio / stats.father_overlap_spread;
-      stats.relative_cooccurrence = 1.0 * stats.father_overlap_spread / stats.son_spread;
+      stats.avg_ratio = stats.sum_ratio / stats.child_spread;
+      stats.avg_non_null_ratio = stats.sum_ratio / stats.parent_overlap_spread;
+      stats.relative_cooccurrence = 1.0 * stats.parent_overlap_spread / stats.child_spread;
 
       // reject: incidence ratio with the potential parent is too low
       if (stats.relative_cooccurrence < parameters.minimum_relative_cooccurrence) {
