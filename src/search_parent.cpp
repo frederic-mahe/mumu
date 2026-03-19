@@ -125,7 +125,7 @@ namespace {
     [[maybe_unused]] static constexpr auto largest_int_without_precision_loss {9'007'199'254'740'992};
 
     // 'zip' two OTUs
-    // for (std::pair<const &int, const &int> pair: std::views::zip(father, son)) // available in c++23
+    // for (std::pair<const &int, const &int> pair: std::views::zip(parent, child)) // available in c++23
 
     // assert(v1.length() == v2.length())
     auto const& son = OTUs[stats.child_id].samples;
@@ -173,7 +173,7 @@ namespace {
                    .child_spread = otu.spread,
                    .parent_spread = father.spread};  // refactoring: son's stats should be initialized outside of the loop, or separated into another struct
 
-      // compute father/son ratios for all samples
+      // compute parent/child ratios for all samples
       per_sample_ratios(OTUs, stats);
 
       // reject: no overlap with the potential parent
