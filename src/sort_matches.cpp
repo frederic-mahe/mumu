@@ -39,7 +39,7 @@ namespace {
 
       // ignore OTUs with zero or one match
       if (OTUs[OTU_id].matches.size() < 2) { continue; }  // refactoring: useless?
-    
+
       std::ranges::sort(OTUs[OTU_id].matches, std::ranges::greater{});  // refactoring: replace with otu.matches!
     }
   }
