@@ -64,6 +64,9 @@ namespace {
       if (lhs.hit_sum_reads > rhs.hit_sum_reads) {
         return true;
       }
+      if (lhs.hit_sum_reads < rhs.hit_sum_reads) {
+        return false;
+      }
       // ...then ties are sorted by increasing input order
       if (lhs.hit_input_order < rhs.hit_input_order) {
         return true;
