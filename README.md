@@ -98,17 +98,18 @@ OTU pairs with at least 84% similarity (`--id 0.84`, see `mumu --help`
 and `man mumu` for more details):
 
 ```sh
-vsearch
-    --usearch_global input.fasta
-    --db input.fasta
-    --self
-    --id 0.84
-    --iddef 1
-    --userfields query+target+id
-    --maxaccepts 0
-    --query_cov 0.9
-    --maxhits 10
-    --userout matches.list
+vsearch \
+    --usearch_global input.fasta \
+    --db input.fasta \
+    --self \
+    --id 0.84 \
+    --iddef 1 \
+    --userfields query+target+id \
+    --maxaccepts 0 \
+    --query_cov 0.9 \
+    --maxhits 10 \
+    --userout - | \
+    sed -r 's/;size=[0-9]+;//g' > matches.list
 ```
 
 
