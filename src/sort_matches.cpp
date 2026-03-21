@@ -46,8 +46,9 @@ namespace {
 
 
   auto sort_matches_legacy(std::unordered_map<std::string, struct OTU> & OTUs) -> void {
-    // lulu orders potential parents by decreasing spread (incidence),
-    // and then by decreasing total abundance, and then by input order
+    // lulu orders matches with potential parents by decreasing spread
+    // (incidence), and then by decreasing total abundance, and then
+    // (implicitely) by input order (of OTUs)
     // R code: order(spread, total, decreasing = TRUE)
     std::cout << "(legacy order) ... ";
 
@@ -67,7 +68,7 @@ namespace {
       if (lhs.hit_sum_reads < rhs.hit_sum_reads) {
         return false;
       }
-      // ...then ties are sorted by increasing input order
+      // ...then ties are sorted by increasing input order of OTUs
       if (lhs.hit_input_order < rhs.hit_input_order) {
         return true;
       }
