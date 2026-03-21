@@ -1196,7 +1196,7 @@ wait
 # and then by decreasing total abundance, and then by input order
 #
 # different spread: A > B, and A before B
-DESCRIPTION="mumu --legacy sorts by decreasing spread (merge with A)"
+DESCRIPTION="mumu --legacy sorts by decreasing spread (A > B, and A before B)"
 "${MUMU}" \
     --otu_table <(printf "OTUs\ts1\ts2\n"
                   printf "A\t4\t4\n"
@@ -1210,14 +1210,44 @@ DESCRIPTION="mumu --legacy sorts by decreasing spread (merge with A)"
                     failure "${DESCRIPTION}") > /dev/null
 wait
 
+# different spread: A > B, and B before A
+DESCRIPTION="mumu --legacy sorts by decreasing spread (A > B, and B before A)"
+"${MUMU}" \
+    --otu_table <(printf "OTUs\ts1\ts2\n"
+                  printf "A\t4\t4\n"
+                  printf "B\t8\t0\n"
+                  printf "C\t1\t0\n") \
+    --match_list <(printf "C\tB\t99.0\n" ; printf "C\tA\t99.0\n") \
+    --legacy \
+    --new_otu_table /dev/null \
+    --log >(awk 'END {exit $2 == "A" ? 0 : 1}' && \
+                success "${DESCRIPTION}" || \
+                    failure "${DESCRIPTION}") > /dev/null
+wait
+
 # different spread: A < B, and A before B
-DESCRIPTION="mumu --legacy sorts by decreasing spread (merge with B)"
+DESCRIPTION="mumu --legacy sorts by decreasing spread (A < B, and A before B)"
 "${MUMU}" \
     --otu_table <(printf "OTUs\ts1\ts2\n"
                   printf "A\t8\t0\n"
                   printf "B\t4\t4\n"
                   printf "C\t1\t0\n") \
     --match_list <(printf "C\tA\t99.0\n" ; printf "C\tB\t99.0\n") \
+    --legacy \
+    --new_otu_table /dev/null \
+    --log >(awk 'END {exit $2 == "B" ? 0 : 1}' && \
+                success "${DESCRIPTION}" || \
+                    failure "${DESCRIPTION}") > /dev/null
+wait
+
+# different spread: A < B, and B before A
+DESCRIPTION="mumu --legacy sorts by decreasing spread (A < B, and B before A)"
+"${MUMU}" \
+    --otu_table <(printf "OTUs\ts1\ts2\n"
+                  printf "A\t8\t0\n"
+                  printf "B\t4\t4\n"
+                  printf "C\t1\t0\n") \
+    --match_list <(printf "C\tB\t99.0\n" ; printf "C\tA\t99.0\n") \
     --legacy \
     --new_otu_table /dev/null \
     --log >(awk 'END {exit $2 == "B" ? 0 : 1}' && \
