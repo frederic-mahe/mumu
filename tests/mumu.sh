@@ -1195,7 +1195,7 @@ wait
 # lulu orders potential parents by decreasing spread (incidence),
 # and then by decreasing total abundance, and then by input order
 #
-# different spread: A > B
+# different spread: A > B, and A before B
 DESCRIPTION="mumu --legacy sorts by decreasing spread (merge with A)"
 "${MUMU}" \
     --otu_table <(printf "OTUs\ts1\ts2\n"
@@ -1210,7 +1210,7 @@ DESCRIPTION="mumu --legacy sorts by decreasing spread (merge with A)"
                     failure "${DESCRIPTION}") > /dev/null
 wait
 
-# different spread: A < B
+# different spread: A < B, and A before B
 DESCRIPTION="mumu --legacy sorts by decreasing spread (merge with B)"
 "${MUMU}" \
     --otu_table <(printf "OTUs\ts1\ts2\n"
