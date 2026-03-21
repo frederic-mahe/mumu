@@ -1195,7 +1195,7 @@ wait
 # lulu orders potential parents by decreasing spread (incidence),
 # and then by decreasing total abundance, and then by input order
 #
-# different spread: A > B, and A before B
+# different spread: A > B, and A before B -> merge with A
 DESCRIPTION="mumu --legacy sorts by decreasing spread (A > B, and A before B)"
 "${MUMU}" \
     --otu_table <(printf "OTUs\ts1\ts2\n"
@@ -1210,7 +1210,7 @@ DESCRIPTION="mumu --legacy sorts by decreasing spread (A > B, and A before B)"
                     failure "${DESCRIPTION}") > /dev/null
 wait
 
-# different spread: A > B, and B before A
+# different spread: A > B, and B before A -> merge with A
 DESCRIPTION="mumu --legacy sorts by decreasing spread (A > B, and B before A)"
 "${MUMU}" \
     --otu_table <(printf "OTUs\ts1\ts2\n"
@@ -1225,7 +1225,7 @@ DESCRIPTION="mumu --legacy sorts by decreasing spread (A > B, and B before A)"
                     failure "${DESCRIPTION}") > /dev/null
 wait
 
-# different spread: A < B, and A before B
+# different spread: A < B, and A before B -> merge with B
 DESCRIPTION="mumu --legacy sorts by decreasing spread (A < B, and A before B)"
 "${MUMU}" \
     --otu_table <(printf "OTUs\ts1\ts2\n"
@@ -1240,7 +1240,7 @@ DESCRIPTION="mumu --legacy sorts by decreasing spread (A < B, and A before B)"
                     failure "${DESCRIPTION}") > /dev/null
 wait
 
-# different spread: A < B, and B before A
+# different spread: A < B, and B before A -> merge with B
 DESCRIPTION="mumu --legacy sorts by decreasing spread (A < B, and B before A)"
 "${MUMU}" \
     --otu_table <(printf "OTUs\ts1\ts2\n"
@@ -1255,8 +1255,8 @@ DESCRIPTION="mumu --legacy sorts by decreasing spread (A < B, and B before A)"
                     failure "${DESCRIPTION}") > /dev/null
 wait
 
-# same spread, different total abundance: A > B
-DESCRIPTION="mumu --legacy sorts by decreasing total abundance (merge with A)"
+# same spread, different total abundance: A > B, and A before B -> merge with A
+DESCRIPTION="mumu --legacy sorts by decreasing total abundance (A > B, and A before B)"
 "${MUMU}" \
     --otu_table <(printf "OTUs\ts1\ts2\n"
                   printf "A\t4\t5\n"
@@ -1270,8 +1270,23 @@ DESCRIPTION="mumu --legacy sorts by decreasing total abundance (merge with A)"
                     failure "${DESCRIPTION}") > /dev/null
 wait
 
-# same spread, different total abundance: A < B
-DESCRIPTION="mumu --legacy sorts by decreasing total abundance (merge with B)"
+# same spread, different total abundance: A > B, and B before A -> merge with A
+DESCRIPTION="mumu --legacy sorts by decreasing total abundance (A > B, and B before A)"
+"${MUMU}" \
+    --otu_table <(printf "OTUs\ts1\ts2\n"
+                  printf "A\t4\t5\n"
+                  printf "B\t4\t4\n"
+                  printf "C\t1\t1\n") \
+    --match_list <(printf "C\tB\t99.0\n" ; printf "C\tA\t99.0\n") \
+    --legacy \
+    --new_otu_table /dev/null \
+    --log >(awk 'END {exit $2 == "A" ? 0 : 1}' && \
+                success "${DESCRIPTION}" || \
+                    failure "${DESCRIPTION}") > /dev/null
+wait
+
+# same spread, different total abundance: A < B, and A before B -> merge with B
+DESCRIPTION="mumu --legacy sorts by decreasing total abundance (A < B, and A before B)"
 "${MUMU}" \
     --otu_table <(printf "OTUs\ts1\ts2\n"
                   printf "A\t4\t4\n"
@@ -1285,14 +1300,14 @@ DESCRIPTION="mumu --legacy sorts by decreasing total abundance (merge with B)"
                     failure "${DESCRIPTION}") > /dev/null
 wait
 
-# same spread, same total abundance, different input order: A > B (B before A)
-DESCRIPTION="mumu --legacy preserves OTU input order (merge with B)"
+# same spread, different total abundance: A < B, and B before A -> merge with B
+DESCRIPTION="mumu --legacy sorts by decreasing total abundance (A < B, and B before A)"
 "${MUMU}" \
     --otu_table <(printf "OTUs\ts1\ts2\n"
-                  printf "B\t4\t4\n"
                   printf "A\t4\t4\n"
+                  printf "B\t4\t5\n"
                   printf "C\t1\t1\n") \
-    --match_list <(printf "C\tA\t99.0\n" ; printf "C\tB\t99.0\n") \
+    --match_list <(printf "C\tB\t99.0\n" ; printf "C\tA\t99.0\n") \
     --legacy \
     --new_otu_table /dev/null \
     --log >(awk 'END {exit $2 == "B" ? 0 : 1}' && \
@@ -1300,8 +1315,9 @@ DESCRIPTION="mumu --legacy preserves OTU input order (merge with B)"
                     failure "${DESCRIPTION}") > /dev/null
 wait
 
-# same spread, same total abundance, different input order: A < B (A before B)
-DESCRIPTION="mumu --legacy preserves OTU input order (merge with A)"
+# now the imput order of parents (OTUs) matters
+# same spread, same total abundance, different input order: A < B (A before B) -> merge with A
+DESCRIPTION="mumu --legacy preserves OTU input order (A < B, A before B)"
 "${MUMU}" \
     --otu_table <(printf "OTUs\ts1\ts2\n"
                   printf "A\t4\t4\n"
@@ -1311,6 +1327,51 @@ DESCRIPTION="mumu --legacy preserves OTU input order (merge with A)"
     --legacy \
     --new_otu_table /dev/null \
     --log >(awk 'END {exit $2 == "A" ? 0 : 1}' && \
+                success "${DESCRIPTION}" || \
+                    failure "${DESCRIPTION}") > /dev/null
+wait
+
+# same spread, same total abundance, different input order: A < B (A before B) -> merge with A
+DESCRIPTION="mumu --legacy preserves OTU input order, not match input order (A < B, A before B)"
+"${MUMU}" \
+    --otu_table <(printf "OTUs\ts1\ts2\n"
+                  printf "A\t4\t4\n"
+                  printf "B\t4\t4\n"
+                  printf "C\t1\t1\n") \
+    --match_list <(printf "C\tB\t99.0\n" ; printf "C\tA\t99.0\n") \
+    --legacy \
+    --new_otu_table /dev/null \
+    --log >(awk 'END {exit $2 == "A" ? 0 : 1}' && \
+                success "${DESCRIPTION}" || \
+                    failure "${DESCRIPTION}") > /dev/null
+wait
+
+# same spread, same total abundance, different input order: A > B (B before A) -> merge with B
+DESCRIPTION="mumu --legacy preserves OTU input order (A > B, B before A)"
+"${MUMU}" \
+    --otu_table <(printf "OTUs\ts1\ts2\n"
+                  printf "B\t4\t4\n"
+                  printf "A\t4\t4\n"
+                  printf "C\t1\t1\n") \
+    --match_list <(printf "C\tB\t99.0\n" ; printf "C\tA\t99.0\n") \
+    --legacy \
+    --new_otu_table /dev/null \
+    --log >(awk 'END {exit $2 == "B" ? 0 : 1}' && \
+                success "${DESCRIPTION}" || \
+                    failure "${DESCRIPTION}") > /dev/null
+wait
+
+# same spread, same total abundance, different input order: A > B (B before A) -> merge with B
+DESCRIPTION="mumu --legacy preserves OTU input order, not match input order (A > B, B before A)"
+"${MUMU}" \
+    --otu_table <(printf "OTUs\ts1\ts2\n"
+                  printf "B\t4\t4\n"
+                  printf "A\t4\t4\n"
+                  printf "C\t1\t1\n") \
+    --match_list <(printf "C\tA\t99.0\n" ; printf "C\tB\t99.0\n") \
+    --legacy \
+    --new_otu_table /dev/null \
+    --log >(awk 'END {exit $2 == "B" ? 0 : 1}' && \
                 success "${DESCRIPTION}" || \
                     failure "${DESCRIPTION}") > /dev/null
 wait
