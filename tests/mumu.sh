@@ -1210,7 +1210,7 @@ DESCRIPTION="mumu --legacy sorts by decreasing spread (merge with A)"
                     failure "${DESCRIPTION}") > /dev/null
 wait
 
-# different spread: B > A
+# different spread: A < B
 DESCRIPTION="mumu --legacy sorts by decreasing spread (merge with B)"
 "${MUMU}" \
     --otu_table <(printf "OTUs\ts1\ts2\n"
