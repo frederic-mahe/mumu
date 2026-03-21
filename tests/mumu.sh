@@ -1209,7 +1209,8 @@ LOG=$(mktemp)
                   printf "A\t4\t4\n"
                   printf "B\t8\t0\n"
                   printf "C\t1\t0\n") \
-    --match_list <(printf "C\tA\t99.0\n" ; printf "C\tB\t99.0\n") \
+    --match_list <(printf "C\tA\t99.0\n"
+                   printf "C\tB\t99.0\n") \
     --legacy \
     --new_otu_table /dev/null \
     --log "${LOG}" > /dev/null
@@ -1227,7 +1228,8 @@ LOG=$(mktemp)
                   printf "A\t4\t4\n"
                   printf "B\t8\t0\n"
                   printf "C\t1\t0\n") \
-    --match_list <(printf "C\tB\t99.0\n" ; printf "C\tA\t99.0\n") \
+    --match_list <(printf "C\tB\t99.0\n"
+                   printf "C\tA\t99.0\n") \
     --legacy \
     --new_otu_table /dev/null \
     --log "${LOG}" > /dev/null
@@ -1245,7 +1247,8 @@ LOG=$(mktemp)
                   printf "A\t8\t0\n"
                   printf "B\t4\t4\n"
                   printf "C\t1\t0\n") \
-    --match_list <(printf "C\tA\t99.0\n" ; printf "C\tB\t99.0\n") \
+    --match_list <(printf "C\tA\t99.0\n"
+                   printf "C\tB\t99.0\n") \
     --legacy \
     --new_otu_table /dev/null \
     --log "${LOG}" > /dev/null
@@ -1263,7 +1266,8 @@ LOG=$(mktemp)
                   printf "A\t8\t0\n"
                   printf "B\t4\t4\n"
                   printf "C\t1\t0\n") \
-    --match_list <(printf "C\tB\t99.0\n" ; printf "C\tA\t99.0\n") \
+    --match_list <(printf "C\tB\t99.0\n"
+                   printf "C\tA\t99.0\n") \
     --legacy \
     --new_otu_table /dev/null \
     --log "${LOG}" > /dev/null
@@ -1281,7 +1285,8 @@ LOG=$(mktemp)
                   printf "A\t4\t5\n"
                   printf "B\t4\t4\n"
                   printf "C\t1\t1\n") \
-    --match_list <(printf "C\tA\t99.0\n" ; printf "C\tB\t99.0\n") \
+    --match_list <(printf "C\tA\t99.0\n"
+                   printf "C\tB\t99.0\n") \
     --legacy \
     --new_otu_table /dev/null \
     --log "${LOG}" > /dev/null
@@ -1299,7 +1304,8 @@ LOG=$(mktemp)
                   printf "A\t4\t5\n"
                   printf "B\t4\t4\n"
                   printf "C\t1\t1\n") \
-    --match_list <(printf "C\tB\t99.0\n" ; printf "C\tA\t99.0\n") \
+    --match_list <(printf "C\tB\t99.0\n"
+                   printf "C\tA\t99.0\n") \
     --legacy \
     --new_otu_table /dev/null \
     --log "${LOG}" > /dev/null
@@ -1317,7 +1323,8 @@ LOG=$(mktemp)
                   printf "A\t4\t4\n"
                   printf "B\t4\t5\n"
                   printf "C\t1\t1\n") \
-    --match_list <(printf "C\tA\t99.0\n" ; printf "C\tB\t99.0\n") \
+    --match_list <(printf "C\tA\t99.0\n"
+                   printf "C\tB\t99.0\n") \
     --legacy \
     --new_otu_table /dev/null \
     --log "${LOG}" > /dev/null
@@ -1335,7 +1342,8 @@ LOG=$(mktemp)
                   printf "A\t4\t4\n"
                   printf "B\t4\t5\n"
                   printf "C\t1\t1\n") \
-    --match_list <(printf "C\tB\t99.0\n" ; printf "C\tA\t99.0\n") \
+    --match_list <(printf "C\tB\t99.0\n"
+                   printf "C\tA\t99.0\n") \
     --legacy \
     --new_otu_table /dev/null \
     --log "${LOG}" > /dev/null
@@ -1354,7 +1362,8 @@ LOG=$(mktemp)
                   printf "A\t4\t4\n"
                   printf "B\t4\t4\n"
                   printf "C\t1\t1\n") \
-    --match_list <(printf "C\tA\t99.0\n" ; printf "C\tB\t99.0\n") \
+    --match_list <(printf "C\tA\t99.0\n"
+                   printf "C\tB\t99.0\n") \
     --legacy \
     --new_otu_table /dev/null \
     --log "${LOG}" > /dev/null
@@ -1372,7 +1381,8 @@ LOG=$(mktemp)
                   printf "A\t4\t4\n"
                   printf "B\t4\t4\n"
                   printf "C\t1\t1\n") \
-    --match_list <(printf "C\tB\t99.0\n" ; printf "C\tA\t99.0\n") \
+    --match_list <(printf "C\tB\t99.0\n"
+                   printf "C\tA\t99.0\n") \
     --legacy \
     --new_otu_table /dev/null \
     --log "${LOG}" > /dev/null
@@ -1390,7 +1400,8 @@ LOG=$(mktemp)
                   printf "B\t4\t4\n"
                   printf "A\t4\t4\n"
                   printf "C\t1\t1\n") \
-    --match_list <(printf "C\tB\t99.0\n" ; printf "C\tA\t99.0\n") \
+    --match_list <(printf "C\tB\t99.0\n"
+                   printf "C\tA\t99.0\n") \
     --legacy \
     --new_otu_table /dev/null \
     --log "${LOG}" > /dev/null
@@ -1408,7 +1419,8 @@ LOG=$(mktemp)
                   printf "B\t4\t4\n"
                   printf "A\t4\t4\n"
                   printf "C\t1\t1\n") \
-    --match_list <(printf "C\tA\t99.0\n" ; printf "C\tB\t99.0\n") \
+    --match_list <(printf "C\tA\t99.0\n"
+                   printf "C\tB\t99.0\n") \
     --legacy \
     --new_otu_table /dev/null \
     --log "${LOG}" > /dev/null
