@@ -1225,6 +1225,21 @@ DESCRIPTION="mumu --legacy sorts by decreasing spread (merge with B)"
                     failure "${DESCRIPTION}") > /dev/null
 wait
 
+# same spread, different total abundance: A > B
+DESCRIPTION="mumu --legacy sorts by decreasing total abundance (merge with A)"
+"${MUMU}" \
+    --otu_table <(printf "OTUs\ts1\ts2\n"
+                  printf "A\t4\t5\n"
+                  printf "B\t4\t4\n"
+                  printf "C\t1\t1\n") \
+    --match_list <(printf "C\tA\t99.0\n" ; printf "C\tB\t99.0\n") \
+    --legacy \
+    --new_otu_table /dev/null \
+    --log >(awk 'END {exit $2 == "A" ? 0 : 1}' && \
+                success "${DESCRIPTION}" || \
+                    failure "${DESCRIPTION}") > /dev/null
+wait
+
 # same spread, different total abundance: A < B
 DESCRIPTION="mumu --legacy sorts by decreasing total abundance (merge with B)"
 "${MUMU}" \
