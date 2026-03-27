@@ -29,14 +29,14 @@ mumu \(em post-clustering curation of metabarcoding data
 .PP
 .\" ============================================================================
 .SH DESCRIPTION
-\fBmumu\fR is a robust and fast C++ implementation of \fBlulu\fR, a R
+\fBmumu\fR is a robust and fast C++ implementation of \fBlulu\fR, an R
 package for post-clustering curation of metabarcoding data, available
 at
 .UR https://github.com/tobiasgf/lulu
 .UE .
-Like its forebearer, \fBmumu\fR reads from two input files: an OTU
-table and a list of OTU matches; and writes to two output files: a log
-file and a file that will receive the new reduced OTU table. See the
+Like its forebear, \fBmumu\fR reads from two input files: an OTU table
+and a list of OTU matches; and writes to two output files: a log file
+and a file that will receive the new reduced OTU table. See the
 \fIMandatory\fR section below for more details.
 .PP
 \fBmumu\fR introduces partial overlap, as well as new sorting and
@@ -269,7 +269,7 @@ report issues.
 multithreading is not activated. This option has no effect, mumu
 always uses one thread.
 \" Number of computation threads to use. Values between 1 and 256 are
-\" accepted, but we recommend to use a number of threads lesser or equal
+\" accepted, but we recommend to use a number of threads less than or equal
 \" to the number of available CPU cores. Default number of threads is 1.
 .LP
 .\" ============================================================================
@@ -312,10 +312,10 @@ input order (\-\-otu_table), whereas mumu orders potential parents by
 decreasing similarity, then by decreasing total abundance, then by
 decreasing spread, and finally by names (alphabetically, ASCII order).
 .PP
-Third, lulu rejects potential parents with a similarity value lesser
-or equal to the user defined threshold (84.0% by default), whereas
-mumu only rejects potential parents with a similarity value lesser
-than the user defined threshold.
+Third, lulu rejects potential parents with a similarity value less
+than or equal to the user defined threshold (84.0% by default),
+whereas mumu only rejects potential parents with a similarity value
+less than the user defined threshold.
 .PP
 These differences combined explain why merging results can differ
 between mumu and lulu.
@@ -361,7 +361,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 .PP
 .\" ============================================================================
 .SH SEE ALSO
-\fBlulu\fR, a R package for post-clustering curation of metabarcoding
+\fBlulu\fR, an R package for post-clustering curation of metabarcoding
 data, available at
 .UR https://github.com/tobiasgf/lulu
 .UE ;
@@ -386,7 +386,7 @@ nine new automatic tests. Update documentation.
 .TP
 .BR v1.1.2\~ "released February 5th, 2026"
 fix typo in option name (thanks to Joel Hjärne Kokk for reporting that
-typo), the mispelled option name can still be used. Add two new
+typo), the misspelled option name can still be used. Add two new
 automatic tests. Update documentation.
 .TP
 .BR v1.1.1\~ "released January 31st, 2026"
@@ -400,7 +400,7 @@ and warnings, a uninstall Makefile target, and Makefile variables for
 package maintainers. Fix clang-tidy warnings, improve documentation.
 .TP
 .BR v1.0.2\~ "released March 23rd, 2023"
-fix a minor bug in the log output: some values where incorrect for
+fix a minor bug in the log output: some values were incorrect for
 empty OTUs (zero occurrences).
 .TP
 .BR v1.0.1\~ "released July 8th, 2022"
