@@ -257,14 +257,13 @@ the 'minimum_relative_cooccurrence'. Values greater than zero and up
 to one are accepted, and the default value is 0.95.
 .TP
 .BI \-e\fP,\fB\ \-\-legacy
-set the merging strategy to be the same as lulu's (experimental): no
-partial overlap, same sorting strategy for potential parents, same
-filtering strategy for similarity values. See section KNOWN
-DIFFERENCES WITH LULU (below) for more details. Users are invited to
-report issues.
+replicate lulu's merging strategy (experimental): no partial overlap,
+same sorting strategy for potential parents, same filtering strategy
+for similarity values. See section KNOWN DIFFERENCES WITH LULU (below)
+for more details. Users are invited to report issues.
 .TP
 .BI \-t\fP,\fB\ \-\-threads\~ "positive integer"
-This option has currently no effect, mumu always uses a single thread.
+ignore this option, mumu currently uses a single thread.
 \" Number of computation threads to use. Values between 1 and 256 are
 \" accepted, but we recommend to use a number of threads less than or equal
 \" to the number of available CPU cores. Default number of threads is 1.
