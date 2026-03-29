@@ -44,20 +44,20 @@ filtering strategies to find more potential parents. Use the
 .SS Mandatory
 .TP 9
 .B \-h\fP,\fB\ \-\-help
-display a short help message and exit successfully.
+write a short help message and exit successfully.
 .TP
 .B \-v\fP,\fB\ \-\-version
-output version information and exit successfully.
+write version information and exit successfully.
 .TP
 .BI \-o\fP,\fB\ \-\-otu_table\~ "filename"
-input file containing the contingency table. One OTU per line, one
-sample per column, columns are separated by tabulations. The first
-line contains sample names (their values are not interpreted by mumu),
-and the first column contains OTU names. Each OTU name must be
-unique. If present, leading and trailing double quotes are silently
-removed from OTU names. Abundance values are positive integers ranging
-from zero to 2^64 - 1. Decimal values are floored (0.9 becomes
-0). Here is a simple example with three samples and two OTUs:
+read contingency table from "filename". One OTU per line, one sample
+per column, columns are separated by tabulations. The first line
+contains sample names (their values are not interpreted by mumu), and
+the first column contains OTU names. Each OTU name must be unique. If
+present, leading and trailing double quotes are silently removed from
+OTU names. Abundance values are positive integers ranging from zero to
+2^64 - 1. Decimal values are floored (0.9 becomes 0). Here is a simple
+example with three samples and two OTUs:
 .sp 1
 .TS H
 center, tab (@);
@@ -69,7 +69,7 @@ B@3@0@6
 .TE
 .TP
 .BI \-m\fP,\fB\ \-\-match_list\~ "filename"
-input file containing OTU similarities. No header line, one pair of
+read OTU similarities from "filename". No header line, one pair of
 OTUs per line, three columns separated by tabulations:
 .RS
 .RS
@@ -121,7 +121,7 @@ vsearch \\
 .EE
 .TP
 .BI \-l\fP,\fB\ \-\-log\~ "filename"
-output file for OTU merging statistics (18 columns separated by
+write OTU merging statistics to "filename" (18 columns separated by
 tabulations, first line is a header line with column names). OTUs are
 processed in no specific order. For a given query OTU with potential
 parents, mumu will order potential parents by decreasing similarity
@@ -200,8 +200,8 @@ of one (1) can only be merged with OTUs of abundance greater than one
 .RE
 .TP
 .BI \-n\fP,\fB\ \-\-new_otu_table\~ "filename"
-output file for the newly computed contingency table. Same format as
-the input OTU table (see \-\-otu_table). Sample order is unchanged,
+write the newly computed contingency table to "filename". Same format
+as the input OTU table (see \-\-otu_table). Sample order is unchanged,
 but OTUs are reordered by decreasing abundance, then by decreasing
 incidence value (or spread), and finally by OTU name (alphabetically,
 ASCII order). Note that abundance and incidence values are recomputed:
@@ -220,7 +220,7 @@ of its parent OTU (same thing for the incidence).
 .SS Optional
 .TP 9
 .BI \-a\fP,\fB\ \-\-minimum_match\~ "positive float"
-minimum similarity percentage threshold between an OTU and its
+set the minimum similarity percentage threshold between an OTU and its
 potential parent. Similarity is defined as the edit distance between
 the two aligned sequences: matching columns divided by the alignment
 length. If the similarity percentage between a query OTU and a
@@ -229,36 +229,36 @@ value, then the potential parent OTU is rejected. Accepted values
 range from 50 to 100, and the default value is 84.0.
 .TP
 .BI \-b\fP,\fB\ \-\-minimum_ratio_type\~ "min|avg"
-method used to decide if a potential parent OTU must be rejected based
-on abundance ratios (threshold is controlled by the option
-\-\-minimum_ratio). Decision can be based on the \fIminimum\fR
+set the method used to decide if a potential parent OTU must be
+rejected based on abundance ratios (threshold is controlled by the
+option \-\-minimum_ratio). Decision can be based on the \fIminimum\fR
 observed ratio ('min') or the \fIaverage\fR of observed ratios
 ('avg'). Default method is 'min'.
 .TP
 .BI \-c\fP,\fB\ \-\-minimum_ratio\~ "positive float"
-minimum or average abundance ratio observed between a potential parent
-OTU and a query OTU (method is controlled by the option
-\-\-minimum_ratio_type). For each sample where both the potential
-parent OTU and the query OTU are present, the local abundance of the
-potential parent OTU is divided by the local abundance of the query
-OTU. If the minimum or average observed value is less than or equal to
-the 'minimum_ratio' value, then the potential parent OTU is
-rejected. Any positive value greater than zero is accepted, and the
-default value is 1.0.
+set the minimum or average abundance ratio observed between a
+potential parent OTU and a query OTU (method is controlled by the
+option \-\-minimum_ratio_type). For each sample where both the
+potential parent OTU and the query OTU are present, the local
+abundance of the potential parent OTU is divided by the local
+abundance of the query OTU. If the minimum or average observed value
+is less than or equal to the 'minimum_ratio' value, then the potential
+parent OTU is rejected. Any positive value greater than zero is
+accepted, and the default value is 1.0.
 .TP
 .BI \-d\fP,\fB\ \-\-minimum_relative_cooccurrence\~ "positive float"
-minimum incidence ratio observed between a potential parent OTU and a
-query OTU. The relative cooccurrence ratio is computed as the number of
-samples where both the potential parent OTU and the query OTU are
-present divided by the number of samples where the query OTU is
-present. A potential parent OTU is rejected if its relative
+set the minimum incidence ratio observed between a potential parent
+OTU and a query OTU. The relative cooccurrence ratio is computed as
+the number of samples where both the potential parent OTU and the
+query OTU are present divided by the number of samples where the query
+OTU is present. A potential parent OTU is rejected if its relative
 cooccurrence is strictly smaller than
-the 'minimum_relative_cooccurrence'. Values greater than zero and up to
-one are accepted, and the default value is 0.95.
+the 'minimum_relative_cooccurrence'. Values greater than zero and up
+to one are accepted, and the default value is 0.95.
 .TP
 .BI \-e\fP,\fB\ \-\-legacy
-(experimental) replicate lulu's results by changing mumu's behaviour:
-no partial overlap, same sorting strategy for potential parents, same
+set the merging strategy to be the same as lulu's (experimental): no
+partial overlap, same sorting strategy for potential parents, same
 filtering strategy for similarity values. See section KNOWN
 DIFFERENCES WITH LULU (below) for more details. Users are invited to
 report issues.
