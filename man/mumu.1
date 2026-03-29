@@ -50,7 +50,7 @@ display a short help message and exit successfully.
 output version information and exit successfully.
 .TP
 .BI \-o\fP,\fB\ \-\-otu_table\~ "filename"
-Input file containing the contingency table. One OTU per line, one
+input file containing the contingency table. One OTU per line, one
 sample per column, columns are separated by tabulations. The first
 line contains sample names (their values are not interpreted by mumu),
 and the first column contains OTU names. Each OTU name must be
@@ -69,7 +69,7 @@ B@3@0@6
 .TE
 .TP
 .BI \-m\fP,\fB\ \-\-match_list\~ "filename"
-Input file containing OTU similarities. No header line, one pair of
+input file containing OTU similarities. No header line, one pair of
 OTUs per line, three columns separated by tabulations:
 .RS
 .RS
@@ -121,7 +121,7 @@ vsearch \\
 .EE
 .TP
 .BI \-l\fP,\fB\ \-\-log\~ "filename"
-Output file for OTU merging statistics (18 columns separated by
+output file for OTU merging statistics (18 columns separated by
 tabulations, first line is a header line with column names). OTUs are
 processed in no specific order. For a given query OTU with potential
 parents, mumu will order potential parents by decreasing similarity
@@ -200,7 +200,7 @@ of one (1) can only be merged with OTUs of abundance greater than one
 .RE
 .TP
 .BI \-n\fP,\fB\ \-\-new_otu_table\~ "filename"
-Output file for the newly computed contingency table. Same format as
+output file for the newly computed contingency table. Same format as
 the input OTU table (see \-\-otu_table). Sample order is unchanged,
 but OTUs are reordered by decreasing abundance, then by decreasing
 incidence value (or spread), and finally by OTU name (alphabetically,
