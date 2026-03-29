@@ -50,8 +50,8 @@ write a short help message and exit successfully.
 write version information and exit successfully.
 .TP
 .BI \-o\fP,\fB\ \-\-otu_table\~ "filename"
-read contingency table from \fIfilename\fR. One OTU per line, one
-sample per column, columns are separated by tabulations. The first
+read contingency table from \fIfilename\fR. Expect one OTU per line,
+one sample per column, columns separated by tabulations. The first
 line contains sample names (their values are not interpreted by mumu),
 and the first column contains OTU names. Each OTU name must be
 unique. If present, leading and trailing double quotes are silently
@@ -69,8 +69,8 @@ B@3@0@6
 .TE
 .TP
 .BI \-m\fP,\fB\ \-\-match_list\~ "filename"
-read OTU similarities from \fIfilename\fR. No header line, one pair of
-OTUs per line, three columns separated by tabulations:
+read OTU similarities from \fIfilename\fR. Expect no header line, one
+pair of OTUs per line, three columns separated by tabulations:
 .RS
 .RS
 .nr step 1 1
