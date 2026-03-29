@@ -50,14 +50,14 @@ write a short help message and exit successfully.
 write version information and exit successfully.
 .TP
 .BI \-o\fP,\fB\ \-\-otu_table\~ "filename"
-read contingency table from "filename". One OTU per line, one sample
-per column, columns are separated by tabulations. The first line
-contains sample names (their values are not interpreted by mumu), and
-the first column contains OTU names. Each OTU name must be unique. If
-present, leading and trailing double quotes are silently removed from
-OTU names. Abundance values are positive integers ranging from zero to
-2^64 - 1. Decimal values are floored (0.9 becomes 0). Here is a simple
-example with three samples and two OTUs:
+read contingency table from \fIfilename\fR. One OTU per line, one
+sample per column, columns are separated by tabulations. The first
+line contains sample names (their values are not interpreted by mumu),
+and the first column contains OTU names. Each OTU name must be
+unique. If present, leading and trailing double quotes are silently
+removed from OTU names. Abundance values are positive integers ranging
+from zero to 2^64 - 1. Decimal values are floored (0.9 becomes
+0). Here is a simple example with three samples and two OTUs:
 .sp 1
 .TS H
 center, tab (@);
@@ -69,7 +69,7 @@ B@3@0@6
 .TE
 .TP
 .BI \-m\fP,\fB\ \-\-match_list\~ "filename"
-read OTU similarities from "filename". No header line, one pair of
+read OTU similarities from \fIfilename\fR. No header line, one pair of
 OTUs per line, three columns separated by tabulations:
 .RS
 .RS
@@ -121,15 +121,15 @@ vsearch \\
 .EE
 .TP
 .BI \-l\fP,\fB\ \-\-log\~ "filename"
-write OTU merging statistics to "filename" (18 columns separated by
-tabulations, first line is a header line with column names). OTUs are
-processed in no specific order. For a given query OTU with potential
-parents, mumu will order potential parents by decreasing similarity
-with the query OTU, then by decreasing abundance, then by decreasing
-incidence (or spread), and finally by names (alphabetically, ASCII
-order). Each potential parent is tested, and the search stops if
-parenthood criteria are matched or if the list is exhausted. The
-different columns correspond to:
+write OTU merging statistics to \fIfilename\fR (18 columns separated
+by tabulations, first line is a header line with column names). OTUs
+are processed in no specific order. For a given query OTU with
+potential parents, mumu will order potential parents by decreasing
+similarity with the query OTU, then by decreasing abundance, then by
+decreasing incidence (or spread), and finally by names
+(alphabetically, ASCII order). Each potential parent is tested, and
+the search stops if parenthood criteria are matched or if the list is
+exhausted. The different columns correspond to:
 .RS
 .RS
 .nr step 1 1
@@ -200,14 +200,14 @@ of one (1) can only be merged with OTUs of abundance greater than one
 .RE
 .TP
 .BI \-n\fP,\fB\ \-\-new_otu_table\~ "filename"
-write the newly computed contingency table to "filename". Same format
-as the input OTU table (see \-\-otu_table). Sample order is unchanged,
-but OTUs are reordered by decreasing abundance, then by decreasing
-incidence value (or spread), and finally by OTU name (alphabetically,
-ASCII order). Note that abundance and incidence values are recomputed:
-an OTU found to derive from a 'parent' OTU does not appear in the new
-OTU table, and its abundance values are added to the abundance values
-of its parent OTU (same thing for the incidence).
+write the newly computed contingency table to \fIfilename\fR. Same
+format as the input OTU table (see \-\-otu_table). Sample order is
+unchanged, but OTUs are reordered by decreasing abundance, then by
+decreasing incidence value (or spread), and finally by OTU name
+(alphabetically, ASCII order). Note that abundance and incidence
+values are recomputed: an OTU found to derive from a 'parent' OTU does
+not appear in the new OTU table, and its abundance values are added to
+the abundance values of its parent OTU (same thing for the incidence).
 .PP
 .\" .B \-\-
 .\" delimit the option list. Later arguments, if any, are treated as
