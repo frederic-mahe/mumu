@@ -2739,7 +2739,7 @@ printf "A\tB\t96.5\nB\tA\t96.5\n" > "${MATCH_LIST}"
     --match_list "${MATCH_LIST}" \
     --new_otu_table "${NEW_OTU_TABLE}" \
     --log "${LOG}" > /dev/null 2>&1
-awk 'NR > 1 {exit $14 == 0.00 ? 0 : 1}' "${LOG}" && \
+awk 'NR > 1 {exit $14 == "0.00" ? 0 : 1}' "${LOG}" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 
@@ -2759,7 +2759,7 @@ printf "A\tB\t96.5\nB\tA\t96.5\n" > "${MATCH_LIST}"
     --match_list "${MATCH_LIST}" \
     --new_otu_table "${NEW_OTU_TABLE}" \
     --log "${LOG}" > /dev/null 2>&1
-awk 'NR > 1 {exit $15 == 0.00 ? 0 : 1}' "${LOG}" && \
+awk 'NR > 1 {exit $15 == "0.00" ? 0 : 1}' "${LOG}" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 
