@@ -74,6 +74,13 @@ for OPTION in "-h" "--help" "-v" "--version" ; do
             failure "${DESCRIPTION}"
 done
 
+## -h output contains the program name
+DESCRIPTION="-h writes meaningful content (contains 'mumu')"
+"${MUMU}" -h 2>/dev/null | \
+    grep -q "mumu" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
 
 ## -------------------------------------------------------- mandatory arguments
 
@@ -301,6 +308,21 @@ LOG=$(mktemp)
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${OTU_TABLE2}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
+## when --otu_table is given twice, the last value is used
+DESCRIPTION="mumu uses the last --otu_table when the option is given twice"
+NEW_OTU_TABLE=$(mktemp)
+"${MUMU}" \
+    --otu_table <(printf "OTUs\ts1\nFIRST\t1\n") \
+    --otu_table <(printf "OTUs\ts1\nSECOND\t2\n") \
+    --match_list <(printf "") \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log /dev/null > /dev/null 2>&1
+grep -qw "SECOND" "${NEW_OTU_TABLE}" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${NEW_OTU_TABLE}"
+unset NEW_OTU_TABLE
+
 ## mumu accepts the short options -o, -m, -n and -l
 DESCRIPTION="mumu accepts the short options -o, -m, -n and -l"
 OTU_TABLE=$(mktemp)
@@ -390,6 +412,38 @@ LOG=$(mktemp)
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
+## mumu accepts minimum_match = 50.0 (exact lower boundary)
+DESCRIPTION="mumu accepts minimum_match = 50.0 (lower boundary)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log "${LOG}" \
+    --minimum_match 50.0 > /dev/null 2>&1 && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
+## mumu accepts minimum_match = 100.0 (exact upper boundary)
+DESCRIPTION="mumu accepts minimum_match = 100.0 (upper boundary)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log "${LOG}" \
+    --minimum_match 100.0 > /dev/null 2>&1 && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
 ## mumu stops with an error if minimum_match < 50.0
 DESCRIPTION="mumu stops with an error if minimum_match < 50.0"
 OTU_TABLE=$(mktemp)
@@ -434,6 +488,22 @@ LOG=$(mktemp)
     --new_otu_table "${NEW_OTU_TABLE}" \
     --log "${LOG}" \
     --minimum_ratio 10 > /dev/null 2>&1 && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
+## mumu accepts minimum_ratio values strictly greater than zero (near-zero boundary)
+DESCRIPTION="mumu accepts minimum_ratio > 0 (near-zero boundary)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log "${LOG}" \
+    --minimum_ratio 0.000001 > /dev/null 2>&1 && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
@@ -514,6 +584,22 @@ LOG=$(mktemp)
     --new_otu_table "${NEW_OTU_TABLE}" \
     --log "${LOG}" \
     --minimum_ratio_type mvg > /dev/null 2>&1 && \
+    failure "${DESCRIPTION}" || \
+        success "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
+## minimum_ratio_type is case-sensitive: 'MIN' is not a valid value
+DESCRIPTION="mumu stops with an error if minimum_ratio_type is uppercase 'MIN'"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log "${LOG}" \
+    --minimum_ratio_type MIN > /dev/null 2>&1 && \
     failure "${DESCRIPTION}" || \
         success "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
