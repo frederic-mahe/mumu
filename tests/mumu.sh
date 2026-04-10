@@ -2984,4 +2984,25 @@ grep -q "accepted" "${LOG}" && \
 
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${LOG}"
 
+
+## mumu accepts similarity equal to minimum_match (unlike lulu, which rejects equality)
+DESCRIPTION="mumu accepts similarity equal to minimum_match (non-legacy, merge expected)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\nA\t9\nB\t1\n" > "${OTU_TABLE}"
+printf "B\tA\t84.0\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --minimum_match 84.0 \
+    --log "${LOG}" \
+    --new_otu_table /dev/null > /dev/null 2>&1
+
+grep -q "accepted" "${LOG}" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${LOG}"
+
 exit 0
