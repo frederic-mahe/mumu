@@ -1916,6 +1916,42 @@ printf "A\tB\t96.5\nB\tA\t96.5\n" > "${MATCH_LIST}"
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}"
 
+## min and avg ratio types must yield different merge outcomes when per-sample
+## ratios vary across samples. Setup: A=(1,8), B=(2,2).
+## Ratios (A/B): s1=0.5, s2=4.0. min=0.5, avg=2.25.
+## With minimum_ratio=1.0: min type rejects (0.5 <= 1.0), avg type accepts (2.25 > 1.0).
+DESCRIPTION="mumu rejects parent when minimum ratio type is 'min' and min ratio is below threshold"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+printf "OTUs\ts1\ts2\nA\t1\t8\nB\t2\t2\n" > "${OTU_TABLE}"
+printf "B\tA\t96.5\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --minimum_ratio_type "min" \
+    --minimum_ratio 1.0 \
+    --new_otu_table >(awk 'END {exit NR == 3 ? 0 : 1}' && \
+                          success "${DESCRIPTION}" || \
+                              failure "${DESCRIPTION}") \
+    --log /dev/null > /dev/null
+rm -f "${OTU_TABLE}" "${MATCH_LIST}"
+
+DESCRIPTION="mumu accepts parent when minimum ratio type is 'avg' and avg ratio exceeds threshold (but min does not)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+printf "OTUs\ts1\ts2\nA\t1\t8\nB\t2\t2\n" > "${OTU_TABLE}"
+printf "B\tA\t96.5\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --minimum_ratio_type "avg" \
+    --minimum_ratio 1.0 \
+    --new_otu_table >(awk 'END {exit NR == 2 ? 0 : 1}' && \
+                          success "${DESCRIPTION}" || \
+                              failure "${DESCRIPTION}") \
+    --log /dev/null > /dev/null
+rm -f "${OTU_TABLE}" "${MATCH_LIST}"
+
 ## when there are several matches, sort them by similarity, abundance, spread, names
 #
 # C can be linked to A or B (same abundance values, but different similarity values):
