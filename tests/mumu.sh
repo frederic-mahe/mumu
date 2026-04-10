@@ -2571,6 +2571,27 @@ awk 'NR > 1 {exit $6 == 6 ? 0 : 1}' "${LOG}" && \
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
+## complementary: overlap abundance must differ from total abundance when the
+## query OTU is present in samples where the parent is absent.
+## B: s1=3 (no A), s2=2, s3=4 -> total=9, overlap (s2+s3)=6
+## A: s1=0, s2=5, s3=10        -> total=15
+## Without this test, col 6 == col 4 in the base case and the distinction is invisible.
+DESCRIPTION="mumu log column 6 is overlap abundance of the query (different from total when query present without parent)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\ts2\ts3\nA\t0\t5\t10\nB\t3\t2\t4\n" > "${OTU_TABLE}"
+printf "B\tA\t96.5\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table /dev/null \
+    --log "${LOG}" > /dev/null 2>&1
+awk 'NR > 1 {exit ($4 == 9 && $6 == 6) ? 0 : 1}' "${LOG}" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${LOG}"
+
 DESCRIPTION="mumu log column 7 is overlap abundance of the potential parent"
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
@@ -3172,6 +3193,26 @@ grep -q "accepted" "${LOG}" && \
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${LOG}"
 
 
+## tighter probe: similarity just below the default threshold (84.0) must be rejected
+DESCRIPTION="mumu rejects parent when similarity is just below the default threshold (83.9 < 84.0)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\nA\t9\nB\t1\n" > "${OTU_TABLE}"
+printf "B\tA\t83.9\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --log "${LOG}" \
+    --new_otu_table /dev/null > /dev/null 2>&1
+
+grep -q "accepted" "${LOG}" && \
+    failure "${DESCRIPTION}" || \
+        success "${DESCRIPTION}"
+
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${LOG}"
+
+
 ## option minimum_match value is used to filter the list of potential parents
 DESCRIPTION="mumu minimum_match value is used to filter the list of potential parents (above changed threshold)"
 OTU_TABLE=$(mktemp)
@@ -3225,6 +3266,27 @@ printf "B\tA\t84.0\n" > "${MATCH_LIST}"
     --otu_table "${OTU_TABLE}" \
     --match_list "${MATCH_LIST}" \
     --minimum_match 84.0 \
+    --log "${LOG}" \
+    --new_otu_table /dev/null > /dev/null 2>&1
+
+grep -q "accepted" "${LOG}" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${LOG}"
+
+
+## similarity at the lowest valid minimum_match (50.0) is accepted when threshold is 50.0
+DESCRIPTION="mumu accepts similarity = 50.0 when minimum_match = 50.0 (lower boundary, non-legacy)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+LOG=$(mktemp)
+printf "OTUs\ts1\nA\t9\nB\t1\n" > "${OTU_TABLE}"
+printf "B\tA\t50.0\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --minimum_match 50.0 \
     --log "${LOG}" \
     --new_otu_table /dev/null > /dev/null 2>&1
 
