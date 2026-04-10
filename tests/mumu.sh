@@ -3073,4 +3073,45 @@ grep -q "accepted" "${LOG}" && \
 
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${LOG}"
 
+
+## minimum_relative_cooccurrence functional tests.
+## Setup: A absent in s1 and s2, present (9 reads) in s3-s10.
+##        B present (1 read) in all 10 samples.
+## Both present in 8/10 samples: cooccurrence = 0.80.
+## Default threshold (0.95): 0.80 < 0.95 -> parent rejected (no merge).
+## Lowered threshold (0.75): 0.80 > 0.75 -> parent accepted (merge).
+
+DESCRIPTION="mumu rejects parent when relative cooccurrence is below the threshold (default 0.95)"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+printf "OTUs\ts1\ts2\ts3\ts4\ts5\ts6\ts7\ts8\ts9\ts10\n" > "${OTU_TABLE}"
+printf "A\t0\t0\t9\t9\t9\t9\t9\t9\t9\t9\n" >> "${OTU_TABLE}"
+printf "B\t1\t1\t1\t1\t1\t1\t1\t1\t1\t1\n" >> "${OTU_TABLE}"
+printf "B\tA\t99.0\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table >(awk 'END {exit NR == 3 ? 0 : 1}' && \
+                          success "${DESCRIPTION}" || \
+                              failure "${DESCRIPTION}") \
+    --log /dev/null > /dev/null
+rm -f "${OTU_TABLE}" "${MATCH_LIST}"
+
+DESCRIPTION="mumu accepts parent when relative cooccurrence is above a lowered threshold"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+printf "OTUs\ts1\ts2\ts3\ts4\ts5\ts6\ts7\ts8\ts9\ts10\n" > "${OTU_TABLE}"
+printf "A\t0\t0\t9\t9\t9\t9\t9\t9\t9\t9\n" >> "${OTU_TABLE}"
+printf "B\t1\t1\t1\t1\t1\t1\t1\t1\t1\t1\n" >> "${OTU_TABLE}"
+printf "B\tA\t99.0\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --minimum_relative_cooccurrence 0.75 \
+    --new_otu_table >(awk 'END {exit NR == 2 ? 0 : 1}' && \
+                          success "${DESCRIPTION}" || \
+                              failure "${DESCRIPTION}") \
+    --log /dev/null > /dev/null
+rm -f "${OTU_TABLE}" "${MATCH_LIST}"
+
 exit 0
