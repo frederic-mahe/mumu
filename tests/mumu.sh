@@ -858,14 +858,13 @@ DESCRIPTION="mumu silently parses negative integer abundance values in the OTU t
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 
-DESCRIPTION="mumu incorrectly parses negative integer abundance values in the OTU table"
-# 18446744073709551615 = (2^64 - 1)
+DESCRIPTION="mumu silently converts negative integer abundance values to 0 in the OTU table"
 "${MUMU}" \
     --otu_table <(printf "OTUs\ts1\nA\t-1\n") \
     --match_list <(printf "") \
     --new_otu_table /dev/stdout \
     --log /dev/null 2> /dev/null | \
-    grep -qw "18446744073709551615$" && \
+    grep -qw "0$" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 

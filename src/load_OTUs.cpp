@@ -22,13 +22,14 @@
 // France
 
 #include <algorithm>  // std::ranges::count
+#include <charconv>  // std::from_chars
 #include <cstdio>  // std::size_t
 #include <fstream>
 #include <iostream>
 #include <numeric>
 #include <ranges>
-#include <sstream>
 #include <string>
+#include <string_view>
 #include <unordered_map>
 #include <utility>  // std::move
 #include "mumu.hpp"
@@ -115,9 +116,14 @@ namespace {
     OTU otu;
     otu.input_order = ticker;
     otu.samples.reserve(n_samples);
-    std::stringstream abundances {line.substr(first_sep + 1)};
-    for (auto const abundance : std::ranges::istream_view<unsigned long int>(abundances)) {
-      otu.samples.push_back(abundance);
+    auto remaining = std::string_view{line}.substr(first_sep + 1);
+    while (not remaining.empty()) {
+      unsigned long int value {};
+      std::from_chars(remaining.data(), remaining.data() + remaining.size(), value);
+      otu.samples.push_back(value);
+      auto const next_sep = remaining.find(sepchar);
+      if (next_sep == std::string_view::npos) { break; }
+      remaining.remove_prefix(next_sep + 1);
     }
 
     // sanity check
