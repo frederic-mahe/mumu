@@ -51,6 +51,8 @@ namespace {
     unsigned long int parent_overlap_abundance {0};
     unsigned int child_spread {0};
     unsigned int parent_spread {0};
+    std::vector<unsigned long int> const* child_samples {nullptr};
+    std::vector<unsigned long int> const* parent_samples {nullptr};
     unsigned int parent_overlap_spread {0};
     unsigned int padding {0};
     double smallest_ratio {largest_double};
@@ -119,9 +121,7 @@ namespace {
   }
 
 
-  auto per_sample_ratios(Stats &stats,
-                         OTU const& child_otu,
-                         OTU const& parent_otu) -> void {
+  auto per_sample_ratios(Stats &stats) -> void {
     // C++23 refactor: std::pow(2, std::numeric_limits<double>::digits)
     [[maybe_unused]] static constexpr auto largest_int_without_precision_loss {9'007'199'254'740'992};
 
@@ -129,8 +129,8 @@ namespace {
     // for (std::pair<const &int, const &int> pair: std::views::zip(parent, child)) // available in c++23
 
     // assert(v1.length() == v2.length())
-    auto const& child = child_otu.samples;
-    auto const& parent = parent_otu.samples;
+    auto const& child = *stats.child_samples;
+    auto const& parent = *stats.parent_samples;
     auto current_child_sample = child.begin();
     auto current_parent_sample = parent.begin();
     while (current_child_sample != child.end()) {  // check only one end, vectors have the same length
@@ -172,10 +172,12 @@ namespace {
                    .child_total_abundance = otu.sum_reads,
                    .parent_total_abundance = parent.sum_reads,
                    .child_spread = otu.spread,
-                   .parent_spread = parent.spread};  // refactoring: child's stats should be initialized outside of the loop, or separated into another struct
+                   .parent_spread = parent.spread,
+                   .child_samples = &otu.samples,
+                   .parent_samples = &parent.samples};  // refactoring: child's stats should be initialized outside of the loop, or separated into another struct
 
       // compute parent/child ratios for all samples
-      per_sample_ratios(stats, otu, parent);
+      per_sample_ratios(stats);
 
       // reject: no overlap with the potential parent
       if (stats.parent_overlap_spread == 0) {
