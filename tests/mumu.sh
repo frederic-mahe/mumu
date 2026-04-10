@@ -869,6 +869,18 @@ DESCRIPTION="mumu incorrectly parses negative integer abundance values in the OT
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 
+## 18446744073709551615 (2^64 - 1) is the maximum value for an unsigned 64-bit integer.
+## Passing it directly must be accepted and preserved in the output.
+DESCRIPTION="mumu accepts 18446744073709551615 (2^64 - 1) as abundance and round-trips correctly"
+"${MUMU}" \
+    --otu_table <(printf "OTUs\ts1\nA\t18446744073709551615\n") \
+    --match_list <(printf "") \
+    --new_otu_table /dev/stdout \
+    --log /dev/null 2> /dev/null | \
+    grep -qw "18446744073709551615$" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
 DESCRIPTION="mumu silently parses decimal abundance values in the OTU table"
 "${MUMU}" \
     --otu_table <(printf "OTUs\ts1\nA\t5.1\n") \
@@ -1311,6 +1323,24 @@ LOG=$(mktemp)
     --log /dev/null \
     --new_otu_table "${LOG}" > /dev/null
 awk 'END {exit $2 == 1 ? 0 : 1}' "${LOG}" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -rf "${LOG}"
+unset LOG
+
+# lulu also rejects when similarity equals a custom minimum_match threshold
+DESCRIPTION="mumu --legacy rejects similarity equal to a custom minimum_match threshold"
+LOG=$(mktemp)
+"${MUMU}" \
+    --otu_table <(printf "OTUs\ts1\n"
+                  printf "A\t9\n"
+                  printf "B\t1\n") \
+    --match_list <(printf "B\tA\t90.0\n") \
+    --legacy \
+    --minimum_match 90.0 \
+    --log /dev/null \
+    --new_otu_table "${LOG}" > /dev/null
+awk 'END {exit NR == 3 ? 0 : 1}' "${LOG}" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 rm -rf "${LOG}"
@@ -1787,6 +1817,17 @@ printf "OTUs\ts1\nA\t1\nA\t10\n" > "${OTU_TABLE}"
         success "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
+## sample column order in the output must match the input
+DESCRIPTION="mumu preserves sample column order from the input OTU table"
+"${MUMU}" \
+    --otu_table <(printf "OTUs\ts3\ts1\ts2\nA\t1\t2\t3\n") \
+    --match_list <(printf "") \
+    --new_otu_table /dev/stdout \
+    --log /dev/null 2>/dev/null | \
+    awk 'NR == 1 {exit ($2 == "s3" && $3 == "s1" && $4 == "s2") ? 0 : 1}' && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
 ## toy-example:
 
 # OTUs	s1	s2	s3
@@ -1851,6 +1892,25 @@ awk 'END {exit NR == 2 ? 0 : 1}' "${LOG}" && \
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
+## when B merges into A, each sample abundance is added independently:
+## A_s1 + B_s1, A_s2 + B_s2, etc.
+DESCRIPTION="mumu adds merged abundances per sample column"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+printf "OTUs\ts1\ts2\nA\t10\t10\nB\t3\t2\n" > "${OTU_TABLE}"
+printf "B\tA\t99.0\n" > "${MATCH_LIST}"
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log /dev/null > /dev/null
+awk 'NR == 2 {exit ($1 == "A" && $2 == 13 && $3 == 12) ? 0 : 1}' "${NEW_OTU_TABLE}" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}"
+unset NEW_OTU_TABLE
+
 # mumu can find the root of chained merges (A <- B <- C)
 DESCRIPTION="mumu can find the root of chained merges"
 OTU_TABLE=$(mktemp)
@@ -1881,6 +1941,21 @@ DESCRIPTION="mumu OTUs with the same abundance are not merged"
                           success "${DESCRIPTION}" || \
                               failure "${DESCRIPTION}") \
     --log /dev/null > /dev/null
+
+## when all potential matches are between same-abundance OTUs (no merge possible),
+## the log contains only the header line and no data entries.
+DESCRIPTION="mumu log has only the header when all OTU pairs have equal abundance"
+LOG=$(mktemp)
+"${MUMU}" \
+    --otu_table <(printf "OTUs\ts1\nA\t1\nB\t1\n") \
+    --match_list <(printf "A\tB\t99.0\nB\tA\t99.0\n") \
+    --new_otu_table /dev/null \
+    --log "${LOG}" > /dev/null
+awk 'END {exit NR == 1 ? 0 : 1}' "${LOG}" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${LOG}"
+unset LOG
 
 # merged OTUs are sorted by decreasing abundance (B 5 reads, then A with 4 reads)
 ## input
