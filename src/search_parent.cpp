@@ -35,12 +35,12 @@
 namespace {
 
   constexpr auto accept_as_parent {"accepted"};  // reduce scope
+  constexpr auto reject_as_parent {"rejected"};  // reduce scope
 
   // refactoring: move to a separate header file stats.h
   struct Stats {
   private:
     static constexpr auto largest_double{std::numeric_limits<double>::max()};
-    static constexpr auto reject_as_parent {"rejected"};
   public:
     std::string_view child_id;
     std::string_view parent_id;
@@ -62,7 +62,7 @@ namespace {
     double avg_non_null_ratio {0.0};
     double largest_ratio {0.0};
     double relative_cooccurrence {0.0};
-    std::string status {reject_as_parent};
+    bool accepted {false};
   };
 
 
@@ -87,7 +87,7 @@ namespace {
       << stats.avg_non_null_ratio << sepchar
       << stats.largest_ratio << sepchar
       << stats.relative_cooccurrence << sepchar
-      << stats.status << '\n';
+      << (stats.accepted ? accept_as_parent : reject_as_parent) << '\n';
   }
 
 
@@ -214,7 +214,7 @@ namespace {
       }
 
       // accept: mark OTU and output stats
-      stats.status = accept_as_parent;
+      stats.accepted = true;
       otu.is_mergeable = true;
       otu.parent_id = match.hit_id;
       log_file << stats;

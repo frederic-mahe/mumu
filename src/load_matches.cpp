@@ -35,6 +35,9 @@
 
 namespace {
 
+  constexpr auto default_matches_size {4U};
+
+
   auto check_n_columns(std::string const & line) -> void {
     static constexpr auto expected_n_sepchar = 2;
     auto const count = std::ranges::count(line, sepchar);
@@ -120,6 +123,7 @@ auto read_match_list(std::unordered_map<std::string, struct OTU> &OTUs,
       //   continue;
       // }
 
+      query_otu.matches.reserve(default_matches_size);
       query_otu.matches.push_back(Match {
           .similarity = similarity,
           .hit_sum_reads = hit_otu.sum_reads,
