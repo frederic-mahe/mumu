@@ -42,8 +42,8 @@ namespace {
     static constexpr auto largest_double{std::numeric_limits<double>::max()};
     static constexpr auto reject_as_parent {"rejected"};
   public:
-    std::string child_id;  //refactoring: string_view
-    std::string parent_id;
+    std::string_view child_id;
+    std::string_view parent_id;
     double similarity {0.0};
     unsigned long int child_total_abundance {1};  // refactoring: can't be zero, but zero is clearer?
     unsigned long int parent_total_abundance {0};  // refactoring: same as above?
@@ -119,8 +119,9 @@ namespace {
   }
 
 
-  auto per_sample_ratios(std::unordered_map<std::string, struct OTU> &OTUs,
-                         Stats &stats) -> void {
+  auto per_sample_ratios(Stats &stats,
+                         OTU const& child_otu,
+                         OTU const& parent_otu) -> void {
     // C++23 refactor: std::pow(2, std::numeric_limits<double>::digits)
     [[maybe_unused]] static constexpr auto largest_int_without_precision_loss {9'007'199'254'740'992};
 
@@ -128,8 +129,8 @@ namespace {
     // for (std::pair<const &int, const &int> pair: std::views::zip(parent, child)) // available in c++23
 
     // assert(v1.length() == v2.length())
-    auto const& child = OTUs[stats.child_id].samples;
-    auto const& parent = OTUs[stats.parent_id].samples;
+    auto const& child = child_otu.samples;
+    auto const& parent = parent_otu.samples;
     auto current_child_sample = child.begin();
     auto current_parent_sample = parent.begin();
     while (current_child_sample != child.end()) {  // check only one end, vectors have the same length
@@ -174,7 +175,7 @@ namespace {
                    .parent_spread = parent.spread};  // refactoring: child's stats should be initialized outside of the loop, or separated into another struct
 
       // compute parent/child ratios for all samples
-      per_sample_ratios(OTUs, stats);
+      per_sample_ratios(stats, otu, parent);
 
       // reject: no overlap with the potential parent
       if (stats.parent_overlap_spread == 0) {
@@ -254,7 +255,3 @@ auto search_parent(std::unordered_map<std::string, struct OTU> &OTUs,
 // Initialize child stats outside the parent testing loop to avoid
 // repeated work. This improves performance by avoiding redundant
 // computations.
-
-// Use std::string_view instead of std::string for IDs to avoid
-// unnecessary copying. This optimizes performance when passing
-// strings around.

@@ -36,7 +36,8 @@
 namespace {
 
   struct OTU_stats {
-    std::string OTU_id;  // should be a string_view
+    std::string_view OTU_id;
+    OTU const* otu_ptr {nullptr};
     long int spread {0};  // refactor; type is not correct
     unsigned long int abundance {0};
 
@@ -61,13 +62,13 @@ namespace {
     std::vector<struct OTU_stats> sorted_OTUs;
     sorted_OTUs.reserve(OTUs.size());  // probably 25-50% too much
     for (auto const& otu: OTUs) {  // replace with copy_if()?
-      auto const& OTU_id {otu.first};
-      if (OTUs[OTU_id].is_merged) { continue; }  // skip merged OTUs
+      if (otu.second.is_merged) { continue; }  // skip merged OTUs
 
       sorted_OTUs.push_back(OTU_stats {
-          .OTU_id = OTU_id,
-          .spread = OTUs[OTU_id].spread,
-          .abundance = OTUs[OTU_id].sum_reads}
+          .OTU_id = otu.first,
+          .otu_ptr = &otu.second,
+          .spread = static_cast<long int>(otu.second.spread),
+          .abundance = otu.second.sum_reads}
         );
     }
     // sort by decreasing abundance, spread and id name
@@ -90,7 +91,7 @@ auto write_table(std::unordered_map<std::string, struct OTU> &OTUs,
   // output 
   for (auto const& otu: sorted_OTUs) {
     new_otu_table << otu.OTU_id;
-    for (auto const& sample: OTUs[otu.OTU_id].samples) {   // C++23 refactoring: std::views::join_with('\t');
+    for (auto const& sample: otu.otu_ptr->samples) {   // C++23 refactoring: std::views::join_with('\t');
       new_otu_table << sepchar << sample;
     }
     new_otu_table << '\n';
