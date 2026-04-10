@@ -930,16 +930,15 @@ DESCRIPTION="mumu accepts decimal abundance values with an integral part in the 
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 
-DESCRIPTION="mumu rejects decimal abundance values without an integral part in the OTU table (.1 -> 0)"
-# use a subshell to mask the exception message
-("${MUMU}" \
+DESCRIPTION="mumu silently converts decimal abundance values without an integral part to 0 in the OTU table (.1 -> 0)"
+"${MUMU}" \
      --otu_table <(printf "OTUs\ts1\nA\t.1\n") \
      --match_list <(printf "") \
      --new_otu_table /dev/stdout \
      --log /dev/null 2> /dev/null | \
-     grep -qw "0$") && \
-    failure "${DESCRIPTION}" || \
-        success "${DESCRIPTION}"
+     grep -qw "0$" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
 
 DESCRIPTION="mumu floors decimal abundance values in the OTU table (5.9 -> 5)"
 "${MUMU}" \
@@ -951,16 +950,16 @@ DESCRIPTION="mumu floors decimal abundance values in the OTU table (5.9 -> 5)"
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 
-DESCRIPTION="mumu stops with an error if the OTU table has a non-numerical value (NA)"
+DESCRIPTION="mumu silently converts non-numerical abundance values to 0 in the OTU table (NA -> 0)"
 OTU_TABLE=$(mktemp)
 MATCH_LIST=$(mktemp)
 printf "OTUs\ts1\nA\t5\nB\tNA\n" > "${OTU_TABLE}"
 "${MUMU}" \
     --otu_table "${OTU_TABLE}" \
     --match_list "${MATCH_LIST}" \
-    --new_otu_table /dev/null \
-    --log /dev/null 2>&1 > /dev/null | \
-    grep -q "^Error" && \
+    --new_otu_table /dev/stdout \
+    --log /dev/null 2> /dev/null | \
+    grep -qw "0$" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}"
