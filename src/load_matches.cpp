@@ -43,7 +43,7 @@ namespace {
   }
 
 
-  // C++17 refactoring: replace with std::from_chars
+  // C++17 refactoring: replace with std::from_chars (see below)
   auto extract_similarity(std::string const & buf,
                           std::string const & line) -> double {
     if (buf.empty()) {
@@ -56,6 +56,21 @@ namespace {
     }
     return std::stod(buf);
   }
+  // requires GCC >= 11 or clang >=12
+  // (eliminates a coverage issue with try/catch)
+  // #include <charconv>
+  // auto extract_similarity(std::string const & buf,
+  //                         std::string const & line) -> double {
+  //   if (buf.empty()) {
+  //     fatal("empty similarity value in line: " + line);
+  //   }
+  //   double result {};
+  //   auto const [ptr, ec] = std::from_chars(buf.data(), buf.data() + buf.size(), result);
+  //   if (ec != std::errc{}) {
+  //     fatal("illegal similarity value in line: " + line);
+  //   }
+  //   return result;
+  // }
 
 }  // namespace
 
