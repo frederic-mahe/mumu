@@ -22,11 +22,12 @@
 // France
 
 #include <algorithm>
+#include <charconv>
 #include <fstream>
 #include <iostream>
-#include <sstream>
-#include <stdexcept>
 #include <string>
+#include <string_view>
+#include <system_error>
 #include <unordered_map>
 #include "mumu.hpp"
 #include "utils.hpp"
@@ -43,34 +44,17 @@ namespace {
   }
 
 
-  // C++17 refactoring: replace with std::from_chars (see below)
-  auto extract_similarity(std::string const & buf,
+  auto extract_similarity(std::string_view buf,
                           std::string const & line) -> double {
     if (buf.empty()) {
       fatal("empty similarity value in line: " + line);
     }
-    try {
-      static_cast<void>(std::stod(buf));
-    } catch ([[maybe_unused]] std::invalid_argument const& ex) {
+    double result {};
+    if (std::from_chars(buf.data(), buf.data() + buf.size(), result).ec != std::errc{}) {
       fatal("illegal similarity value in line: " + line);
     }
-    return std::stod(buf);
+    return result;
   }
-  // requires GCC >= 11 or clang >=12
-  // (eliminates a coverage issue with try/catch)
-  // #include <charconv>
-  // auto extract_similarity(std::string const & buf,
-  //                         std::string const & line) -> double {
-  //   if (buf.empty()) {
-  //     fatal("empty similarity value in line: " + line);
-  //   }
-  //   double result {};
-  //   auto const [ptr, ec] = std::from_chars(buf.data(), buf.data() + buf.size(), result);
-  //   if (ec != std::errc{}) {
-  //     fatal("illegal similarity value in line: " + line);
-  //   }
-  //   return result;
-  // }
 
 }  // namespace
 
@@ -106,13 +90,11 @@ auto read_match_list(std::unordered_map<std::string, struct OTU> &OTUs,
   while (std::getline(match_list, line))
     {
       check_n_columns(line);
-      std::string query;
-      std::string hit;
-      std::string buf;
-      std::stringstream match_raw_data(line);
-      std::getline(match_raw_data, query, sepchar);
-      std::getline(match_raw_data, hit, sepchar);
-      std::getline(match_raw_data, buf, sepchar);
+      auto const sep1 = line.find(sepchar);
+      auto const sep2 = line.find(sepchar, sep1 + 1);
+      auto const query = line.substr(0, sep1);
+      auto const hit   = line.substr(sep1 + 1, sep2 - sep1 - 1);
+      auto const buf   = std::string_view{line}.substr(sep2 + 1);
 
       auto const similarity {extract_similarity(buf, line)};
 
