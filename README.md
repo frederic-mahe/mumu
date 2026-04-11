@@ -153,11 +153,8 @@ compilers.
 - [x] high software quality score ([softwipe](https://github.com/adrianzap/softwipe)),
 - [x] allow empty input files,
 - [x] allow process substitutions (input/output),
-- [x] compile without warnings with GCC 10 and 11,
-- [x] compile without warnings with GCC 12.2,
-- [x] compile without warnings with GCC 12.3,
-- [x] compile without warnings with GCC 13, 14, and 15
-- [x] compile with clang 17 to 22 (`std::ranges` is not supported in clang-16),
+- [x] compile without warnings with GCC 11 to 15
+- [x] compile with clang 17 to 22 (`std::ranges` is not supported in clang 16),
 - [x] investigate the five minor failed tests when running on Alpine (as root),
 - [x] add a row of column header to the log file? (see issue https://github.com/frederic-mahe/mumu/issues/4)
 - [x] silently strip quote symbols from input table? Exporters often
@@ -165,6 +162,7 @@ compilers.
 - [ ] allow named pipes (input/output),
 - [x] test performances on ARM64 GNU/Linux (Raspberry Pi 3B+),
 - [x] test performances on RISC-V GNU/Linux (Banana Pi BPI-F3),
+- [x] faster input parsing through string views,
 - [ ] support for sparse contingency tables,
 - [ ] faster input parsing through data buffers,
 - [ ] faster output with `std::format` (in 2026?),
