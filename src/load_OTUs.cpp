@@ -26,6 +26,7 @@
 #include <cstdio>  // std::size_t
 #include <fstream>
 #include <iostream>
+#include <iterator>  // std::next
 #include <numeric>
 #include <ranges>
 #include <string>
@@ -119,7 +120,8 @@ namespace {
     auto remaining = std::string_view{line}.substr(first_sep + 1);
     while (not remaining.empty()) {
       unsigned long int value {};
-      std::from_chars(remaining.data(), remaining.data() + remaining.size(), value);
+      auto const * last_char = std::next(remaining.data(), static_cast<std::ptrdiff_t>(remaining.size()));
+      std::from_chars(remaining.data(), last_char, value);
       otu.samples.push_back(value);
       auto const next_sep = remaining.find(sepchar);
       if (next_sep == std::string_view::npos) { break; }
