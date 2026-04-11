@@ -33,7 +33,7 @@ SPECIFIC := -O3 -DNDEBUG
 
 PREFIX ?= /usr/local
 datarootdir = $(PREFIX)/share
-datadir = $(datarootdir)
+datadir = $(datarootdir)  # unused
 exec_prefix = $(PREFIX)
 bindir = $(exec_prefix)/bin
 mandir = $(datarootdir)/man
