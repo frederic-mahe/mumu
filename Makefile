@@ -119,7 +119,8 @@ debug: SPECIFIC = -O0 -ggdb -DDEBUG -D_GLIBCXX_DEBUG \
 debug: all
 
 
-coverage: SPECIFIC = -O0 --coverage -fprofile-arcs -ftest-coverage -lgcov
+coverage: SPECIFIC = -O0 --coverage -fprofile-arcs -ftest-coverage
+coverage: LIBS = -lgcov
 coverage: all check
 	bash ./tests/coverage.sh
 
