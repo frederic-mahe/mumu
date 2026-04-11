@@ -82,6 +82,7 @@ endif
 ## link time optimization
 # - use '-flto=auto' with GCC (>= 11, enforced above) to use all available cores
 # - use '-flto' with clang (thread count is handled separately by clang, no '=auto' support)
+# - do not use '-flto' for debug or coverage
 ifneq ($(IS_CLANG), 0)
   SPECIFIC += -flto
 else
