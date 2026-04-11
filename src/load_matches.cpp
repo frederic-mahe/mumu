@@ -25,6 +25,7 @@
 #include <charconv>  // std::from_chars
 #include <fstream>
 #include <iostream>
+#include <iterator>
 #include <string>
 #include <string_view>
 #include <system_error>
@@ -53,7 +54,8 @@ namespace {
       fatal("empty similarity value in line: " + line);
     }
     double result {};
-    if (std::from_chars(buf.data(), buf.data() + buf.size(), result).ec != std::errc{}) {
+    auto const * last_char = std::next(buf.data(), static_cast<std::ptrdiff_t>(buf.size()));
+    if (std::from_chars(buf.data(), last_char, result).ec != std::errc{}) {
       fatal("illegal similarity value in line: " + line);
     }
     return result;
