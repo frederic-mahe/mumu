@@ -123,7 +123,7 @@ debug: all
 coverage: SPECIFIC = -O0 --coverage -fprofile-arcs -ftest-coverage
 coverage: LIBS = -lgcov
 coverage: all check
-	bash ./tests/coverage.sh
+	bash ./tests/coverage.sh  # script requires bash
 
 
 profile: SPECIFIC = -O2 -pg
@@ -158,7 +158,7 @@ uninstall:
 
 
 check: $(PROG)
-	bash ./tests/mumu.sh ./$(PROG)
+	bash ./tests/mumu.sh ./$(PROG)  # script requires bash
 
 
 # make sure rules run even if no file was modified
