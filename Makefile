@@ -41,8 +41,8 @@ man1dir = $(mandir)/man1
 INSTALL = /usr/bin/install
 MKDIR_P := $(INSTALL) -d
 INSTALL_PROGRAM = $(INSTALL)
-RM := rm --force
-RMDIR := rmdir --parents --ignore-fail-on-non-empty
+RM := rm -f
+RMDIR := rmdir -p
 
 cpp_files  := $(wildcard $(SRC)/*.cpp)
 objects    := $(cpp_files:.cpp=.o)
@@ -136,7 +136,7 @@ clean:
 	$(tidy_files) \
 	./$(SRC)/.gdb_history \
 	./$(SRC)/main_coverage.info ./tests/gmon.out
-	$(RM) --recursive ./$(SRC)/out
+	$(RM) -r ./$(SRC)/out
 
 
 dist-clean: clean
