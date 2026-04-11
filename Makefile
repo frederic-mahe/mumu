@@ -56,7 +56,7 @@ dependencies := Makefile
 ## compiler identity and version
 # -dumpversion returns the major version only for GCC >= 7 and clang >= 3.5
 CXX_VERSION_MAJOR := $(shell $(CXX) -dumpversion 2>/dev/null | cut -d. -f1)
-CXX_VERSION_MAJOR := $(or $(CXX_VERSION_MAJOR), 0)
+CXX_VERSION_MAJOR := $(or $(CXX_VERSION_MAJOR),0)
 # use the presence of __clang__ to distinguish clang from GCC
 IS_CLANG := $(shell $(CXX) -x c++ -E -dM - < /dev/null | grep -c '__clang__')
 
