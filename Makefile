@@ -53,18 +53,39 @@ tidy_files := compile_commands.json
 dependencies := Makefile
 
 
-## link time optimization
-# - use '-flto=auto' with GCC 11.4 and more recent to avoid a compilation warning
-# - use '-flto' with clang, and older versions of GCC
-# - risk of using '-flto=auto' with clang 12 and 13, but only clang >= 17 can compile mumu
-CXXVERSION := $(shell $(CXX) -dumpversion)
-ifeq ($(CXXVERSION), 12)
-	SPECIFIC += -flto=auto
-endif
-ifeq ($(CXXVERSION), 13)
-	SPECIFIC += -flto=auto
+## compiler identity and version
+# -dumpversion returns the major version only for GCC >= 7 and clang >= 3.5
+CXX_VERSION_MAJOR := $(shell $(CXX) -dumpversion 2>/dev/null | cut -d. -f1)
+CXX_VERSION_MAJOR := $(or $(CXX_VERSION_MAJOR), 0)
+# use the presence of __clang__ to distinguish clang from GCC
+IS_CLANG := $(shell $(CXX) -x c++ -E -dM - < /dev/null | grep -c '__clang__')
+
+
+## minimum version enforcement
+# GCC >= 11, clang >= 17 required
+ifneq ($(IS_CLANG), 0)
+  # clang path
+  MIN_VERSION := 17
+  COMPILER_NAME := clang
 else
-	SPECIFIC += -flto
+  # GCC path
+  MIN_VERSION := 11
+  COMPILER_NAME := GCC
+endif
+
+VERSION_OK := $(shell [ "$(CXX_VERSION_MAJOR)" -ge "$(MIN_VERSION)" ] && echo yes || echo no)
+ifneq ($(VERSION_OK), yes)
+  $(error $(COMPILER_NAME) >= $(MIN_VERSION) is required, but found version $(CXX_VERSION_MAJOR))
+endif
+
+
+## link time optimization
+# - use '-flto=auto' with GCC (>= 11, enforced above) to use all available cores
+# - use '-flto' with clang (thread count is handled separately by clang, no '=auto' support)
+ifneq ($(IS_CLANG), 0)
+  SPECIFIC += -flto
+else
+  SPECIFIC += -flto=auto
 endif
 
 
