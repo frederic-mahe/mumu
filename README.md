@@ -32,7 +32,7 @@ maintain and to port to other operating systems. Please note that mumu
 has been tested on GNU/Linux. Compilation on other operating systems,
 such as macOS, BSD, or Windows should be possible but remains
 untested. Compiling mumu requires a compliant C++ compiler
-([GCC](https://gcc.gnu.org/) 10 or more recent,
+([GCC](https://gcc.gnu.org/) 11 or more recent,
 [clang](https://clang.llvm.org/) 17 or more recent). If your system
 only provides an older compiler, a recipe for a
 singularity/Apptainer/docker image is available (see section [advanced
@@ -60,7 +60,7 @@ make install  # as root or sudo
 dependencies are minimal:
  - a 64-bit operating system,
  - `make` (version 4 or more recent),
- - [GCC](https://gcc.gnu.org/) 10 (2020) or more recent, or
+ - [GCC](https://gcc.gnu.org/) 11 (2021) or more recent, or
    [clang](https://clang.llvm.org/) 17 (2023) or more recent,
  - [GNU Awk](https://www.gnu.org/software/gawk/) and other GNU tools
    for testing
