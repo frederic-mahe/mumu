@@ -39,6 +39,7 @@ bindir = $(exec_prefix)/bin
 mandir = $(datarootdir)/man
 man1dir = $(mandir)/man1
 INSTALL = /usr/bin/install
+MKDIR_P := $(INSTALL) -d
 INSTALL_PROGRAM = $(INSTALL)
 RM := rm --force
 RMDIR := rmdir --parents --ignore-fail-on-non-empty
@@ -143,9 +144,9 @@ dist-clean: clean
 
 
 install: $(PROG) $(MAN)
-	$(INSTALL_PROGRAM) --directory $(DESTDIR)$(bindir)
+	$(MKDIR_P) $(DESTDIR)$(bindir)
 	$(INSTALL_PROGRAM) $(PROG) $(DESTDIR)$(bindir)
-	$(INSTALL_PROGRAM) --directory $(DESTDIR)$(man1dir)
+	$(MKDIR_P) $(DESTDIR)$(man1dir)
 	$(INSTALL_PROGRAM) $(MAN) $(DESTDIR)$(man1dir)
 
 
