@@ -24,11 +24,11 @@
 #include <string>
 
 
-auto warn(char const * message) -> void;
+auto warn(char const * message) noexcept -> void;
 
 auto warn(char const * message,
-          std::string const & line_view) -> void;
+          std::string const & line_view) noexcept -> void;
 
-[[ noreturn ]] auto fatal(std::string const & message) -> void;
+[[ noreturn ]] auto fatal(std::string const & message) noexcept -> void;
 
-[[ noreturn ]] auto exit_successfully() -> void;
+[[ noreturn ]] auto exit_successfully() noexcept -> void;
