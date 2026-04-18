@@ -40,20 +40,20 @@
 namespace {
 
   [[nodiscard]]
-  auto count_samples(std::string const &line) -> unsigned int {
+  auto count_samples(std::string const &line) noexcept -> unsigned int {
     // number of column separators is equal to the number of samples
     return static_cast<unsigned int>(std::ranges::count(line, sepchar));
   }
 
 
-  auto check_number_of_samples(unsigned int const number_of_samples) -> void {
+  auto check_number_of_samples(unsigned int const number_of_samples) noexcept -> void {
     if (number_of_samples == 0) {
       warn("OTU table should have at least one sample");
     }
   }
 
 
-  auto check_if_csv(std::string const &line) -> void {
+  auto check_if_csv(std::string const &line) noexcept -> void {
     static constexpr auto csv_separator = ',';  // comma
     auto const n_separators = std::ranges::count(line, csv_separator);
     if (n_separators == 0) { return; }
@@ -70,7 +70,7 @@ namespace {
 
 
   auto skip_left_quote(std::string const &line,
-                       std::size_t const first_sep) -> std::size_t {
+                       std::size_t const first_sep) noexcept -> std::size_t {
     static constexpr auto quote = '"';
     auto const has_sep = first_sep != std::string::npos;
     auto const starts_with_quote = line.front() == quote;
