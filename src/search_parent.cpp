@@ -66,7 +66,7 @@ namespace {
   };
 
 
-  auto operator<<(std::ostream& output_stream, const Stats& stats) -> std::ostream& {
+  auto operator<<(std::ostream& output_stream, const Stats& stats) noexcept -> std::ostream& {
     output_stream.precision(2);
     return output_stream
       << std::fixed
@@ -91,7 +91,7 @@ namespace {
   }
 
 
-  auto print_log_header(std::ofstream& log_file) -> void {
+  auto print_log_header(std::ofstream& log_file) noexcept -> void {
     log_file
       << "query_id" << sepchar // 1.  name of query OTU
       << "parent_id" << sepchar // 2.  name of potential parent OTU
@@ -115,13 +115,13 @@ namespace {
   }
 
 
-  auto is_null(double const a_ratio) -> bool {
+  auto is_null(double const a_ratio) noexcept -> bool {
     // assume that per-sample ratio is never < 1 / 10^17 (epsilon double == 2.22045e-16)
     return std::fabs(a_ratio) < std::numeric_limits<double>::epsilon();
   }
 
 
-  auto per_sample_ratios(Stats &stats) -> void {
+  auto per_sample_ratios(Stats &stats) noexcept -> void {
     // C++23 refactor: std::pow(2, std::numeric_limits<double>::digits)
     [[maybe_unused]] static constexpr auto largest_int_without_precision_loss {9'007'199'254'740'992};
 
