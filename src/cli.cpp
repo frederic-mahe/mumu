@@ -75,7 +75,7 @@ namespace {
   static_assert(long_options.back().val == 0, "last option must be empty");
 
 
-  auto help() -> void {
+  auto help() noexcept -> void {
     std::cout
       << "Usage: mumu " << n_version << '\n'
       << " -h, --help                            display this help and exit\n"
@@ -100,7 +100,7 @@ namespace {
   }
 
 
-  auto version() -> void {
+  auto version() noexcept -> void {
     std::cout
       << "mumu " << n_version << '\n'
       << "Copyright (C) " << copyright_years << " Frederic Mahe\n"
@@ -108,14 +108,14 @@ namespace {
   }
 
 
-  auto find_next_after(double const threshold) -> double {
+  auto find_next_after(double const threshold) noexcept -> double {
     // find the first representable value just after the theshold
     static constexpr auto largest_double {std::numeric_limits<double>::max()};
     return std::nextafter(threshold, largest_double);
   }
 
 
-  auto update_match_threshold(Parameters &parameters) {
+  auto update_match_threshold(Parameters &parameters) noexcept {
     // lulu excludes match values <= threshold
     // use a slightly larger threshold to replicate that behaviour in mumu,
     // without having to compare doubles for equality
