@@ -27,11 +27,16 @@
 
 #include <array>
 #include <cassert>
+#include <charconv>  // std::from_chars
 #include <cmath>  // std::nextafter
+#include <cstddef>  // std::ptrdiff_t
 #include <cstdlib>  // atoi, atof, exit, EXIT_FAILURE, EXIT_SUCCESS
 #include <iostream>
+#include <iterator>  // std::next
 #include <limits>
 #include <string>
+#include <string_view>
+#include <system_error>  // std::errc
 
 
 namespace {
@@ -117,6 +122,32 @@ namespace {
     parameters.minimum_match = find_next_after(parameters.minimum_match);
   }
 
+
+  auto parse_double(char const * optarg,
+                    std::string_view const option_name) -> double {
+    std::string_view const buf {optarg};
+    double result {};
+    auto const * last_char = std::next(buf.data(), static_cast<std::ptrdiff_t>(buf.size()));
+    auto const [ptr, ec] = std::from_chars(buf.data(), last_char, result);
+    if (ec != std::errc{} or ptr != last_char) {
+      fatal("invalid value for --" + std::string{option_name} + ": " + optarg);
+    }
+    return result;
+  }
+
+
+  auto parse_unsigned_long(char const * optarg,
+                           std::string_view const option_name) -> unsigned long int {
+    std::string_view const buf {optarg};
+    unsigned long int result {};
+    auto const * last_char = std::next(buf.data(), static_cast<std::ptrdiff_t>(buf.size()));
+    auto const [ptr, ec] = std::from_chars(buf.data(), last_char, result);
+    if (ec != std::errc{} or ptr != last_char) {
+      fatal("invalid value for --" + std::string{option_name} + ": " + optarg);
+    }
+    return result;
+  }
+
 }
 
 
@@ -139,7 +170,7 @@ auto parse_args(int argc, char ** argv, Parameters &parameters) -> void {
       break;
 
     case 'a':  // minimum match (default is 84.0)
-      parameters.minimum_match = std::stod(optarg);
+      parameters.minimum_match = parse_double(optarg, "minimum_match");
       if (parameters.is_legacy) {
         update_match_threshold(parameters);
       }
@@ -150,11 +181,11 @@ auto parse_args(int argc, char ** argv, Parameters &parameters) -> void {
       break;
 
     case 'c':  // minimum ratio (default is 1.0)
-      parameters.minimum_ratio = std::stod(optarg);
+      parameters.minimum_ratio = parse_double(optarg, "minimum_ratio");
       break;
 
     case 'd':  // minimum relative cooccurrence (default is 0.95)
-      parameters.minimum_relative_cooccurrence = std::stod(optarg);
+      parameters.minimum_relative_cooccurrence = parse_double(optarg, "minimum_relative_cooccurrence");
       break;
 
     case 'e':  // legacy mode (replicate lulu's behavior)
@@ -187,7 +218,7 @@ auto parse_args(int argc, char ** argv, Parameters &parameters) -> void {
       break;
 
     case 't':  // threads (default is 1)
-      parameters.threads = std::stoul(optarg);
+      parameters.threads = parse_unsigned_long(optarg, "threads");
       break;
 
     case 'v':  // version number
