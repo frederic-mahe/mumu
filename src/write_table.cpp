@@ -57,7 +57,7 @@ namespace {
 
   [[nodiscard]]
   auto extract_OTU_stats(std::unordered_map<std::string, struct OTU> &OTUs)
-    noexcept -> std::vector<struct OTU_stats> {
+    -> std::vector<struct OTU_stats> {
     // goal is to get a sortable list of OTUs
     std::vector<struct OTU_stats> sorted_OTUs;
     sorted_OTUs.reserve(OTUs.size());  // probably 25-50% too much
