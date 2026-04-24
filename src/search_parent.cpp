@@ -62,7 +62,7 @@ namespace {
     double avg_non_null_ratio {0.0};
     double largest_ratio {0.0};
     double relative_cooccurrence {0.0};
-    bool accepted {false};
+    bool is_accepted {false};
   };
 
 
@@ -87,7 +87,7 @@ namespace {
       << stats.avg_non_null_ratio << sepchar
       << stats.largest_ratio << sepchar
       << stats.relative_cooccurrence << sepchar
-      << (stats.accepted ? accept_as_parent : reject_as_parent) << '\n';
+      << (stats.is_accepted ? accept_as_parent : reject_as_parent) << '\n';
   }
 
 
@@ -214,7 +214,7 @@ namespace {
       }
 
       // accept: mark OTU and output stats
-      stats.accepted = true;
+      stats.is_accepted = true;
       otu.is_mergeable = true;
       otu.parent_id = match.hit_id;
       log_file << stats;
