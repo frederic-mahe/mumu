@@ -14,8 +14,6 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v6
     - name: make coverage
       run: make coverage
-    - name: print coverage
-      run: bash ./tests/coverage.sh
