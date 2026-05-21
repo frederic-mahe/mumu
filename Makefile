@@ -26,7 +26,7 @@ PROG := mumu
 MAN := man/$(PROG).1
 SRC := src
 
-CXX := g++
+CXX ?= g++
 PRE_FLAGS := -MMD -MP
 CXXFLAGS := -std=c++20 -Wall -Wextra -Wpedantic -fno-exceptions
 SPECIFIC := -O3 -DNDEBUG
