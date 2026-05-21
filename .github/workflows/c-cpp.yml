@@ -10,12 +10,56 @@ on:
 
 jobs:
   build:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Linux x86_64, default GCC on oldest supported LTS (GCC 11)
+          - name: ubuntu-22.04 / g++
+            os: ubuntu-22.04
+            cxx: g++
 
-    runs-on: ubuntu-22.04
+          # Linux x86_64, default GCC on current LTS (GCC 13)
+          - name: ubuntu-24.04 / g++
+            os: ubuntu-24.04
+            cxx: g++
+
+          # Linux x86_64, default Clang on current LTS (Clang 18)
+          - name: ubuntu-24.04 / clang++
+            os: ubuntu-24.04
+            cxx: clang++
+
+          # Linux ARM64 (Graviton / Ampere class), default GCC (GCC 13)
+          - name: ubuntu-24.04-arm / g++
+            os: ubuntu-24.04-arm
+            cxx: g++
+
+          # macOS Intel, Homebrew GCC 14 (Apple Clang is < 17 by -dumpversion)
+          - name: macos-13 / g++-14
+            os: macos-13
+            cxx: g++-14
+            brew_install: gcc@14
+
+          # macOS Apple Silicon, Homebrew GCC 14
+          - name: macos-14 / g++-14
+            os: macos-14
+            cxx: g++-14
+            brew_install: gcc@14
 
     steps:
-    - uses: actions/checkout@v2
-    - name: make
-      run: make
-    - name: make check
-      run: make check
+      - uses: actions/checkout@v6
+
+      - name: Install Homebrew toolchain (macOS only)
+        if: matrix.brew_install != ''
+        run: brew install ${{ matrix.brew_install }}
+
+      - name: Show compiler version
+        run: ${{ matrix.cxx }} --version
+
+      - name: Build
+        run: make CXX=${{ matrix.cxx }}
+
+      - name: Test
+        run: make check CXX=${{ matrix.cxx }}
