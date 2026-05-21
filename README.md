@@ -159,7 +159,7 @@ compilers.
 - [x] add a row of column header to the log file? (see issue https://github.com/frederic-mahe/mumu/issues/4)
 - [x] silently strip quote symbols from input table? Exporters often
       quote strings, tripping some users (see issue #7),
-- [ ] allow named pipes (input/output),
+- [x] allow named pipes (input/output),
 - [x] test performances on ARM64 GNU/Linux (Raspberry Pi 3B+),
 - [x] test performances on RISC-V GNU/Linux (Banana Pi BPI-F3),
 - [x] faster input parsing through string views,
