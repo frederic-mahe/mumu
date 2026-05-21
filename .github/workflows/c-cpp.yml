@@ -37,10 +37,12 @@ jobs:
             cxx: g++
 
           # macOS Apple Silicon, Homebrew GCC 14 (Apple Clang is < 17 by -dumpversion)
+          # bash is also installed because tests/mumu.sh relies on zero-padded
+          # brace expansion (a bash 4.0 feature) and macOS ships bash 3.2.
           - name: macos-14 / g++-14
             os: macos-14
             cxx: g++-14
-            brew_install: gcc@14
+            brew_install: gcc@14 bash
 
     steps:
       - uses: actions/checkout@v6
