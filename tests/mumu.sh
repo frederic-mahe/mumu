@@ -35,7 +35,7 @@ DESCRIPTION="check if mumu is executable"
 
 ## Print a header
 SECTION_NAME="mumu: interface tests"
-LINE=$(printf "%076s\n" " " | tr " " "-")
+LINE=$(printf '%.0s-' {1..76})
 printf "# %s %s\n" "${LINE:${#SECTION_NAME}}" "${SECTION_NAME}"
 
 
@@ -1588,7 +1588,7 @@ unset LOG
 
 ## Print a header
 SECTION_NAME="mumu: functionality tests"
-LINE=$(printf "%076s\n" " " | tr " " "-")
+LINE=$(printf '%.0s-' {1..76})
 printf "# %s %s\n" "${LINE:${#SECTION_NAME}}" "${SECTION_NAME}"
 
 ## mumu accepts empty input files
