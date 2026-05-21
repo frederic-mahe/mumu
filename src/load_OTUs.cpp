@@ -148,6 +148,9 @@ auto read_otu_table(std::unordered_map<std::string, struct OTU> &OTUs,
   std::cout << "parse OTU table... ";
   // input and output files, buffer
   std::ifstream otu_table {parameters.otu_table};
+  if (not otu_table) {
+    fatal("can't open input file " + parameters.otu_table);
+  }
   std::string line;
 
   // first line

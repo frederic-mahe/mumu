@@ -46,16 +46,6 @@ namespace {
   }
 
 
-  auto input_files_are_reachable(Parameters const &parameters) -> void {
-    for (const auto& file_name : {parameters.otu_table, parameters.match_list} ) {
-      const std::ifstream input_file {file_name};
-      if (not input_file) {
-        fatal("can't open input file " + file_name);
-      }
-    }
-  }
-
-
   auto output_files_are_writable(Parameters const &parameters) -> void {
     for (const auto& file_name : {parameters.new_otu_table, parameters.log} ) {
       const std::ofstream output_file {file_name};
@@ -112,7 +102,6 @@ namespace {
 
 auto validate_args(Parameters const &parameters) -> void {
   check_mandatory_arguments(parameters);
-  input_files_are_reachable(parameters);
   output_files_are_writable(parameters);
   check_numerical_parameters(parameters);
 }

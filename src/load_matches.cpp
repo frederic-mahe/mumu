@@ -89,6 +89,9 @@ auto read_match_list(std::unordered_map<std::string, struct OTU> &OTUs,
   std::cout << "parse match list... ";
   // open input file
   std::ifstream match_list {parameters.match_list};
+  if (not match_list) {
+    fatal("can't open input file " + parameters.match_list);
+  }
 
   // expect three columns
   std::string line;
