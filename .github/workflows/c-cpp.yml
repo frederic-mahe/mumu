@@ -36,13 +36,7 @@ jobs:
             os: ubuntu-24.04-arm
             cxx: g++
 
-          # macOS Intel, Homebrew GCC 14 (Apple Clang is < 17 by -dumpversion)
-          - name: macos-13 / g++-14
-            os: macos-13
-            cxx: g++-14
-            brew_install: gcc@14
-
-          # macOS Apple Silicon, Homebrew GCC 14
+          # macOS Apple Silicon, Homebrew GCC 14 (Apple Clang is < 17 by -dumpversion)
           - name: macos-14 / g++-14
             os: macos-14
             cxx: g++-14
