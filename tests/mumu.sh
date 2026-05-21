@@ -1055,19 +1055,22 @@ DESCRIPTION="mumu can write to a substitution process"
                               failure "${DESCRIPTION}") \
     > /dev/null
 
-# read from named pipes: not possible because mumu opens input files twice
-# DESCRIPTION="mumu can read from named pipes"
-# rm fifo_OTU_TABLE
-# mkfifo fifo_OTU_TABLE
-
-# "${MUMU}" \
-    #     --otu_table fifo_OTU_TABLE \
-    #     --match_list /dev/null \
-    #     --log /dev/null \
-    #     --new_otu_table /dev/stdout &
-
-# printf "OTUs\ts1\nA\t2\nB\t1\n" > fifo_OTU_TABLE
-# rm fifo_OTU_TABLE
+DESCRIPTION="mumu can read from a named pipe"
+FIFO=$(mktemp -u)
+NEW_OTU_TABLE=$(mktemp)
+mkfifo "${FIFO}"
+"${MUMU}" \
+    --otu_table "${FIFO}" \
+    --match_list /dev/null \
+    --log /dev/null \
+    --new_otu_table "${NEW_OTU_TABLE}" > /dev/null 2>&1 &
+printf "OTUs\ts1\nA\t2\nB\t1\n" > "${FIFO}"
+wait
+diff -q <(printf "OTUs\ts1\nA\t2\nB\t1\n") "${NEW_OTU_TABLE}" > /dev/null && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${FIFO}" "${NEW_OTU_TABLE}"
+unset FIFO NEW_OTU_TABLE
 
 
 # match can be a subset of table, but not the other way around.
