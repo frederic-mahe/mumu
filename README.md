@@ -113,6 +113,34 @@ vsearch \
 ```
 
 
+## shell completion
+
+`make install` also installs Tab-completion scripts for **bash** and
+**zsh** into the standard system directories
+(`<prefix>/share/bash-completion/completions/mumu` and
+`<prefix>/share/zsh/site-functions/_mumu`). They complete option names,
+file names for the input/output options, and the `min`/`avg` values of
+`--minimum_ratio_type`.
+
+To enable completion without installing system-wide, source the bash
+script in your current shell:
+
+```sh
+source ./completions/mumu.bash
+```
+
+For zsh, add the `completions/` directory to your `fpath` before
+`compinit` (e.g. in `~/.zshrc`):
+
+```sh
+fpath=(/path/to/mumu/completions $fpath)
+autoload -U compinit && compinit
+```
+
+The bash script relies on the
+[bash-completion](https://github.com/scop/bash-completion) package.
+
+
 ## wrapper
 
 Adrien Taudière (@adrientaudiere) published
