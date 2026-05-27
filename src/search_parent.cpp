@@ -231,16 +231,17 @@ auto search_parent(OTU_map &OTUs,
   std::ofstream log_file {parameters.log};
   print_log_header(log_file);
 
-  for (auto const& otu : OTUs) {
+  for (auto& otu : OTUs) {
     auto const& OTU_id {otu.first};  // refactoring: replace with [first, second]?
+    auto& current_otu {otu.second};
 
     // ignore empty OTUs (no spread, no reads)
-    if (OTUs[OTU_id].spread == 0) { continue; }  // refactoring: move check to read_match_list()
+    if (current_otu.spread == 0) { continue; }  // refactoring: move check to read_match_list()
 
     // test potential parents (thread safe: one OTU per thread, thread
     // only modifies the OTU it is working on, other OTUs are
     // read-only)
-    test_parents(OTUs, OTUs[OTU_id], OTU_id, parameters, log_file);
+    test_parents(OTUs, current_otu, OTU_id, parameters, log_file);
   }
   std::cout << "done\n";
 }

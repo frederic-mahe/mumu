@@ -57,22 +57,23 @@ namespace {
 
 auto merge_OTUs(OTU_map &OTUs) -> void {
   std::cout << "merge OTUs... ";
-  for (auto const& otu : OTUs) {
-    auto const & OTU_id {otu.first};
+  for (auto& otu : OTUs) {
+    auto& child {otu.second};
     // skip orphans
-    if (not OTUs[OTU_id].is_mergeable) { continue; }
+    if (not child.is_mergeable) { continue; }
     // find the end of the merging chain
-    const auto root = find_root(OTUs, OTUs[OTU_id].parent_id);
+    const auto root = find_root(OTUs, child.parent_id);
+    auto& root_otu {OTUs[root]};
     // add child's reads to root's reads
     // refactoring: add_reads_to_root(OTUs[OTU_id], OTUs[root]);
-    std::ranges::transform(OTUs[OTU_id].samples,
-                           OTUs[root].samples,
-                           OTUs[root].samples.begin(),
+    std::ranges::transform(child.samples,
+                           root_otu.samples,
+                           root_otu.samples.begin(),
                            std::plus{});
     // update status
-    OTUs[OTU_id].is_merged = true;
-    OTUs[root].is_root = true;
-    OTUs[root].sum_reads += OTUs[OTU_id].sum_reads;
+    child.is_merged = true;
+    root_otu.is_root = true;
+    root_otu.sum_reads += child.sum_reads;
   }
   std::cout << "done\n";
 }
@@ -80,14 +81,14 @@ auto merge_OTUs(OTU_map &OTUs) -> void {
 
 auto update_spread_values(OTU_map &OTUs) -> void {
   std::cout << "update spread values... ";
-  for (auto const& otu : OTUs) {
-    auto const& OTU_id {otu.first};
+  for (auto& otu : OTUs) {
+    auto& current_otu {otu.second};
     // skip unmodified OTUs
-    if (not OTUs[OTU_id].is_root) { continue; }
+    if (not current_otu.is_root) { continue; }
 
     // refactor: move to a new file count_occurrences
     auto has_reads = [](const auto n_reads) -> bool { return n_reads != 0; };
-    OTUs[OTU_id].spread = static_cast<unsigned int>(std::ranges::count_if(OTUs[OTU_id].samples, has_reads));
+    current_otu.spread = static_cast<unsigned int>(std::ranges::count_if(current_otu.samples, has_reads));
   }
   std::cout << "done\n";
 }
