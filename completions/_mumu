@@ -1,0 +1,26 @@
+#compdef mumu
+# zsh completion for mumu
+#
+# Keep in sync with src/cli.cpp (long_options) and man/mumu.1.
+# Install location: <datarootdir>/zsh/site-functions/_mumu
+#
+# The deprecated misspelled alias --minimum_relative_cooccurence still works
+# but is intentionally not advertised here.
+
+_mumu() {
+  _arguments -s \
+    '(- *)'{-h,--help}'[display this help and exit]' \
+    '(- *)'{-v,--version}'[display version information and exit]' \
+    {-t,--threads}'[number of threads to use]:threads:' \
+    {-o,--otu_table}'[input OTU table (tab-separated, samples in columns)]:file:_files' \
+    {-m,--match_list}'[input OTU pairwise similarity scores]:file:_files' \
+    {-n,--new_otu_table}'[write an updated OTU table]:file:_files' \
+    {-l,--log}'[record operations]:file:_files' \
+    {-a,--minimum_match}'[minimum similarity threshold]:float:' \
+    {-c,--minimum_ratio}'[minimum abundance ratio]:float:' \
+    {-b,--minimum_ratio_type}'[abundance ratio method]:type:(min avg)' \
+    {-d,--minimum_relative_cooccurrence}'[relative parent-child spread]:float:' \
+    {-e,--legacy}'[behave like lulu]'
+}
+
+_mumu "$@"
