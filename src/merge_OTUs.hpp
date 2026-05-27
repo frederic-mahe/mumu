@@ -21,9 +21,8 @@
 // 34398 MONTPELLIER CEDEX 5
 // France
 
-#include <string>
-#include <unordered_map>
+#include "mumu.hpp"
 
-auto merge_OTUs (std::unordered_map<std::string, struct OTU> &OTUs) -> void;
+auto merge_OTUs (OTU_map &OTUs) -> void;
 
-auto update_spread_values (std::unordered_map<std::string, struct OTU> &OTUs) -> void;
+auto update_spread_values (OTU_map &OTUs) -> void;

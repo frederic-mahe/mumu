@@ -21,9 +21,13 @@
 // 34398 MONTPELLIER CEDEX 5
 // France
 
+#pragma once
+
 #include <algorithm>
 #include <climits>
+#include <cstddef>
 #include <cstdint>
+#include <functional>
 #include <iostream>
 #include <string>
 #include <string_view>
@@ -103,3 +107,24 @@ struct OTU {
   bool is_root {false};
   bool padding_8 {false};
 };
+
+
+// Transparent hasher: opting in to C++20 heterogeneous lookup
+// (is_transparent) lets find()/contains() accept a std::string_view key,
+// so probing the OTU map no longer allocates a temporary std::string.
+// A single std::string_view overload also covers std::string and
+// const char* keys through their implicit, non-allocating conversions.
+struct transparent_string_hash {
+  using is_transparent = void;
+  // noexcept: std::hash<std::string_view> is noexcept and constructing the
+  // view from the argument neither allocates nor throws
+  [[nodiscard]] auto operator()(std::string_view const key) const noexcept -> std::size_t {
+    return std::hash<std::string_view>{}(key);
+  }
+};
+
+
+// std::equal_to<> (the transparent specialisation) compares keys of mixed
+// types (std::string vs std::string_view) without materialising a string
+using OTU_map = std::unordered_map<std::string, struct OTU,
+                                   transparent_string_hash, std::equal_to<>>;

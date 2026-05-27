@@ -156,7 +156,7 @@ namespace {
   }
 
 
-  auto test_parents(std::unordered_map<std::string, struct OTU> &OTUs,
+  auto test_parents(OTU_map &OTUs,
                     OTU &otu,
                     const std::string &OTU_id,
                     Parameters const &parameters,
@@ -224,7 +224,7 @@ namespace {
 } // namespace
 
 
-auto search_parent(std::unordered_map<std::string, struct OTU> &OTUs,
+auto search_parent(OTU_map &OTUs,
                    Parameters const &parameters) -> void {
   std::cout << "search for potential parent OTUs... ";
   // stats will be written to log file

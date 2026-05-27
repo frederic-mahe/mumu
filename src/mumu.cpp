@@ -48,7 +48,7 @@ auto main (int argc, char** argv) -> int {
   validate_args(parameters);
 
   // load and index data
-  std::unordered_map<std::string, struct OTU> OTUs;
+  OTU_map OTUs;
   read_otu_table(OTUs, parameters);
   read_match_list(OTUs, parameters);
   sort_matches(OTUs, parameters);

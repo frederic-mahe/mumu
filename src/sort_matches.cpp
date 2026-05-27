@@ -31,7 +31,7 @@
 
 namespace {
 
-  auto sort_matches_mumu(std::unordered_map<std::string, struct OTU> & OTUs) -> void {
+  auto sort_matches_mumu(OTU_map & OTUs) -> void {
     std::cout << "(mumu order) ... ";
     // refactor as range view
     for (auto const& otu : OTUs) {
@@ -45,7 +45,7 @@ namespace {
   }
 
 
-  auto sort_matches_legacy(std::unordered_map<std::string, struct OTU> & OTUs) -> void {
+  auto sort_matches_legacy(OTU_map & OTUs) -> void {
     // lulu orders matches with potential parents by decreasing spread
     // (incidence), and then by decreasing total abundance, and then
     // (implicitely) by input order (of OTUs)
@@ -89,7 +89,7 @@ namespace {
 
 
 
-auto sort_matches(std::unordered_map<std::string, struct OTU> &OTUs,
+auto sort_matches(OTU_map &OTUs,
                   struct Parameters const &parameters) -> void {
   std::cout << "sort lists of matches... ";
   if (parameters.is_legacy) {

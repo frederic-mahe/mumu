@@ -35,7 +35,7 @@ namespace {
 // OTU C can be merged with OTU B, that can merge with OTU A.
 // Hence, OTU C should be merged with OTU A.
   [[nodiscard]]
-  auto find_root(std::unordered_map<std::string, struct OTU> &OTUs,
+  auto find_root(OTU_map &OTUs,
                  std::string root) -> std::string {
     while (OTUs[root].is_mergeable) {
       // refactoring: performance: store parent ID in a variable instead of looking up
@@ -55,7 +55,7 @@ namespace {
 } // namespace
 
 
-auto merge_OTUs(std::unordered_map<std::string, struct OTU> &OTUs) -> void {
+auto merge_OTUs(OTU_map &OTUs) -> void {
   std::cout << "merge OTUs... ";
   for (auto const& otu : OTUs) {
     auto const & OTU_id {otu.first};
@@ -78,7 +78,7 @@ auto merge_OTUs(std::unordered_map<std::string, struct OTU> &OTUs) -> void {
 }
 
 
-auto update_spread_values(std::unordered_map<std::string, struct OTU> &OTUs) -> void {
+auto update_spread_values(OTU_map &OTUs) -> void {
   std::cout << "update spread values... ";
   for (auto const& otu : OTUs) {
     auto const& OTU_id {otu.first};

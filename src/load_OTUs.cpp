@@ -100,7 +100,7 @@ namespace {
   }
 
 
-  auto parse_each_otu(std::unordered_map<std::string, struct OTU> &OTUs,
+  auto parse_each_otu(OTU_map &OTUs,
                       std::string const &line,
                       unsigned int const n_samples,
                       unsigned long int const ticker) -> void {
@@ -143,7 +143,7 @@ namespace {
 } // namespace
 
 
-auto read_otu_table(std::unordered_map<std::string, struct OTU> &OTUs,
+auto read_otu_table(OTU_map &OTUs,
                     struct Parameters const &parameters) -> void {
   std::cout << "parse OTU table... ";
   // input and output files, buffer

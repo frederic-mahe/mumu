@@ -84,7 +84,7 @@ namespace {
 // }
 
 
-auto read_match_list(std::unordered_map<std::string, struct OTU> &OTUs,
+auto read_match_list(OTU_map &OTUs,
                      struct Parameters const &parameters) -> void {
   std::cout << "parse match list... ";
   // open input file
@@ -100,8 +100,8 @@ auto read_match_list(std::unordered_map<std::string, struct OTU> &OTUs,
       check_n_columns(line);
       auto const sep1 = line.find(sepchar);
       auto const sep2 = line.find(sepchar, sep1 + 1);
-      auto const query = line.substr(0, sep1);
-      auto const hit   = line.substr(sep1 + 1, sep2 - sep1 - 1);
+      auto const query = std::string_view{line}.substr(0, sep1);
+      auto const hit   = std::string_view{line}.substr(sep1 + 1, sep2 - sep1 - 1);
       auto const buf   = std::string_view{line}.substr(sep2 + 1);
 
       auto const similarity {extract_similarity(buf, line)};
@@ -110,13 +110,17 @@ auto read_match_list(std::unordered_map<std::string, struct OTU> &OTUs,
       if (similarity < parameters.minimum_match) { continue; }
 
       // ignore match entries that are not in the OTU table
-      if ((not OTUs.contains(hit)) or (not OTUs.contains(query))) {
+      // (heterogeneous find: the string_view key is probed without
+      // allocating a temporary std::string)
+      auto const hit_entry = OTUs.find(hit);
+      auto const query_entry = OTUs.find(query);
+      if (hit_entry == OTUs.end() or query_entry == OTUs.end()) {
         warn("one of these is not in the OTU table: ", line);
         continue;
       }
 
-      auto const &hit_otu = OTUs[hit];
-      auto &query_otu = OTUs[query];
+      auto const &hit_otu = hit_entry->second;
+      auto &query_otu = query_entry->second;
 
       // ignore matches to lesser abundant OTUs
       if (query_otu.sum_reads >= hit_otu.sum_reads) {
@@ -134,7 +138,7 @@ auto read_match_list(std::unordered_map<std::string, struct OTU> &OTUs,
           .hit_sum_reads = hit_otu.sum_reads,
           .hit_spread = hit_otu.spread,
           .hit_input_order = hit_otu.input_order,
-          .hit_id = hit}
+          .hit_id = std::string{hit}}
         );  // no need to reserve(10)?
     }
   std::cout << "done\n";
