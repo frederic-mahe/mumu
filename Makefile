@@ -38,11 +38,17 @@ exec_prefix = $(PREFIX)
 bindir = $(exec_prefix)/bin
 mandir = $(datarootdir)/man
 man1dir = $(mandir)/man1
+bashcompdir = $(datarootdir)/bash-completion/completions
+zshcompdir = $(datarootdir)/zsh/site-functions
 INSTALL = /usr/bin/install
 MKDIR_P := $(INSTALL) -d
 INSTALL_PROGRAM = $(INSTALL)
+INSTALL_DATA = $(INSTALL) -m 644
 RM := rm -f
 RMDIR := rmdir -p
+
+BASHCOMP := completions/$(PROG).bash
+ZSHCOMP := completions/_$(PROG)
 
 cpp_files  := $(wildcard $(SRC)/*.cpp)
 objects    := $(cpp_files:.cpp=.o)
@@ -144,16 +150,24 @@ dist-clean: clean
 	$(RM) *~ ./$(SRC)/*~ ./tests/*~ ./man/*~
 
 
-install: $(PROG) $(MAN)
+install: $(PROG) $(MAN) $(BASHCOMP) $(ZSHCOMP)
 	$(MKDIR_P) $(DESTDIR)$(bindir)
 	$(INSTALL_PROGRAM) $(PROG) $(DESTDIR)$(bindir)
 	$(MKDIR_P) $(DESTDIR)$(man1dir)
 	$(INSTALL_PROGRAM) $(MAN) $(DESTDIR)$(man1dir)
+	$(MKDIR_P) $(DESTDIR)$(bashcompdir)
+	$(INSTALL_DATA) $(BASHCOMP) $(DESTDIR)$(bashcompdir)/$(PROG)
+	$(MKDIR_P) $(DESTDIR)$(zshcompdir)
+	$(INSTALL_DATA) $(ZSHCOMP) $(DESTDIR)$(zshcompdir)/_$(PROG)
 
 
 uninstall:
 	$(RM) $(DESTDIR)$(bindir)/$(PROG)
 	$(RM) $(DESTDIR)$(man1dir)/$(PROG).1
+	$(RM) $(DESTDIR)$(bashcompdir)/$(PROG)
+	$(RM) $(DESTDIR)$(zshcompdir)/_$(PROG)
+	$(RMDIR) $(DESTDIR)$(zshcompdir)/
+	$(RMDIR) $(DESTDIR)$(bashcompdir)/
 	$(RMDIR) $(DESTDIR)$(man1dir)/
 	$(RMDIR) $(DESTDIR)$(bindir)/
 
