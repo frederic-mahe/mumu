@@ -50,7 +50,7 @@ auto main (int argc, char** argv) -> int {
 
   // load and index data
   OTU_map OTUs;
-  read_otu_table(OTUs, parameters);
+  auto const header = read_otu_table(OTUs, parameters);
   read_match_list(OTUs, parameters);
   sort_matches(OTUs, parameters);
 
@@ -60,7 +60,7 @@ auto main (int argc, char** argv) -> int {
   // merge, sort and output
   merge_OTUs(OTUs);
   update_spread_values(OTUs);
-  write_table(OTUs, parameters.new_otu_table);
+  write_table(OTUs, parameters.new_otu_table, header);
 
   return EXIT_SUCCESS;
 }

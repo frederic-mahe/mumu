@@ -24,4 +24,5 @@
 #include "mumu.hpp"
 
 auto write_table (OTU_map &OTUs,
-                  const std::string &new_otu_table_name) -> void;
+                  const std::string &new_otu_table_name,
+                  const std::string &header) -> void;

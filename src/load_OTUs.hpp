@@ -24,4 +24,4 @@
 #include "mumu.hpp"
 
 auto read_otu_table (OTU_map &OTUs,
-                     struct Parameters const &parameters) -> void;
+                     struct Parameters const &parameters) -> std::string;

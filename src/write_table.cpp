@@ -81,10 +81,12 @@ namespace {
 
 
 auto write_table(OTU_map &OTUs,
-                 const std::string &new_otu_table_name) -> void {
+                 const std::string &new_otu_table_name,
+                 const std::string &header) -> void {
   std::cout << "write new OTU table... ";
-  // re-open output file
-  std::ofstream new_otu_table {new_otu_table_name, std::ios_base::app};
+  // open output file and emit the header line read from the input table
+  std::ofstream new_otu_table {new_otu_table_name};
+  new_otu_table << header << '\n';
   // list and sort remaining OTUs
   const auto sorted_OTUs {extract_OTU_stats(OTUs)};
 

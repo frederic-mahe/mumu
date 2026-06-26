@@ -61,14 +61,6 @@ namespace {
   }
 
 
-  auto output_first_line(std::string const &line,
-                         struct Parameters const &parameters) -> void {
-    // write header line to new OTU table
-    std::ofstream new_otu_table {parameters.new_otu_table};
-    new_otu_table << line << '\n';
-  }
-
-
   auto skip_left_quote(std::string const &line,
                        std::size_t const first_sep) noexcept -> std::size_t {
     static constexpr auto quote = '"';
@@ -150,27 +142,30 @@ namespace {
 
 
 auto read_otu_table(OTU_map &OTUs,
-                    struct Parameters const &parameters) -> void {
+                    struct Parameters const &parameters) -> std::string {
   std::cout << "parse OTU table... ";
-  // input and output files, buffer
+  // input file, buffer
   std::ifstream otu_table {parameters.otu_table};
   if (not otu_table) {
     fatal("can't open input file " + parameters.otu_table);
   }
-  std::string line;
 
-  // first line
-  std::getline(otu_table, line);
-  output_first_line(line, parameters);
-  auto const n_samples {count_samples(line)};
+  // first line: kept verbatim and returned so write_table() can emit it
+  // as the header of the new OTU table
+  std::string header;
+  std::getline(otu_table, header);
+  auto const n_samples {count_samples(header)};
   check_number_of_samples(n_samples);
-  check_if_csv(line);
+  check_if_csv(header);
 
   // parse other lines, and map the values
+  std::string line;
   auto ticker {1UL};
   while (std::getline(otu_table, line)) {
     parse_each_otu(OTUs, line, n_samples, ticker);
     ++ticker;
   }
   std::cout << "done, " << OTUs.size() << " entries\n";
+
+  return header;
 }
