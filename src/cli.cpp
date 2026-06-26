@@ -129,7 +129,9 @@ namespace {
     double result {};
     auto const * last_char = std::next(buf.data(), static_cast<std::ptrdiff_t>(buf.size()));
     auto const [ptr, ec] = std::from_chars(buf.data(), last_char, result);
-    if (ec != std::errc{} or ptr != last_char) {
+    // reject trailing garbage and non-finite values (nan, inf), which
+    // std::from_chars accepts but would slip past the numeric range checks
+    if (ec != std::errc{} or ptr != last_char or not std::isfinite(result)) {
       fatal("invalid value for --" + std::string{option_name} + ": " + optarg);
     }
     return result;
