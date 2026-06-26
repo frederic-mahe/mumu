@@ -35,7 +35,7 @@ namespace {
     std::cout << "(mumu order) ... ";
     // refactor as range view
     for (auto& otu : OTUs) {
-      auto& matches {otu.second.matches};  // refactoring: replace with otu.matches!
+      auto& matches {otu.second.matches};
 
       // ignore OTUs with zero or one match
       if (matches.size() < 2) { continue; }  // refactoring: useless?

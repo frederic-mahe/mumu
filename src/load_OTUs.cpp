@@ -132,7 +132,7 @@ namespace {
       fatal("variable number of columns in OTU table");
     }
 
-    // add more results to the map
+    // compute derived values (spread and total number of reads)
     auto has_reads = [](auto const n_reads) -> bool { return n_reads != 0; };
     otu.spread = static_cast<unsigned int>(std::ranges::count_if(otu.samples, has_reads));
     otu.sum_reads = std::accumulate(otu.samples.begin(), otu.samples.end(), 0UL);

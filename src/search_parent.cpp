@@ -260,7 +260,3 @@ auto search_parent(OTU_map &OTUs,
 // Use C++20 ranges and views like zip to iterate over the samples
 // instead of manual indexing. This makes the code more idiomatic and
 // reduces errors.
-
-// Initialize child stats outside the parent testing loop to avoid
-// repeated work. This improves performance by avoiding redundant
-// computations.
