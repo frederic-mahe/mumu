@@ -35,12 +35,7 @@ namespace {
     std::cout << "(mumu order) ... ";
     // refactor as range view
     for (auto& otu : OTUs) {
-      auto& matches {otu.second.matches};
-
-      // ignore OTUs with zero or one match
-      if (matches.size() < 2) { continue; }  // refactoring: useless?
-
-      std::ranges::sort(matches, std::ranges::greater{});
+      std::ranges::sort(otu.second.matches, std::ranges::greater{});
     }
   }
 
@@ -76,12 +71,7 @@ namespace {
     };
 
     for (auto& otu : OTUs) {
-      auto& matches {otu.second.matches};
-
-      // ignore OTUs with zero or one match
-      if (matches.size() < 2) { continue; }  // refactoring: useless?
-
-      std::ranges::sort(matches, compare_matches);
+      std::ranges::sort(otu.second.matches, compare_matches);
     }
   }
 
