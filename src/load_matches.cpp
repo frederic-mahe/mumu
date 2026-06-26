@@ -132,7 +132,9 @@ auto read_match_list(OTU_map &OTUs,
       //   continue;
       // }
 
-      query_otu.matches.reserve(default_matches_size);
+      if (query_otu.matches.empty()) {
+        query_otu.matches.reserve(default_matches_size);
+      }
       query_otu.matches.push_back(Match {
           .similarity = similarity,
           .hit_sum_reads = hit_otu.sum_reads,
