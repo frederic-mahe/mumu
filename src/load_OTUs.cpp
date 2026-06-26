@@ -112,13 +112,16 @@ namespace {
     auto const OTU_id = get_OTU_id(line, first_sep);
 
     // strengthening: check for empty OTU_id?
-    // check for duplicates
-    if (OTUs.contains(OTU_id)) {
+    // insert the new entry and check for duplicates in a single lookup:
+    // try_emplace leaves the map untouched (inserted == false) when the
+    // id already exists, so we build the OTU in place afterwards
+    auto const [entry, inserted] = OTUs.try_emplace(OTU_id);
+    if (not inserted) {
       fatal("duplicated OTU name: " + OTU_id);
     }
+    OTU &otu = entry->second;
 
     // get abundance values (rest of the line, we know there are n samples)
-    OTU otu;
     otu.input_order = ticker;
     otu.samples.reserve(n_samples);
     auto remaining = std::string_view{line}.substr(first_sep + 1);
@@ -141,7 +144,6 @@ namespace {
     auto has_reads = [](auto const n_reads) -> bool { return n_reads != 0; };
     otu.spread = static_cast<unsigned int>(std::ranges::count_if(otu.samples, has_reads));
     otu.sum_reads = std::accumulate(otu.samples.begin(), otu.samples.end(), 0UL);
-    OTUs[OTU_id] = std::move(otu);
   }
 
 } // namespace
