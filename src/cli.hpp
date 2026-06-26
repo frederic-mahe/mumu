@@ -22,3 +22,5 @@
 // France
 
 auto parse_args (int argc, char ** argv, struct Parameters &parameters) -> void;
+
+auto finalize_args (struct Parameters &parameters) -> void;

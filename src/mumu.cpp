@@ -46,6 +46,7 @@ auto main (int argc, char** argv) -> int {
   Parameters parameters;
   parse_args(argc, argv, parameters);
   validate_args(parameters);
+  finalize_args(parameters);
 
   // load and index data
   OTU_map OTUs;

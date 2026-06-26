@@ -171,9 +171,6 @@ auto parse_args(int argc, char ** argv, Parameters &parameters) -> void {
 
     case 'a':  // minimum match (default is 84.0)
       parameters.minimum_match = parse_double(optarg, "minimum_match");
-      if (parameters.is_legacy) {
-        update_match_threshold(parameters);
-      }
       break;
 
     case 'b':  // minimum ratio type (default is "min")
@@ -190,7 +187,6 @@ auto parse_args(int argc, char ** argv, Parameters &parameters) -> void {
 
     case 'e':  // legacy mode (replicate lulu's behavior)
       parameters.is_legacy = true;
-      update_match_threshold(parameters);
       break;
 
     case 'h':  // help message
@@ -228,5 +224,15 @@ auto parse_args(int argc, char ** argv, Parameters &parameters) -> void {
     default:
       warn("unknown option");
     }
+  }
+}
+
+
+auto finalize_args(Parameters &parameters) -> void {
+  // lulu excludes match values <= threshold; apply the epsilon bump only
+  // after validation, so a legitimate user value (e.g. 100.0) is range-checked
+  // before being nudged past the [50, 100] upper bound
+  if (parameters.is_legacy) {
+    update_match_threshold(parameters);
   }
 }
