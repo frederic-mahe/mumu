@@ -164,17 +164,23 @@ namespace {
 
     assert(otu.spread != 0);  // empty child should be skipped
 
+    // child-side stats are identical for every candidate parent: build
+    // them once, then copy per match and fill in the parent-side fields
+    // (the copy also resets the per-match ratio accumulators to their
+    // pristine defaults)
+    Stats const child_stats {.child_id = OTU_id,
+                             .child_total_abundance = otu.sum_reads,
+                             .child_spread = otu.spread,
+                             .child_samples = &otu.samples};
+
     for (auto const& match : otu.matches) {
       auto const& parent = OTUs.at(match.hit_id);
-      Stats stats {.child_id = OTU_id,
-                   .parent_id = match.hit_id,
-                   .similarity = match.similarity,
-                   .child_total_abundance = otu.sum_reads,
-                   .parent_total_abundance = parent.sum_reads,
-                   .child_spread = otu.spread,
-                   .parent_spread = parent.spread,
-                   .child_samples = &otu.samples,
-                   .parent_samples = &parent.samples};  // refactoring: child's stats should be initialized outside of the loop, or separated into another struct
+      Stats stats {child_stats};
+      stats.parent_id = match.hit_id;
+      stats.similarity = match.similarity;
+      stats.parent_total_abundance = parent.sum_reads;
+      stats.parent_spread = parent.spread;
+      stats.parent_samples = &parent.samples;
 
       // compute parent/child ratios for all samples
       per_sample_ratios(stats);
