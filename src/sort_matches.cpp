@@ -34,13 +34,13 @@ namespace {
   auto sort_matches_mumu(OTU_map & OTUs) -> void {
     std::cout << "(mumu order) ... ";
     // refactor as range view
-    for (auto const& otu : OTUs) {
-      auto const & OTU_id {otu.first};
+    for (auto& otu : OTUs) {
+      auto& matches {otu.second.matches};  // refactoring: replace with otu.matches!
 
       // ignore OTUs with zero or one match
-      if (OTUs[OTU_id].matches.size() < 2) { continue; }  // refactoring: useless?
+      if (matches.size() < 2) { continue; }  // refactoring: useless?
 
-      std::ranges::sort(OTUs[OTU_id].matches, std::ranges::greater{});  // refactoring: replace with otu.matches!
+      std::ranges::sort(matches, std::ranges::greater{});
     }
   }
 
@@ -75,13 +75,13 @@ namespace {
       return false;
     };
 
-    for (auto const& otu : OTUs) {
-      auto const & OTU_id {otu.first};
+    for (auto& otu : OTUs) {
+      auto& matches {otu.second.matches};
 
       // ignore OTUs with zero or one match
-      if (OTUs[OTU_id].matches.size() < 2) { continue; }  // refactoring: useless?
+      if (matches.size() < 2) { continue; }  // refactoring: useless?
 
-      std::ranges::sort(OTUs[OTU_id].matches, compare_matches);
+      std::ranges::sort(matches, compare_matches);
     }
   }
 
