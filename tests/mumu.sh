@@ -476,6 +476,72 @@ LOG=$(mktemp)
         success "${DESCRIPTION}"
 rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
 
+## std::from_chars parses "nan"/"inf", which would otherwise slip past
+## the numeric range checks (every comparison with NaN is false)
+## mumu stops with an error if minimum_match is not finite (nan)
+DESCRIPTION="mumu stops with an error if minimum_match is nan"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log "${LOG}" \
+    --minimum_match nan > /dev/null 2>&1 && \
+    failure "${DESCRIPTION}" || \
+        success "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
+## mumu stops with an error if minimum_match is not finite (inf)
+DESCRIPTION="mumu stops with an error if minimum_match is inf"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log "${LOG}" \
+    --minimum_match inf > /dev/null 2>&1 && \
+    failure "${DESCRIPTION}" || \
+        success "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
+## mumu stops with an error if minimum_ratio is not finite (inf)
+DESCRIPTION="mumu stops with an error if minimum_ratio is inf"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log "${LOG}" \
+    --minimum_ratio inf > /dev/null 2>&1 && \
+    failure "${DESCRIPTION}" || \
+        success "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
+## mumu stops with an error if minimum_relative_cooccurrence is not finite (nan)
+DESCRIPTION="mumu stops with an error if minimum_relative_cooccurrence is nan"
+OTU_TABLE=$(mktemp)
+MATCH_LIST=$(mktemp)
+NEW_OTU_TABLE=$(mktemp)
+LOG=$(mktemp)
+"${MUMU}" \
+    --otu_table "${OTU_TABLE}" \
+    --match_list "${MATCH_LIST}" \
+    --new_otu_table "${NEW_OTU_TABLE}" \
+    --log "${LOG}" \
+    --minimum_relative_cooccurrence nan > /dev/null 2>&1 && \
+    failure "${DESCRIPTION}" || \
+        success "${DESCRIPTION}"
+rm -f "${OTU_TABLE}" "${MATCH_LIST}" "${NEW_OTU_TABLE}" "${LOG}"
+
 ## mumu accepts minimum_ratio values greater than zero
 DESCRIPTION="mumu accepts minimum_ratio values greater than zero"
 OTU_TABLE=$(mktemp)
@@ -1346,6 +1412,25 @@ awk 'END {exit NR == 3 ? 0 : 1}' "${LOG}" && \
         failure "${DESCRIPTION}"
 rm -rf "${LOG}"
 unset LOG
+
+# the --legacy epsilon bump of minimum_match (to emulate lulu's "exclude
+# values <= threshold") must be applied after the [50, 100] range check,
+# so a user value of 100 is accepted (it then merges nothing)
+DESCRIPTION="mumu --legacy accepts --minimum_match 100 (merges nothing)"
+NEW_OTU_TABLE=$(mktemp)
+"${MUMU}" \
+    --otu_table <(printf "OTUs\ts1\n"
+                  printf "A\t9\n"
+                  printf "B\t1\n") \
+    --match_list <(printf "B\tA\t100.0\n") \
+    --legacy \
+    --minimum_match 100.0 \
+    --log /dev/null \
+    --new_otu_table "${NEW_OTU_TABLE}" > /dev/null 2>&1 && \
+    awk 'END {exit NR == 3 ? 0 : 1}' "${NEW_OTU_TABLE}" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+rm -f "${NEW_OTU_TABLE}"
 
 # lulu orders potential parents by decreasing spread (incidence),
 # and then by decreasing total abundance, and then by input order
