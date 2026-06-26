@@ -37,9 +37,12 @@ namespace {
   [[nodiscard]]
   auto find_root(OTU_map &OTUs,
                  std::string root) -> std::string {
-    while (OTUs[root].is_mergeable) {
-      // refactoring: performance: store parent ID in a variable instead of looking up
-      root = {OTUs[root].parent_id};
+    while (true) {
+      // bind the entry once per step: const lookup, single hash, and no
+      // accidental insertion (every id in the chain is known to exist)
+      auto const& entry = OTUs.at(root);
+      if (not entry.is_mergeable) { break; }
+      root = entry.parent_id;
     }
     return root;
   }
@@ -63,7 +66,7 @@ auto merge_OTUs(OTU_map &OTUs) -> void {
     if (not child.is_mergeable) { continue; }
     // find the end of the merging chain
     const auto root = find_root(OTUs, child.parent_id);
-    auto& root_otu {OTUs[root]};
+    auto& root_otu {OTUs.at(root)};
     // add child's reads to root's reads
     // refactoring: add_reads_to_root(OTUs[OTU_id], OTUs[root]);
     std::ranges::transform(child.samples,

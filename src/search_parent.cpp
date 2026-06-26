@@ -165,7 +165,7 @@ namespace {
     assert(otu.spread != 0);  // empty child should be skipped
 
     for (auto const& match : otu.matches) {
-      auto const& parent = OTUs[match.hit_id];
+      auto const& parent = OTUs.at(match.hit_id);
       Stats stats {.child_id = OTU_id,
                    .parent_id = match.hit_id,
                    .similarity = match.similarity,
