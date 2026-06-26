@@ -73,7 +73,7 @@ namespace {
                        std::size_t const first_sep) noexcept -> std::size_t {
     static constexpr auto quote = '"';
     auto const has_sep = first_sep != std::string::npos;
-    auto const starts_with_quote = line.front() == quote;
+    auto const starts_with_quote = (not line.empty()) and (line.front() == quote);
     return (has_sep and starts_with_quote) ? std::size_t{1} : std::size_t{0};
   }
 
@@ -95,7 +95,11 @@ namespace {
   auto get_OTU_id(std::string const &line,
                   std::size_t const first_sep) -> std::string {
     auto const id_start = skip_left_quote(line, first_sep);
-    auto const id_count = skip_right_quote(line, first_sep) - id_start;
+    auto const id_end = skip_right_quote(line, first_sep);
+    // clamp: a degenerate quoted field (e.g. a lone '"') can place the
+    // end before the start; avoid the size_t underflow that would make
+    // id_count wrap to npos
+    auto const id_count = (id_end > id_start) ? id_end - id_start : std::size_t{0};
     return line.substr(id_start, id_count);
   }
 
