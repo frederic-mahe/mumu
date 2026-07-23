@@ -23,6 +23,6 @@
 
 #include "mumu.hpp"
 
-auto write_table (OTU_map &OTUs,
+auto write_table (OTU_map const &OTUs,
                   const std::string &new_otu_table_name,
                   const std::string &header) -> void;

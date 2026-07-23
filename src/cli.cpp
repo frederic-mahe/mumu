@@ -154,7 +154,7 @@ namespace {
 }
 
 
-auto parse_args(int argc, char ** argv, Parameters &parameters) -> void {
+auto parse_args(int argc, char * const * argv, Parameters &parameters) -> void {
   // C++23 refactor: generate from long_options at compile-time
   const std::string short_options {"ht:vo:m:a:b:c:d:en:l:"};  // refactoring; string_view?
   auto option_character {0};
