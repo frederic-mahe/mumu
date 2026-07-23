@@ -24,8 +24,6 @@
 #include <algorithm>
 #include <iostream>
 #include <functional>
-#include <string>
-#include <unordered_map>
 #include "mumu.hpp"
 #include "sort_matches.hpp"
 

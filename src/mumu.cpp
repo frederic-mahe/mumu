@@ -24,8 +24,6 @@
 #include <cstdlib>  // EXIT_SUCCESS
 #include <ios>
 #include <iostream>
-#include <string>
-#include <unordered_map>
 #include "mumu.hpp"
 #include "cli.hpp"
 #include "validate_args.hpp"

@@ -23,6 +23,7 @@
 
 #include <algorithm>  // std::ranges::count
 #include <charconv>  // std::from_chars
+#include <cstddef>  // std::ptrdiff_t
 #include <cstdio>  // std::size_t
 #include <fstream>
 #include <iostream>
@@ -31,7 +32,6 @@
 #include <ranges>
 #include <string>
 #include <string_view>
-#include <unordered_map>
 #include <utility>  // std::move
 #include "mumu.hpp"
 #include "utils.hpp"

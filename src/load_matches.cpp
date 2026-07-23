@@ -23,13 +23,13 @@
 
 #include <algorithm>
 #include <charconv>  // std::from_chars
+#include <cstddef>  // std::ptrdiff_t
 #include <fstream>
 #include <iostream>
 #include <iterator>
 #include <string>
 #include <string_view>
 #include <system_error>
-#include <unordered_map>
 #include "mumu.hpp"
 #include "utils.hpp"
 #include "load_matches.hpp"

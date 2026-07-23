@@ -24,11 +24,10 @@
 #include <algorithm>
 #include <fstream>
 #include <functional>
-#include <ios>
 #include <iostream>
 #include <string>
+#include <string_view>
 #include <vector>
-#include <unordered_map>
 #include <tuple>
 #include "mumu.hpp"
 #include "write_table.hpp"
