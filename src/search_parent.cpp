@@ -173,7 +173,7 @@ namespace {
     Stats const child_stats {.child_id = OTU_id,
                              .child_total_abundance = otu.sum_reads,
                              .child_spread = otu.spread,
-                             .child_samples = &otu.samples};
+                             .child_samples = &otu.samples,};
 
     for (auto const& match : otu.matches) {
       auto const& parent = OTUs.at(match.hit_id);

@@ -68,7 +68,7 @@ namespace {
           .OTU_id = otu.first,
           .otu_ptr = &otu.second,
           .spread = static_cast<long int>(otu.second.spread),
-          .abundance = otu.second.sum_reads}
+          .abundance = otu.second.sum_reads,}
         );
     }
     // sort by decreasing abundance, spread and id name

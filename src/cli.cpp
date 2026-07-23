@@ -67,8 +67,8 @@ namespace {
       {.name="log", .has_arg=required_argument, .flag=nullptr, .val='l'},
 
       // mandatory terminal empty option struct
-      {.name=nullptr, .has_arg=0, .flag=nullptr, .val=0}
-    }};
+      {.name=nullptr, .has_arg=0, .flag=nullptr, .val=0},
+    },};
   // additional options?
   //  --minimum_spread n (spread threshold to consider as potential parent)
 

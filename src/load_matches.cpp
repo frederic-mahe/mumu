@@ -141,7 +141,7 @@ auto read_match_list(OTU_map &OTUs,
           .hit_sum_reads = hit_otu.sum_reads,
           .hit_spread = hit_otu.spread,
           .hit_input_order = hit_otu.input_order,
-          .hit_id = std::string{hit}}
+          .hit_id = std::string{hit},}
         );  // no need to reserve(10)?
     }
   std::cout << "done\n";
