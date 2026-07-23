@@ -24,6 +24,7 @@
 #include <getopt.h>  // see 'man getopt_long'
 #include "mumu.hpp"
 #include "utils.hpp"
+#include "cli.hpp"
 
 #include <array>
 #include <cassert>

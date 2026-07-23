@@ -31,6 +31,7 @@
 #include <unordered_map>
 #include <tuple>
 #include "mumu.hpp"
+#include "write_table.hpp"
 
 
 namespace {

@@ -26,6 +26,7 @@
 #include <string>
 #include "mumu.hpp"
 #include "utils.hpp"
+#include "validate_args.hpp"
 
 
 namespace {

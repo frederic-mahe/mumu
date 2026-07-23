@@ -35,6 +35,7 @@
 #include <utility>  // std::move
 #include "mumu.hpp"
 #include "utils.hpp"
+#include "load_OTUs.hpp"
 
 
 namespace {

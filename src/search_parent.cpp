@@ -30,6 +30,7 @@
 #include <string>
 #include <unordered_map>
 #include "mumu.hpp"
+#include "search_parent.hpp"
 
 
 namespace {

@@ -27,6 +27,7 @@
 #include <string>
 #include <unordered_map>
 #include "mumu.hpp"
+#include "merge_OTUs.hpp"
 
 
 namespace {
