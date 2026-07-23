@@ -81,17 +81,17 @@ struct Match {
   unsigned long int hit_input_order {0};
   std::string hit_id;  // refactor: replace with string_view?
 
-  auto operator<=>(Match const& rhs) const noexcept {
+  friend auto operator<=>(Match const& lhs, Match const& rhs) noexcept {
     // order by similarity,
     // if equal, order by abundance,
     // if equal, order by spread,
     // if equal, lexicographic order (A, B, ..., a, b, c, ...)
     return
-      std::tie(similarity, hit_sum_reads, hit_spread, rhs.hit_id) <=>
-      std::tie(rhs.similarity, rhs.hit_sum_reads, rhs.hit_spread, hit_id);
+      std::tie(lhs.similarity, lhs.hit_sum_reads, lhs.hit_spread, rhs.hit_id) <=>
+      std::tie(rhs.similarity, rhs.hit_sum_reads, rhs.hit_spread, lhs.hit_id);
   }
 
-  auto operator==(Match const& rhs) const noexcept -> bool = default;
+  friend auto operator==(Match const& lhs, Match const& rhs) noexcept -> bool = default;
 };
 
 

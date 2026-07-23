@@ -40,17 +40,17 @@ namespace {
     long int spread {0};  // refactor; type is not correct
     unsigned long int abundance {0};
 
-    auto operator<=>(OTU_stats const& rhs) const {
+    friend auto operator<=>(OTU_stats const& lhs, OTU_stats const& rhs) {
       // order by abundance,
       // if equal, order by spread,
       // if equal, lexicographic ID order (A, B, ..., a, b, c, ...)
       return
-        std::tie(abundance, spread, rhs.OTU_id) <=>
-        std::tie(rhs.abundance, rhs.spread, OTU_id);
+        std::tie(lhs.abundance, lhs.spread, rhs.OTU_id) <=>
+        std::tie(rhs.abundance, rhs.spread, lhs.OTU_id);
     }
 
     // clang 22: warning: member function 'operator==' is not needed and will not be emitted [-Wunneeded-member-function]
-    auto operator==(OTU_stats const& rhs) const -> bool = default;
+    friend auto operator==(OTU_stats const& lhs, OTU_stats const& rhs) -> bool = default;
   };
 
 
