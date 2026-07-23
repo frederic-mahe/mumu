@@ -42,8 +42,8 @@ namespace {
   private:
     static constexpr auto largest_double{std::numeric_limits<double>::max()};
   public:
-    std::string_view child_id;
-    std::string_view parent_id;
+    std::string_view child_id {};
+    std::string_view parent_id {};
     double similarity {0.0};
     unsigned long int child_total_abundance {1};  // refactoring: can't be zero, but zero is clearer?
     unsigned long int parent_total_abundance {0};  // refactoring: same as above?
