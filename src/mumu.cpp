@@ -58,7 +58,7 @@ auto main (int argc, char** argv) -> int {
   // merge, sort and output
   merge_OTUs(OTUs);
   update_spread_values(OTUs);
-  write_table(OTUs, parameters.new_otu_table, header);
+  write_table(OTUs, Output_table{.filename = parameters.new_otu_table, .header = header});
 
   return EXIT_SUCCESS;
 }

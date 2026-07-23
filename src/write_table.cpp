@@ -25,7 +25,6 @@
 #include <fstream>
 #include <functional>
 #include <iostream>
-#include <string>
 #include <string_view>
 #include <vector>
 #include <tuple>
@@ -81,12 +80,11 @@ namespace {
 
 
 auto write_table(OTU_map const &OTUs,
-                 const std::string &new_otu_table_name,
-                 const std::string &header) -> void {
+                 Output_table const &output) -> void {
   std::cout << "write new OTU table... ";
   // open output file and emit the header line read from the input table
-  std::ofstream new_otu_table {new_otu_table_name};
-  new_otu_table << header << '\n';
+  std::ofstream new_otu_table {output.filename};
+  new_otu_table << output.header << '\n';
   // list and sort remaining OTUs
   const auto sorted_OTUs {extract_OTU_stats(OTUs)};
 
