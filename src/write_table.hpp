@@ -27,8 +27,8 @@
 // bundle the destination and header so the two strings cannot be passed
 // in the wrong order (bugprone-easily-swappable-parameters)
 struct Output_table {
-  std::string const & filename;
-  std::string const & header;
+  std::string filename;
+  std::string header;
 };
 
 
