@@ -99,8 +99,7 @@ namespace {
 
   auto parse_each_otu(OTU_map &OTUs,
                       std::string const &line,
-                      unsigned int const n_samples,
-                      unsigned long int const ticker) -> void {
+                      unsigned int const n_samples) -> void {
     auto const first_sep {line.find_first_of(sepchar)};
     auto const OTU_id = get_OTU_id(line, first_sep);
 
@@ -115,7 +114,9 @@ namespace {
     OTU &otu = entry->second;
 
     // get abundance values (rest of the line, we know there are n samples)
-    otu.input_order = ticker;
+    // the map scrambles order; each line inserts exactly one OTU (duplicates
+    // are fatal above), so the running entry count is this OTU's input order
+    otu.input_order = static_cast<unsigned long int>(OTUs.size());
     otu.samples.reserve(n_samples);
     auto remaining = std::string_view{line}.substr(first_sep + 1);
     while (not remaining.empty()) {
@@ -161,10 +162,8 @@ auto read_otu_table(OTU_map &OTUs,
 
   // parse other lines, and map the values
   std::string line;
-  auto ticker {1UL};
   while (std::getline(otu_table, line)) {
-    parse_each_otu(OTUs, line, n_samples, ticker);
-    ++ticker;
+    parse_each_otu(OTUs, line, n_samples);
   }
   std::cout << "done, " << OTUs.size() << " entries\n";
 
