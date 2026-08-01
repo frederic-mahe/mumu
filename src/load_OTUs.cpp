@@ -119,7 +119,7 @@ namespace {
     // get abundance values (rest of the line, we know there are n samples)
     // the map scrambles order; each line inserts exactly one OTU (duplicates
     // are fatal above), so the running entry count is this OTU's input order
-    otu.input_order = static_cast<unsigned long int>(OTUs.size());
+    otu.input_order = OTUs.size();
     otu.samples.reserve(n_samples);
     auto remaining = std::string_view{line}.substr(first_sep + 1);
     while (not remaining.empty()) {
