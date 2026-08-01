@@ -86,14 +86,14 @@ namespace {
 
 
   auto get_OTU_id(std::string const &line,
-                  std::size_t const first_sep) -> std::string {
+                  std::size_t const first_sep) -> std::string_view {
     auto const id_start = skip_left_quote(line, first_sep);
     auto const id_end = skip_right_quote(line, first_sep);
     // clamp: a degenerate quoted field (e.g. a lone '"') can place the
     // end before the start; avoid the size_t underflow that would make
     // id_count wrap to npos
     auto const id_count = (id_end > id_start) ? id_end - id_start : std::size_t{0};
-    return line.substr(id_start, id_count);
+    return std::string_view{line}.substr(id_start, id_count);
   }
 
 
@@ -107,9 +107,12 @@ namespace {
     // insert the new entry and check for duplicates in a single lookup:
     // try_emplace leaves the map untouched (inserted == false) when the
     // id already exists, so we build the OTU in place afterwards
-    auto const [entry, inserted] = OTUs.try_emplace(OTU_id);
+    // (the key is materialised as a prvalue, so try_emplace moves it
+    // into the node instead of copying it; C++20 has no heterogeneous
+    // try_emplace, that is P2363 in C++26)
+    auto const [entry, inserted] = OTUs.try_emplace(std::string{OTU_id});
     if (not inserted) {
-      fatal("duplicated OTU name: " + OTU_id);
+      fatal("duplicated OTU name: " + std::string{OTU_id});
     }
     OTU &otu = entry->second;
 
