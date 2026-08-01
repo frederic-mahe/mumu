@@ -101,7 +101,10 @@ struct Match {
 struct OTU {
   std::vector<struct Match> matches;
   std::vector<unsigned long int> samples;
-  std::string parent_id;  // std::string_view? no
+  // view on the parent's key inside the OTU map, safe for the same
+  // reason as Match::hit_id above: it is only ever assigned from a
+  // hit_id, which already views a key that outlives this OTU
+  std::string_view parent_id;
   unsigned long int input_order {0};
   unsigned long int sum_reads {0};
   unsigned int spread {0};
