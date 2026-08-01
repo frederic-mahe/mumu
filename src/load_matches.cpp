@@ -141,7 +141,9 @@ auto read_match_list(OTU_map &OTUs,
           .hit_sum_reads = hit_otu.sum_reads,
           .hit_spread = hit_otu.spread,
           .hit_input_order = hit_otu.input_order,
-          .hit_id = std::string{hit},}
+          // view the hit's key in the map, not the local 'line' buffer
+          // that getline() overwrites on the next iteration
+          .hit_id = hit_entry->first,}
         );  // no need to reserve(10)?
     }
   std::cout << "done\n";

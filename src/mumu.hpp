@@ -79,7 +79,10 @@ struct Match {
   unsigned long int hit_sum_reads {0};
   unsigned long int hit_spread {0};
   unsigned long int hit_input_order {0};
-  std::string hit_id;  // refactor: replace with string_view?
+  // view on the hit's key inside the OTU map: the map is node-based,
+  // so references to its elements stay valid across rehashing, and it
+  // outlives every Match it is queried with
+  std::string_view hit_id;
 
   friend auto operator<=>(Match const& lhs, Match const& rhs) noexcept {
     // order by similarity,

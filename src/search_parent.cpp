@@ -177,7 +177,12 @@ namespace {
                              .child_samples = &otu.samples,};
 
     for (auto const& match : otu.matches) {
-      auto const& parent = OTUs.at(match.hit_id);
+      // transparent find: at() gains a std::string_view overload only
+      // in C++26, and every hit_id was checked against the map when the
+      // match list was read
+      auto const parent_entry = OTUs.find(match.hit_id);
+      assert(parent_entry != OTUs.end());
+      auto const& parent = parent_entry->second;
       Stats stats {child_stats};
       stats.parent_id = match.hit_id;
       stats.similarity = match.similarity;
