@@ -39,8 +39,9 @@ namespace {
   auto find_root(OTU_map &OTUs,
                  std::string_view root) -> struct OTU& {
     while (true) {
-      // bind the entry once per step: const lookup, single hash, and no
-      // accidental insertion (every id in the chain is known to exist)
+      // bind the entry once per step: a single transparent hash (no
+      // temporary std::string), and no accidental insertion (every id
+      // in the chain is known to exist)
       auto const entry = OTUs.find(root);
       assert(entry != OTUs.end());
       if (not entry->second.is_mergeable) { return entry->second; }
